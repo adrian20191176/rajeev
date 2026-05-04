@@ -1,20 +1,18 @@
 ---
-import "../styles/global.css";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrandSection from '../components/home/BrandSection.astro';
+import CategorySection from '../components/home/CategorySection.astro';
+import EnquiryCta from '../components/home/EnquiryCta.astro';
+import FeaturedProducts from '../components/home/FeaturedProducts.astro';
+import Hero from '../components/home/Hero.astro';
+import WhyChooseUs from '../components/home/WhyChooseUs.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="generator" content={Astro.generator} />
-		<title>New Astro App</title>
-	</head>
-	<body>
-		<main class="app-shell">
-			<p class="eyebrow">Astro baseline</p>
-			<h1 class="text-3xl font-bold underline">Start here</h1>
-			<p>Build your new application from this clean foundation.</p>
-		</main>
-	</body>
-</html>
+<BaseLayout title="Industrial Parts | Bearings, V-Belts & Oil Seals">
+	<Hero />
+	<CategorySection />
+	<WhyChooseUs />
+	<FeaturedProducts />
+	<EnquiryCta />
+	<BrandSection />
+</BaseLayout>

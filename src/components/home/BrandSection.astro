@@ -1,0 +1,14 @@
+---
+const brands = ['SKF', 'NSK', 'Koyo', 'Gates', 'Bando', 'NOK'];
+---
+
+<section class="section section--light brand-section">
+	<div class="container section-heading">
+		<p class="section-kicker">Brands and suppliers</p>
+		<h2>Common names customers already recognize.</h2>
+	</div>
+
+	<div class="container brand-grid" aria-label="Supplier brands">
+		{brands.map((brand) => <span>{brand}</span>)}
+	</div>
+</section>

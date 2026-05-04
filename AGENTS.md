@@ -18,11 +18,12 @@ Use Node.js `>=22.12.0`.
 - `npm run preview` serves the production build locally.
 
 ## Coding Style & Naming Conventions
-Follow the current Astro and CSS conventions:
+Follow the current Astro, CSS, and Tailwind conventions:
 
 - Use 2-tab indentation in `.astro` files and CSS.
 - Prefer lowercase, descriptive file names such as `about.astro` or `global.css`.
 - Keep component and style names clear and functional. Use `PascalCase` for reusable Astro components if they are added later.
+- Tailwind CSS is part of the project toolchain and must not be removed. Existing plain CSS in `src/styles/global.css` may stay as-is; use Tailwind utilities where they make new UI work faster and clearer.
 
 ## Testing Guidelines
 There is no test suite yet. Before opening a change:
@@ -36,6 +37,13 @@ Mobile responsive design is the number one priority in this repository.
 - Start with mobile layouts first, then scale up to larger breakpoints.
 - Check that spacing, typography, and navigation remain usable on small screens.
 - Avoid fixed widths that break on phones. Prefer fluid layouts, flexible spacing, and responsive units.
+
+## Tailwind CSS Context
+This project will use Tailwind CSS throughout development.
+
+- Keep `tailwindcss` and `@tailwindcss/vite` installed and configured in `astro.config.mjs`.
+- Do not remove Tailwind imports or configuration unless explicitly requested by the project owner.
+- For the current initial setup, the global CSS implementation is acceptable and does not need to be converted to Tailwind utilities.
 
 ## Commit & Pull Request Guidelines
 Use short, imperative commit messages, such as `Add responsive hero`.

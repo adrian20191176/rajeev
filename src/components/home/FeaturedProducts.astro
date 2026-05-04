@@ -1,0 +1,45 @@
+---
+const products = [
+	{ name: 'Deep Groove Ball Bearing', category: 'Bearings', brand: 'SKF', meta: '6205 ZZ' },
+	{ name: 'Tapered Roller Bearing', category: 'Bearings', brand: 'Koyo', meta: '30205' },
+	{ name: 'Pillow Block Bearing', category: 'Bearings', brand: 'NSK', meta: 'UCP204' },
+	{ name: 'Classical V-Belt', category: 'V-Belts', brand: 'Gates', meta: 'B-42' },
+	{ name: 'Wedge Belt', category: 'V-Belts', brand: 'Bando', meta: 'SPB 1500' },
+	{ name: 'Wrapped V-Belt', category: 'V-Belts', brand: 'Gates', meta: 'A-38' },
+	{ name: 'Rotary Oil Seal', category: 'Oil Seals', brand: 'NOK', meta: '35x52x7' },
+	{ name: 'Metric Shaft Seal', category: 'Oil Seals', brand: 'NOK', meta: '45x62x8' },
+];
+---
+
+<section class="section section--product" id="featured-products">
+	<div class="container section-heading">
+		<p class="section-kicker">Featured products</p>
+		<h2>Dummy catalogue items for the first preview.</h2>
+		<p>Cards show the information customers need before sending an availability or pricing enquiry.</p>
+	</div>
+
+	<div class="container product-grid">
+		{products.map((product) => (
+			<article class="product-card">
+				<div class="product-card__image">
+					<span>{product.category}</span>
+				</div>
+				<div class="product-card__body">
+					<p>{product.category}</p>
+					<h3>{product.name}</h3>
+					<dl>
+						<div>
+							<dt>Brand</dt>
+							<dd>{product.brand}</dd>
+						</div>
+						<div>
+							<dt>Part / Size</dt>
+							<dd>{product.meta}</dd>
+						</div>
+					</dl>
+					<a class="btn btn--small" href="#enquiry">Add to Enquiry</a>
+				</div>
+			</article>
+		))}
+	</div>
+</section>

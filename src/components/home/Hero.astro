@@ -1,0 +1,51 @@
+---
+const stats = [
+	{ value: '3+', label: 'Core categories' },
+	{ value: '24h', label: 'Typical response' },
+	{ value: '6', label: 'Supplier brands' },
+];
+---
+
+<section class="hero" id="home">
+	<div class="container hero__grid">
+		<div class="hero__content">
+			<p class="section-kicker">Industrial catalogue and enquiries</p>
+			<h1>Bearings, V-Belts, and Oil Seals for daily industrial demand.</h1>
+			<p class="hero__lead">
+				Browse common spare parts, shortlist what you need, and send an enquiry for availability, sizing, and pricing.
+			</p>
+			<div class="hero__actions">
+				<a class="btn btn--accent" href="#products">Browse Products</a>
+				<a class="btn btn--ghost" href="#enquiry">Send Enquiry</a>
+			</div>
+		</div>
+
+		<div class="hero-visual" aria-label="Industrial product preview">
+			<div class="part-card part-card--bearing">
+				<span>Bearing</span>
+				<strong>6205 ZZ</strong>
+			</div>
+			<div class="part-card part-card--belt">
+				<span>V-Belt</span>
+				<strong>B-42</strong>
+			</div>
+			<div class="part-card part-card--seal">
+				<span>Oil Seal</span>
+				<strong>35x52x7</strong>
+			</div>
+			<div class="visual-plate">
+				<span class="ring ring--outer"></span>
+				<span class="ring ring--inner"></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="container stat-row">
+		{stats.map((stat) => (
+			<div class="stat-item">
+				<strong>{stat.value}</strong>
+				<span>{stat.label}</span>
+			</div>
+		))}
+	</div>
+</section>
