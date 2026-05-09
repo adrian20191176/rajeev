@@ -1,0 +1,67 @@
+<script is:inline>
+	const revealItems = document.querySelectorAll("[data-reveal]");
+	const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	if (!reduceMotion && "IntersectionObserver" in window) {
+		document.documentElement.classList.add("reveal-ready");
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add("is-visible");
+						observer.unobserve(entry.target);
+					}
+				});
+			},
+			{ rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+		);
+
+		revealItems.forEach((item) => observer.observe(item));
+	} else {
+		revealItems.forEach((item) => item.classList.add("is-visible"));
+	}
+
+	document.querySelectorAll("[data-filter-scope]").forEach((scope) => {
+		const input = scope.querySelector("[data-filter-input]");
+		const count = scope.querySelector("[data-filter-count]");
+		const empty = scope.querySelector("[data-filter-empty]");
+		const items = Array.from(scope.querySelectorAll("[data-filter-item]"));
+		const queryParam = input?.dataset.queryParam;
+
+		const applyFilter = () => {
+			const query = input?.value.trim().toLowerCase() ?? "";
+			let visible = 0;
+
+			items.forEach((item) => {
+				const matches = scope.hasAttribute("data-hide-until-search") && !query
+					? false
+					: item.dataset.search.includes(query);
+				item.hidden = !matches;
+				if (matches) {
+					visible += 1;
+				}
+			});
+
+			if (count) {
+				count.textContent = scope.hasAttribute("data-hide-until-search") && !query
+					? "Start typing to search"
+					: `${visible} result${visible === 1 ? "" : "s"}`;
+			}
+
+			if (empty) {
+				empty.hidden = visible !== 0 || (scope.hasAttribute("data-hide-until-search") && !query);
+			}
+		};
+
+		if (queryParam && input) {
+			const value = new URLSearchParams(window.location.search).get(queryParam);
+			if (value) {
+				input.value = value;
+			}
+		}
+
+		input?.addEventListener("input", applyFilter);
+		applyFilter();
+	});
+</script>
