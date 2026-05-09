@@ -26,10 +26,10 @@ Follow the current Astro, CSS, and Tailwind conventions:
 - Tailwind CSS is part of the project toolchain and must not be removed. Existing plain CSS in `src/styles/global.css` may stay as-is; use Tailwind utilities where they make new UI work faster and clearer.
 
 ## Testing Guidelines
-There is no test suite yet. Before opening a change:
+There is no test suite yet. Build checks are not required unless explicitly requested.
 
-- Run `npm run build` to catch syntax or type issues.
-- Verify layout and spacing in `npm run dev`, especially on narrow screens.
+- Do not run or check `npm run build` by default.
+- Verify layout and spacing in `npm run dev` only when explicitly requested, especially on narrow screens.
 
 ## Responsive Design Priority
 Mobile responsive design is the number one priority in this repository.
