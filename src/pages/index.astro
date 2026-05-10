@@ -1,20 +1,445 @@
 ---
-import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import NavBar from "../components/NavBar.astro";
+import Footer from "../components/Footer.astro";
+import BearingSVG from "../components/BearingSVG.astro";
+import { BRANDS, CATEGORIES, BUSINESS } from "../data/rcb";
+
+const featuredCats = CATEGORIES.slice(0, 6);
+const familyColor  = { "Ball Bearings": "cyan", "Roller Bearings": "cyan", "Thrust": "cyan", "Belts": "amber", "Seals": "amber", "Housings": "amber", "Mounted Units": "amber" } as const;
+
+const reasons = [
+  { n: "01", t: "Quality Assurance",   d: "Every shipment audited against OEM specifications. We sell what we'd run on our own machines." },
+  { n: "02", t: "Reliability",          d: "Factory-direct sourcing from NTN, NSK, NACHI, FAG, SKF, KOYO and TIMKEN — no grey market." },
+  { n: "03", t: "Fast Availability",   d: "Deep stock across Colombo and onward dispatch nationwide. Same-day fulfilment on common sizes." },
+  { n: "04", t: "Technical Knowledge", d: "Engineers on the line, not call-centre operators. Tell us the application — we'll spec the part." },
+  { n: "05", t: "Customer-focused",    d: "24/7 enquiry response. We work to your downtime window, not ours." },
+  { n: "06", t: "Value-driven Supply", d: "Cost-effective without cutting corners. Volume pricing for workshops and OEMs on request." },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Royal Crown Bearings",
+  "description": BUSINESS.mission,
+  "url": "https://royalcrownbearings.com",
+  "telephone": BUSINESS.phone,
+  "email": BUSINESS.email,
+  "address": { "@type": "PostalAddress", "addressCountry": "LK", "addressLocality": "Colombo" },
+  "openingHoursSpecification": { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "00:00", "closes": "23:59" },
+};
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="generator" content={Astro.generator} />
-		<title>New Astro App</title>
-	</head>
-	<body>
-		<main class="app-shell">
-			<p class="eyebrow">Astro baseline</p>
-			<h1 class="text-3xl font-bold underline">Start here</h1>
-			<p>Build your new application from this clean foundation.</p>
-		</main>
-	</body>
-</html>
+<Layout
+  title="Royal Crown Bearings"
+  description="Royal Crown Bearings supplies premium bearings, V-belts, oil seals and industrial components across Sri Lanka. NTN, NSK, NACHI, FAG, SKF, KOYO — fast availability, 24/7 service."
+  jsonLd={jsonLd}
+>
+  <NavBar slot="navbar" currentPath="/" />
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="relative overflow-hidden border-b hairline" id="hero">
+    <div class="absolute inset-0 tech-grid pointer-events-none"></div>
+    <div class="absolute inset-0 spot pointer-events-none"></div>
+    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-brand/40 to-transparent"></div>
+
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 pt-10 sm:pt-16 md:pt-24 pb-12 sm:pb-16 md:pb-28 grid md:grid-cols-12 gap-8 md:gap-10 items-center">
+      <!-- Text -->
+      <div class="md:col-span-6 lg:col-span-7 order-2 md:order-1">
+        <div id="hero-eyebrow" class="gsap-reveal flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase">
+          <span class="inline-block w-6 h-px bg-cyan-brand"></span>
+          <span class="text-cyan-brand">Royal Crown Bearings · Est. 2026</span>
+        </div>
+        <h1 id="hero-h1" class="gsap-reveal mt-4 font-display text-[clamp(2.1rem,8vw,4.5rem)] font-semibold tracking-tight leading-[1.04] text-chrome-50" style="text-wrap:balance">
+          Engineered to spin.<br />
+          <span class="text-cyan-brand">Built to last.</span>
+        </h1>
+        <p id="hero-sub" class="gsap-reveal mt-4 sm:mt-5 text-[15px] sm:text-base md:text-lg text-chrome-100/80 max-w-[58ch] leading-relaxed">
+          Premium bearings, V-belts, oil seals and industrial components — sourced from the world's most trusted manufacturers and stocked at scale across Sri Lanka. Powering performance, ensuring reliability.
+        </p>
+
+        <div id="hero-btns" class="gsap-reveal mt-6 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
+          <a href="/categories"
+             class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] bg-cyan-brand text-ink-900 hover:bg-white hover:shadow-glow-cyan btn-shine">
+            View Categories
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+          </a>
+          <button onclick="openSearchPalette()"
+                  class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] border hairline-strong text-chrome-50 hover:border-cyan-brand/60 hover:text-cyan-brand bg-ink-800/40 backdrop-blur btn-shine">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+            Browse Products
+          </button>
+          <button onclick="openEnquiryModal([])"
+                  class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] bg-amber-signal text-ink-900 hover:bg-white hover:shadow-glow-amber btn-shine">
+            Enquire Now
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+          </button>
+        </div>
+
+        <!-- Spec strip -->
+        <div id="hero-stats" class="gsap-reveal mt-8 sm:mt-10 grid grid-cols-3 gap-px rounded-md overflow-hidden border hairline-strong bg-white/5">
+          {[
+            { k: "24/7",  v: "Service Window", num: null },
+            { k: "12+",   v: "Trusted Brands",  num: 12 },
+            { k: "100%",  v: "Quality Assured",  num: 100 },
+          ].map((s) => (
+            <div class="bg-ink-800/80 p-3 sm:p-4">
+              <div class="font-display text-lg sm:text-2xl text-chrome-50 font-semibold stat-val" data-val={s.num ?? s.k}>
+                {s.k}
+              </div>
+              <div class="font-mono text-[9px] sm:text-[10px] tracking-[0.18em] sm:tracking-[0.22em] uppercase text-chrome-200/60 mt-1">{s.v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Hero bearing visual -->
+      <div id="hero-bearing-wrap" class="gsap-reveal md:col-span-6 lg:col-span-5 order-1 md:order-2 relative h-[280px] sm:h-[380px] md:h-[520px]">
+        <div class="absolute inset-0 grid place-items-center">
+          <!-- Outer ring (slow spin) -->
+          <div class="absolute w-full h-full" style="max-width:min(100%,520px);max-height:min(100%,520px)">
+            <BearingSVG
+              type="groove"
+              class="w-full h-full spin-slower opacity-30"
+              id="hero-bearing-outer"
+            />
+          </div>
+          <!-- Main bearing (very slow reverse spin) -->
+          <div class="absolute" style="width:82%;height:82%">
+            <BearingSVG
+              type="groove"
+              class="w-full h-full spin-rev opacity-60"
+              id="hero-bearing-mid"
+            />
+          </div>
+          <!-- Inner bright bearing -->
+          <div class="absolute" style="width:55%;height:55%">
+            <BearingSVG
+              type="groove"
+              class="w-full h-full spin-slow"
+              id="hero-bearing-inner"
+            />
+          </div>
+        </div>
+
+        <!-- HUD overlays -->
+        <div class="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60">
+          <span class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-brand"></span>
+            RCB · CORE
+          </span>
+          <span>Ø60 · Ø95 · 18mm</span>
+        </div>
+        <div class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2 font-mono text-[10px] tracking-[0.18em] uppercase">
+          {[["RPM", "30 000"], ["LOAD", "Heavy"], ["TEMP", "-20→+150°"]].map(([k, v]) => (
+            <div class="border hairline rounded px-2 py-1.5 bg-ink-900/60 backdrop-blur">
+              <div class="text-chrome-200/50 text-[9px]">{k}</div>
+              <div class="text-cyan-brand mt-0.5">{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ BRAND MARQUEE ═══════════════════ -->
+  <section class="border-b hairline overflow-hidden" aria-label="Trusted brands">
+    <div class="marquee-track py-5">
+      {[...BRANDS, ...BRANDS].map((b, i) => (
+        <div class="flex items-center gap-3 font-display text-xl tracking-[0.04em] text-chrome-100/80 px-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-brand/70 shrink-0"></span>
+          <span class="font-semibold whitespace-nowrap">{b.name}</span>
+          <span class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/40 whitespace-nowrap">{b.country}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CATEGORIES PREVIEW ═══════════════════ -->
+  <section class="relative py-16 sm:py-20" id="section-categories">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-10 gsap-reveal">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase">
+            <span class="inline-block w-6 h-px bg-cyan-brand"></span>
+            <span class="text-cyan-brand">Catalogue · {CATEGORIES.length} Categories</span>
+          </div>
+          <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[24ch]" style="text-wrap:balance">
+            Find the right bearing for the job.
+          </h2>
+          <p class="text-chrome-100/80 max-w-[60ch] leading-relaxed">
+            From miniature precision bearings to heavy-duty spherical rollers — every category linked to inventory you can enquire on today.
+          </p>
+        </div>
+        <a href="/categories"
+           class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-4 py-2.5 text-sm border hairline-strong text-chrome-50 hover:border-cyan-brand/60 hover:text-cyan-brand bg-ink-800/40 backdrop-blur btn-shine shrink-0">
+          All categories
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {featuredCats.map((c, i) => (
+          <a href={`/categories/${c.slug}`}
+             class="category-card group relative bg-ink-800 hover:bg-ink-700 transition-colors p-5 sm:p-6 text-left gsap-reveal">
+            <div class="absolute inset-0 tech-grid-fine opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative flex items-start justify-between gap-4">
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/50">
+                  {String(i + 1).padStart(2, "0")} · {c.family}
+                </div>
+                <h3 class="mt-2 font-display text-lg sm:text-xl font-semibold tracking-tight text-chrome-50 group-hover:text-cyan-brand transition-colors">
+                  {c.name}
+                </h3>
+                <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">{c.short}</p>
+                <div class="mt-4 flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-cyan-brand/0 group-hover:text-cyan-brand transition-colors">
+                  Browse
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+                </div>
+              </div>
+              <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center">
+                {c.image ? (
+                  <img src={c.image} alt="" loading="lazy" class="max-w-[80%] max-h-[80%] object-contain" />
+                ) : (
+                  <BearingSVG type={c.iconType as any} size={80} class="opacity-90" />
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ WHY CHOOSE RCB ═══════════════════ -->
+  <section class="relative py-16 sm:py-20 border-y hairline bg-ink-800/30" id="section-why">
+    <div class="absolute inset-0 tech-grid pointer-events-none opacity-50"></div>
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-4 gsap-reveal">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase">
+            <span class="inline-block w-6 h-px bg-cyan-brand"></span>
+            <span class="text-cyan-brand">Why Royal Crown</span>
+          </div>
+          <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[24ch]" style="text-wrap:balance">
+            Five reasons fleets and factories switch.
+          </h2>
+        </div>
+      </div>
+      <div class="md:col-span-8 grid sm:grid-cols-2 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {reasons.map((v) => (
+          <div class="reason-card gsap-reveal bg-ink-800 p-5 sm:p-6">
+            <div class="font-mono text-[10px] tracking-[0.28em] uppercase text-cyan-brand">{v.n}</div>
+            <h3 class="mt-2 font-display text-base sm:text-lg font-semibold text-chrome-50">{v.t}</h3>
+            <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ BRAND GRID ═══════════════════ -->
+  <section class="py-16 sm:py-20" id="section-brands">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <div class="gsap-reveal mb-10">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase">
+            <span class="inline-block w-6 h-px bg-cyan-brand"></span>
+            <span class="text-cyan-brand">Authorised Distribution</span>
+          </div>
+          <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[24ch]" style="text-wrap:balance">
+            Brands trusted by engineers worldwide.
+          </h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {BRANDS.map((b) => (
+          <div class="brand-card gsap-reveal bg-ink-800 hover:bg-ink-700 transition-colors p-5 sm:p-6 text-center group cursor-default">
+            <div class="font-display text-lg sm:text-xl font-semibold text-chrome-50 tracking-tight group-hover:text-cyan-brand transition-colors">{b.name}</div>
+            <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/50 mt-1">{b.country}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ MISSION + VISION ═══════════════════ -->
+  <section class="py-16 sm:py-20 border-y hairline" id="section-mission">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-8 sm:gap-10">
+      {[
+        { eyebrow: "Mission", title: "Deliver bearing solutions that simply work.", body: BUSINESS.mission, accent: "cyan" },
+        { eyebrow: "Vision",  title: "Sri Lanka's most trusted bearing supplier.",  body: BUSINESS.vision,  accent: "amber" },
+      ].map((b) => (
+        <div class={`mission-card gsap-reveal relative chrome-border rounded-lg p-7 sm:p-8 bg-ink-800/40`}>
+          <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase mb-3">
+            <span class={`inline-block w-6 h-px ${b.accent === "cyan" ? "bg-cyan-brand" : "bg-amber-signal"}`}></span>
+            <span class={b.accent === "cyan" ? "text-cyan-brand" : "text-amber-signal"}>{b.eyebrow}</span>
+          </div>
+          <h3 class="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-chrome-50" style="text-wrap:balance">{b.title}</h3>
+          <p class="mt-4 text-chrome-100/80 leading-relaxed">{b.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTACT CTA ═══════════════════ -->
+  <section class="relative py-20 sm:py-24 overflow-hidden" id="section-cta">
+    <div class="absolute inset-0 tech-grid opacity-50 pointer-events-none"></div>
+    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[420px] pointer-events-none" style="background:radial-gradient(closest-side,rgba(0,224,255,0.10),transparent 70%)"></div>
+    <div class="relative max-w-5xl mx-auto px-5 sm:px-6 text-center">
+      <div class="gsap-reveal">
+        <div class="flex items-center gap-2 font-mono text-[11px] tracking-[0.28em] uppercase justify-center mb-4">
+          <span class="inline-block w-6 h-px bg-amber-signal"></span>
+          <span class="text-amber-signal">Talk to a specialist</span>
+        </div>
+        <h2 class="font-display text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-chrome-50" style="text-wrap:balance">
+          Got a part code? <span class="text-cyan-brand">We probably stock it.</span>
+        </h2>
+        <p class="mt-4 text-chrome-100/80 max-w-2xl mx-auto">
+          Send your specifications, application or just a photo of an old bearing — our team will identify and quote within the hour.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <a href={`https://wa.me/${BUSINESS.whatsapp}`} target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] bg-amber-signal text-ink-900 hover:bg-white hover:shadow-glow-amber btn-shine">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.7 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5zm-8.6 17.1a9 9 0 0 1-4.6-1.3l-.3-.2-2.8 1 .9-2.8-.2-.3a9 9 0 1 1 7 3.6zm5-6.7c-.3-.2-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1l-.8 1c-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.4a9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6c.1-.1.1-.3.2-.5l.1-.4c0-.2 0-.3-.1-.5l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.6 1 2.8c.1.2 1.8 2.7 4.4 3.8 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.4z"/></svg>
+            WhatsApp {BUSINESS.phone}
+          </a>
+          <a href={`tel:${BUSINESS.phone}`}
+             class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] border hairline-strong text-chrome-50 hover:border-cyan-brand/60 hover:text-cyan-brand bg-ink-800/40 backdrop-blur btn-shine">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            Call us
+          </a>
+          <button onclick="openEnquiryModal([])"
+                  class="inline-flex items-center justify-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-3.5 text-[15px] bg-cyan-brand text-ink-900 hover:bg-white hover:shadow-glow-cyan btn-shine">
+            Send written enquiry
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Hero entrance ──────────────────────────────────────────────────────────
+  const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  heroTl
+    .to('#hero-eyebrow',      { opacity: 1, y: 0, duration: 0.7 })
+    .to('#hero-h1',           { opacity: 1, y: 0, duration: 0.8 }, '-=0.4')
+    .to('#hero-sub',          { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
+    .to('#hero-btns',         { opacity: 1, y: 0, duration: 0.6 }, '-=0.4')
+    .to('#hero-stats',        { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+    .to('#hero-bearing-wrap', { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }, 0.1);
+
+  // Set initial states before animating
+  gsap.set(['#hero-eyebrow','#hero-h1','#hero-sub','#hero-btns','#hero-stats'], { opacity: 0, y: 30 });
+  gsap.set('#hero-bearing-wrap', { opacity: 0, scale: 0.92 });
+  heroTl.play();
+
+  // ── Stats counter ──────────────────────────────────────────────────────────
+  gsap.delayedCall(1.4, () => {
+    document.querySelectorAll<HTMLElement>('.stat-val').forEach((el) => {
+      const val = el.dataset.val;
+      if (!val || isNaN(Number(val))) return;
+      const end = Number(val);
+      const suffix = el.textContent?.replace(/\d+/g, '') || '';
+      gsap.fromTo({ n: 0 }, { n: 0 }, {
+        n: end,
+        duration: 1.5,
+        ease: 'power2.out',
+        onUpdate() { el.textContent = Math.round((this as any).targets()[0].n) + suffix; },
+      });
+    });
+  });
+
+  // ── Scroll-triggered reveals ────────────────────────────────────────────────
+  const revealAll = gsap.utils.toArray<HTMLElement>('.gsap-reveal');
+
+  // Category cards stagger
+  const catCards = gsap.utils.toArray<HTMLElement>('.category-card');
+  ScrollTrigger.create({
+    trigger: '#section-categories',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap.to(catCards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.65,
+        ease: 'power3.out',
+        stagger: 0.1,
+      });
+    },
+  });
+
+  // Generic section headings
+  gsap.utils.toArray<HTMLElement>('.gsap-reveal:not(.category-card):not(.reason-card):not(.brand-card):not(.mission-card)').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true,
+      },
+    });
+  });
+
+  // Reason cards stagger
+  const reasonCards = gsap.utils.toArray<HTMLElement>('.reason-card');
+  ScrollTrigger.create({
+    trigger: '#section-why',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap.to(reasonCards, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        stagger: 0.08,
+      });
+    },
+  });
+
+  // Brand cards stagger
+  const brandCards = gsap.utils.toArray<HTMLElement>('.brand-card');
+  ScrollTrigger.create({
+    trigger: '#section-brands',
+    start: 'top 85%',
+    once: true,
+    onEnter: () => {
+      gsap.to(brandCards, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.5,
+        ease: 'back.out(1.2)',
+        stagger: 0.04,
+      });
+    },
+  });
+  gsap.set(brandCards, { opacity: 0, scale: 0.88 });
+
+  // Mission/Vision cards
+  const missionCards = gsap.utils.toArray<HTMLElement>('.mission-card');
+  ScrollTrigger.create({
+    trigger: '#section-mission',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      gsap.to(missionCards[0], { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' });
+      gsap.to(missionCards[1], { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+    },
+  });
+  gsap.set(missionCards[0], { opacity: 0, x: -30 });
+  gsap.set(missionCards[1], { opacity: 0, x: 30 });
+</script>

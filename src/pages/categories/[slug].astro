@@ -1,0 +1,333 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import NavBar from "../../components/NavBar.astro";
+import Footer from "../../components/Footer.astro";
+import BearingSVG from "../../components/BearingSVG.astro";
+import { CATEGORIES, PRODUCTS, BRANDS } from "../../data/rcb";
+
+export function getStaticPaths() {
+  return CATEGORIES.map((cat) => ({ params: { slug: cat.slug } }));
+}
+
+const { slug } = Astro.params;
+const cat = CATEGORIES.find((c) => c.slug === slug)!;
+const products = PRODUCTS.filter((p) => p.category === slug);
+const brands   = [...new Set(products.map((p) => p.brand))].sort();
+
+const allBrands = brands;
+const canonicalUrl = `https://royalcrownbearings.com/categories/${slug}`;
+
+// JSON-LD for category
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": `${cat.name} — Royal Crown Bearings`,
+  "description": cat.description,
+  "url": canonicalUrl,
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home",       "item": "https://royalcrownbearings.com" },
+      { "@type": "ListItem", "position": 2, "name": "Categories", "item": "https://royalcrownbearings.com/categories" },
+      { "@type": "ListItem", "position": 3, "name": cat.name,     "item": canonicalUrl },
+    ],
+  },
+};
+---
+
+<Layout
+  title={`${cat.name} — Bearings Sri Lanka`}
+  description={`${cat.short} Buy ${cat.name} from NTN, NSK, FAG, SKF, KOYO and more at Royal Crown Bearings, Sri Lanka.`}
+  canonical={canonicalUrl}
+  jsonLd={jsonLd}
+>
+  <NavBar slot="navbar" currentPath="/categories" />
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+  <section class="relative pt-28 pb-14 tech-grid overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 60% 50% at 60% -10%,rgba(0,224,255,0.07),transparent 70%)"></div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-chrome-200/50 mb-8" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-cyan-brand transition-colors">Home</a>
+        <span class="text-chrome-200/30">/</span>
+        <a href="/categories" class="hover:text-cyan-brand transition-colors">Categories</a>
+        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/80 truncate max-w-[200px]">{cat.name}</span>
+      </nav>
+
+      <div class="flex flex-col lg:flex-row gap-10 lg:items-center">
+        <!-- Text -->
+        <div class="flex-1">
+          <div class="flex items-center gap-3 font-mono text-[11px] tracking-[0.28em] uppercase mb-4 gsap-reveal">
+            <span class="inline-block w-6 h-px bg-cyan-brand"></span>
+            <span class="text-cyan-brand">{cat.family}</span>
+          </div>
+          <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight text-chrome-50 leading-[1.08] gsap-reveal">{cat.name}</h1>
+          <p class="mt-4 text-base sm:text-lg text-chrome-100/70 max-w-2xl leading-relaxed gsap-reveal">{cat.description}</p>
+
+          <div class="mt-6 flex flex-wrap items-center gap-4 gsap-reveal">
+            <button onclick="openEnquiryModal([])"
+                    class="inline-flex items-center gap-2 font-medium tracking-tight rounded-md transition-all duration-200 px-5 py-2.5 text-sm bg-amber-signal text-ink-900 hover:bg-white hover:shadow-glow-amber btn-shine">
+              Request Quote
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/>
+              </svg>
+            </button>
+            <span class="font-mono text-[11px] tracking-[0.18em] uppercase text-chrome-200/50">
+              {products.length} products · {brands.length} brands
+            </span>
+          </div>
+        </div>
+
+        <!-- SVG visual -->
+        <div class="flex items-center justify-center lg:justify-end shrink-0 gsap-bearing">
+          <div class="relative w-48 h-48 lg:w-56 lg:h-56">
+            <BearingSVG type={cat.iconType as any} size={220} id={`hero-${slug}`} spinClass="spin-slow" class="w-full h-full opacity-70" />
+            <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(circle at 50% 50%,rgba(0,224,255,0.06),transparent 70%)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Filter / sort bar ─────────────────────────────────────────────── -->
+  <div class="sticky top-[60px] z-30 border-b hairline bg-ink-900/95 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 py-2.5 flex flex-wrap items-center gap-3">
+      <!-- Brand filter -->
+      <div class="flex items-center gap-2 overflow-x-auto scrollbar-none flex-1">
+        <span class="font-mono text-[9px] tracking-[0.22em] uppercase text-chrome-200/40 shrink-0">Brand:</span>
+        <button
+          data-brand="All"
+          class="brand-btn active shrink-0 px-2.5 py-1 rounded font-mono text-[9px] tracking-[0.18em] uppercase transition-all"
+        >All</button>
+        {allBrands.map(b => (
+          <button
+            data-brand={b}
+            class="brand-btn shrink-0 px-2.5 py-1 rounded font-mono text-[9px] tracking-[0.18em] uppercase transition-all"
+          >{b}</button>
+        ))}
+      </div>
+
+      <!-- Sort -->
+      <select id="sort-select"
+              class="shrink-0 px-3 py-1.5 rounded-md border hairline-strong bg-ink-800 text-chrome-200/80 font-mono text-[10px] tracking-[0.14em] uppercase outline-none focus:border-cyan-brand/60 transition-colors cursor-pointer">
+        <option value="code">Sort: Part Code</option>
+        <option value="bore-asc">Bore: Small → Large</option>
+        <option value="bore-desc">Bore: Large → Small</option>
+        <option value="brand">Brand A–Z</option>
+      </select>
+
+      <!-- Count -->
+      <span id="result-count" class="font-mono text-[10px] tracking-[0.18em] uppercase text-chrome-200/40 shrink-0">
+        {products.length} results
+      </span>
+    </div>
+  </div>
+
+  <!-- ── Product grid ───────────────────────────────────────────────────── -->
+  <main class="max-w-7xl mx-auto px-5 sm:px-6 py-10">
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {products.map((p) => (
+        <article
+          class="product-card group chrome-border rounded-xl bg-ink-800/60 p-4 flex flex-col gap-3 hover:bg-ink-800/80 transition-all duration-300"
+          data-brand={p.brand}
+          data-bore={p.bore ?? 0}
+          data-code={p.code}
+        >
+          <!-- Icon + code -->
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 shrink-0 rounded-lg border hairline-strong bg-ink-700/60 grid place-items-center overflow-hidden">
+              <BearingSVG type={p.iconType as any} size={44} />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-mono text-[11px] tracking-[0.18em] text-cyan-brand/80 truncate">{p.code}</div>
+              <div class="font-mono text-[9px] tracking-[0.22em] uppercase text-chrome-200/50 mt-0.5">{p.brand}</div>
+            </div>
+            <div class={`shrink-0 font-mono text-[8px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded border ${p.availability === 'In Stock' ? 'text-emerald-400 border-emerald-400/30 bg-emerald-400/5' : 'text-amber-signal border-amber-signal/30 bg-amber-signal/5'}`}>
+              {p.availability === 'In Stock' ? 'In Stock' : 'Pre-order'}
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div>
+            <a href={`/products/${p.id}`}
+               class="font-display text-sm font-semibold text-chrome-50 hover:text-cyan-brand transition-colors leading-snug line-clamp-2">
+              {p.name}
+            </a>
+          </div>
+
+          <!-- Specs -->
+          <div class="grid grid-cols-3 gap-1.5 text-center">
+            {p.bore && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5">
+                <div class="font-mono text-[10px] text-chrome-50">{p.bore}</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">Bore mm</div>
+              </div>
+            )}
+            {p.od && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5">
+                <div class="font-mono text-[10px] text-chrome-50">{p.od}</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">OD mm</div>
+              </div>
+            )}
+            {p.width && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5">
+                <div class="font-mono text-[10px] text-chrome-50">{p.width}</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">Width mm</div>
+              </div>
+            )}
+            {p.section && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5 col-span-1">
+                <div class="font-mono text-[10px] text-chrome-50">{p.section}</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">Section</div>
+              </div>
+            )}
+            {p.length && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5 col-span-2">
+                <div class="font-mono text-[10px] text-chrome-50">{p.length} mm</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">Length</div>
+              </div>
+            )}
+            {p.series && (
+              <div class="rounded bg-ink-700/50 px-2 py-1.5 col-span-1">
+                <div class="font-mono text-[10px] text-chrome-50">{p.series}</div>
+                <div class="font-mono text-[8px] uppercase tracking-[0.18em] text-chrome-200/40 mt-0.5">Series</div>
+              </div>
+            )}
+          </div>
+
+          <!-- Actions -->
+          <div class="flex items-center gap-2 mt-auto pt-2 border-t hairline">
+            <button
+              onclick={`addToEnquiry(${p.id})`}
+              class="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-ink-700/60 hover:bg-amber-signal/20 hover:border-amber-signal/40 border border-white/5 text-chrome-100 hover:text-amber-signal font-mono text-[10px] tracking-[0.14em] uppercase transition-all"
+            >
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add to Enquiry
+            </button>
+            <a href={`/products/${p.id}`}
+               class="p-2 rounded-md border hairline-strong bg-ink-700/40 hover:border-cyan-brand/40 hover:text-cyan-brand text-chrome-200/60 transition-all"
+               aria-label={`View ${p.name}`}>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden py-20 text-center">
+      <div class="font-mono text-[11px] tracking-[0.22em] uppercase text-chrome-200/40 mb-3">No results</div>
+      <p class="text-chrome-100/60">No products match the selected brand filter.</p>
+      <button onclick="resetFilters()" class="mt-4 font-mono text-[11px] tracking-[0.18em] uppercase text-cyan-brand hover:text-cyan-brand/70 transition-colors">Clear filter</button>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</Layout>
+
+<style>
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .brand-btn {
+    color: rgba(194,204,219,0.6);
+    border: 1px solid transparent;
+  }
+  .brand-btn.active {
+    color: #00E0FF;
+    background: rgba(0,224,255,0.08);
+    border-color: rgba(0,224,255,0.20);
+  }
+  .brand-btn:hover:not(.active) {
+    color: rgba(242,246,250,0.9);
+    background: rgba(255,255,255,0.04);
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Entrance
+  gsap.fromTo('.gsap-reveal',
+    { opacity: 0, y: 18 },
+    { opacity: 1, y: 0, duration: 0.55, stagger: 0.09, ease: 'power2.out', delay: 0.05 }
+  );
+  gsap.fromTo('.gsap-bearing',
+    { opacity: 0, scale: 0.88 },
+    { opacity: 1, scale: 1,    duration: 0.8, ease: 'back.out(1.4)', delay: 0.2 }
+  );
+
+  ScrollTrigger.batch('.product-card', {
+    onEnter: (els) => gsap.fromTo(els,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }
+    ),
+    start: 'top 94%',
+    once: true,
+  });
+
+  // ── Brand filter ─────────────────────────────────────────────────────
+  let activeBrand = 'All';
+  let activeSort  = 'code';
+
+  const cards      = Array.from(document.querySelectorAll<HTMLElement>('.product-card'));
+  const grid       = document.getElementById('product-grid')!;
+  const emptyState = document.getElementById('empty-state')!;
+  const countEl    = document.getElementById('result-count')!;
+
+  function applyFilter() {
+    let visible = cards.filter(card => activeBrand === 'All' || card.dataset.brand === activeBrand);
+
+    // Sort
+    visible = visible.slice().sort((a, b) => {
+      if (activeSort === 'bore-asc')  return Number(a.dataset.bore) - Number(b.dataset.bore);
+      if (activeSort === 'bore-desc') return Number(b.dataset.bore) - Number(a.dataset.bore);
+      if (activeSort === 'brand')     return (a.dataset.brand ?? '').localeCompare(b.dataset.brand ?? '');
+      return (a.dataset.code ?? '').localeCompare(b.dataset.code ?? '');
+    });
+
+    // Show/hide
+    cards.forEach(c => c.style.display = 'none');
+    visible.forEach(c => { c.style.display = ''; grid.appendChild(c); });
+
+    countEl.textContent = `${visible.length} result${visible.length !== 1 ? 's' : ''}`;
+    emptyState.classList.toggle('hidden', visible.length > 0);
+
+    // Re-animate newly visible cards
+    gsap.fromTo(visible,
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out' }
+    );
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.brand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeBrand = btn.dataset.brand ?? 'All';
+      applyFilter();
+    });
+  });
+
+  document.getElementById('sort-select')?.addEventListener('change', (e) => {
+    activeSort = (e.target as HTMLSelectElement).value;
+    applyFilter();
+  });
+
+  (window as any).resetFilters = () => {
+    activeBrand = 'All';
+    document.querySelectorAll('.brand-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-brand="All"]')?.classList.add('active');
+    applyFilter();
+  };
+</script>
