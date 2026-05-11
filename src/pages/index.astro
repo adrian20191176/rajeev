@@ -1,20 +1,248 @@
 ---
-import "../styles/global.css";
+import Layout from '../layouts/Layout.astro';
+import BearingVisual from '../components/BearingVisual.astro';
+import { BUSINESS, BRANDS, CATEGORIES } from '../data/rcb.js';
+
+const featuredCats = CATEGORIES.slice(0, 6);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="generator" content={Astro.generator} />
-		<title>New Astro App</title>
-	</head>
-	<body>
-		<main class="app-shell">
-			<p class="eyebrow">Astro baseline</p>
-			<h1 class="text-3xl font-bold underline">Start here</h1>
-			<p>Build your new application from this clean foundation.</p>
-		</main>
-	</body>
-</html>
+<Layout title="Royal Crown Bearings — Powering Performance, Ensuring Reliability">
+
+  <!-- ── HERO ──────────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden border-b hairline">
+    <div class="absolute inset-0 tech-grid pointer-events-none"></div>
+    <div class="absolute inset-0 spot pointer-events-none"></div>
+    <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
+
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 pt-10 sm:pt-16 md:pt-24 pb-12 sm:pb-16 md:pb-28 grid md:grid-cols-12 gap-8 md:gap-10 items-center">
+      <!-- Text -->
+      <div class="md:col-span-6 lg:col-span-7 order-2 md:order-1">
+        <div class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold mb-4">
+          <span class="inline-block w-6 h-px bg-gold"></span>Royal Crown Bearings · Est. 2026
+        </div>
+        <h1 class="font-display text-[clamp(2.1rem,8vw,4.5rem)] font-semibold tracking-tight leading-[1.04] text-chrome-50" style="text-wrap:balance">
+          Engineered to spin.<br/>
+          <span class="text-gold">Built to last.</span>
+        </h1>
+        <p class="mt-4 sm:mt-5 text-[15px] sm:text-base md:text-lg text-chrome-100/80 max-w-[58ch] leading-relaxed">
+          Premium bearings, V-belts, oil seals and industrial components — sourced from the world's most trusted manufacturers and stocked at scale across Sri Lanka.
+        </p>
+
+        <div class="mt-6 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
+          <a href="/categories" class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan">
+            View Categories
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+          </a>
+          <button class="open-search btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 hover:text-gold bg-ink-600/40 backdrop-blur">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+            Browse Products
+          </button>
+          <button onclick="openEnquiry([])" class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold hover:shadow-glow-amber">
+            Enquire Now
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+          </button>
+        </div>
+
+        <!-- Spec strip -->
+        <div class="mt-8 sm:mt-10 grid grid-cols-3 gap-px rounded-md overflow-hidden border hairline-strong bg-white/5">
+          {[
+            { k:'24/7', v:'Service Window' },
+            { k:'12+',  v:'Trusted Brands' },
+            { k:'100%', v:'Quality Assured' },
+          ].map(s => (
+            <div class="bg-ink-600/80 p-3 sm:p-4">
+              <div class="font-display text-lg sm:text-2xl text-chrome-50 font-semibold">{s.k}</div>
+              <div class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-chrome-200/60 mt-1">{s.v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Hero bearing visual -->
+      <div class="md:col-span-6 lg:col-span-5 order-1 md:order-2 relative h-[280px] sm:h-[400px] md:h-[520px]">
+        <div class="absolute inset-0 grid place-items-center">
+          <BearingVisual iconType="groove" size={560} class="spin-slower opacity-95" />
+        </div>
+        <div class="absolute inset-0 grid place-items-center">
+          <BearingVisual iconType="cylindrical" size={380} class="spin-rev opacity-50" />
+        </div>
+        <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(closest-side, rgba(212,175,55,0.16), transparent 70%)"></div>
+        <!-- HUD overlay labels -->
+        <div class="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] tracking-widest uppercase text-chrome-200/50">
+          <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-gold"></span>RCB · CORE</span>
+          <span>Ø60 · Ø95 · 18mm</span>
+        </div>
+        <div class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2 font-mono text-[10px] tracking-widest uppercase">
+          {[['RPM','30 000'],['LOAD','Heavy'],['TEMP','-20→+150°']].map(([k,v]) => (
+            <div class="border hairline rounded px-2 py-1.5 bg-ink-900/60 backdrop-blur">
+              <div class="text-chrome-200/50 text-[9px]">{k}</div>
+              <div class="text-gold mt-0.5">{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BRAND MARQUEE ─────────────────────────────────────────────── -->
+  <section class="border-b hairline overflow-hidden">
+    <div class="py-5 flex items-center gap-12 marquee" style="width:max-content">
+      {[...BRANDS, ...BRANDS].map((b) => (
+        <div class="flex items-center gap-3 font-display text-2xl tracking-[0.04em] text-chrome-100/80">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold/70"></span>
+          <span class="font-semibold">{b.name}</span>
+          <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/40">{b.country}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── CATEGORIES PREVIEW ────────────────────────────────────────── -->
+  <section class="relative py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <div class="flex items-end justify-between gap-6 flex-wrap mb-10">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold">
+            <span class="inline-block w-6 h-px bg-gold"></span>Catalogue · 18 Categories
+          </div>
+          <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[24ch]" style="text-wrap:balance">Find the right bearing for the job.</h2>
+          <p class="text-chrome-100/80 max-w-[60ch] leading-relaxed">From miniature precision bearings to heavy-duty spherical rollers — every category linked to inventory you can enquire on today.</p>
+        </div>
+        <a href="/categories" class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40 whitespace-nowrap">
+          All categories
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {featuredCats.map((c, i) => (
+          <a href={`/categories/${c.slug}`}
+            class="group relative bg-ink-700 hover:bg-ink-600 transition-colors p-5 sm:p-6 text-left">
+            <div class="absolute inset-0 tech-grid-fine opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="relative flex items-start justify-between gap-4">
+              <div class="flex-1 min-w-0">
+                <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50">{String(i+1).padStart(2,'0')} · {c.family}</div>
+                <h3 class="mt-2 font-display text-lg sm:text-xl font-semibold tracking-tight text-chrome-50 group-hover:text-gold transition-colors">{c.name}</h3>
+                <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">{c.short}</p>
+                <div class="mt-4 flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase text-transparent group-hover:text-gold transition-colors">
+                  Browse
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+                </div>
+              </div>
+              <div class="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center">
+                {c.image ? (
+                  <img src={c.image} alt="" loading="lazy" class="max-w-[80%] max-h-[80%] object-contain" />
+                ) : (
+                  <BearingVisual iconType={c.iconType} size={80} class="opacity-90" />
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHY ROYAL CROWN ───────────────────────────────────────────── -->
+  <section class="relative py-16 sm:py-20 border-y hairline bg-ink-800/30">
+    <div class="absolute inset-0 tech-grid pointer-events-none opacity-50"></div>
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-4">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold">
+            <span class="inline-block w-6 h-px bg-gold"></span>Why Royal Crown
+          </div>
+          <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50" style="text-wrap:balance">Five reasons fleets and factories switch.</h2>
+        </div>
+      </div>
+      <div class="md:col-span-8 grid sm:grid-cols-2 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {[
+          { n:'01', t:'Quality Assurance',   d:'Every shipment audited against OEM specifications. We sell what we\'d run on our own machines.' },
+          { n:'02', t:'Reliability',          d:'Factory-direct sourcing from NTN, NSK, NACHI, FAG, SKF, KOYO and TIMKEN — no grey market.' },
+          { n:'03', t:'Fast Availability',   d:'Deep stock across Colombo and onward dispatch nationwide. Same-day fulfilment on common sizes.' },
+          { n:'04', t:'Technical Knowledge', d:'Engineers on the line, not call-centre operators. Tell us the application — we\'ll spec the part.' },
+          { n:'05', t:'Customer-focused',    d:'24/7 enquiry response. We work to your downtime window, not ours.' },
+          { n:'06', t:'Value-driven Supply', d:'Cost-effective without cutting corners. Volume pricing for workshops and OEMs on request.' },
+        ].map(v => (
+          <div class="bg-ink-700 p-5 sm:p-6">
+            <div class="font-mono text-[10px] tracking-widest uppercase text-gold">{v.n}</div>
+            <h3 class="mt-2 font-display text-base sm:text-lg font-semibold text-chrome-50">{v.t}</h3>
+            <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BRAND GRID ────────────────────────────────────────────────── -->
+  <section class="py-16 sm:py-20">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <div class="flex flex-col gap-3 mb-10">
+        <div class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold">
+          <span class="inline-block w-6 h-px bg-gold"></span>Authorised Distribution
+        </div>
+        <h2 class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50">Brands trusted by engineers worldwide.</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
+        {BRANDS.map(b => (
+          <div class="bg-ink-700 hover:bg-ink-600 transition-colors p-5 sm:p-6 text-center group">
+            <div class="font-display text-lg sm:text-xl font-semibold text-chrome-50 tracking-tight group-hover:text-gold transition-colors">{b.name}</div>
+            <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 mt-1">{b.country}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MISSION + VISION ──────────────────────────────────────────── -->
+  <section class="py-16 sm:py-20 border-y hairline">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-8 sm:gap-10">
+      {[
+        { eyebrow:'Mission', title:'Deliver bearing solutions that simply work.', body: BUSINESS.mission, accent:'gold' },
+        { eyebrow:'Vision',  title:'Sri Lanka\'s most trusted bearing supplier.', body: BUSINESS.vision,  accent:'amber' },
+      ].map(b => (
+        <div class="relative chrome-border rounded-lg p-7 sm:p-8 bg-ink-700/40">
+          <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+          <div class={`flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase mb-3 ${b.accent === 'gold' ? 'text-gold' : 'text-amber-signal'}`}>
+            <span class={`inline-block w-6 h-px ${b.accent === 'gold' ? 'bg-gold' : 'bg-amber-signal'}`}></span>{b.eyebrow}
+          </div>
+          <h3 class="font-display text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight text-chrome-50" style="text-wrap:balance">{b.title}</h3>
+          <p class="mt-4 text-chrome-100/80 leading-relaxed">{b.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── CONTACT CTA ───────────────────────────────────────────────── -->
+  <section class="relative py-20 sm:py-24 overflow-hidden">
+    <div class="absolute inset-0 tech-grid opacity-50 pointer-events-none"></div>
+    <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[420px]" style="background:radial-gradient(closest-side, rgba(212,175,55,0.10), transparent 70%)"></div>
+    <div class="relative max-w-5xl mx-auto px-5 sm:px-6 text-center">
+      <div class="flex items-center justify-center gap-2 font-mono text-[11px] tracking-widest uppercase text-amber-signal mb-4">
+        <span class="inline-block w-6 h-px bg-amber-signal"></span>Talk to a specialist
+      </div>
+      <h2 class="font-display text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-chrome-50" style="text-wrap:balance">
+        Got a part code? <span class="text-gold">We probably stock it.</span>
+      </h2>
+      <p class="mt-4 text-chrome-100/80 max-w-2xl mx-auto">Send your specifications, application or just a photo of an old bearing — our team will identify and quote within the hour.</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a href={`https://wa.me/${BUSINESS.whatsapp}`} target="_blank" rel="noopener"
+          class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md bg-amber-signal text-ink-900 hover:bg-gold hover:shadow-glow-amber">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 0 0 3.7 17.3L2 22l4.8-1.6A11 11 0 1 0 20.5 3.5zm-8.6 17.1a9 9 0 0 1-4.6-1.3l-.3-.2-2.8 1 .9-2.8-.2-.3a9 9 0 1 1 7 3.6zm5-6.7c-.3-.2-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1l-.8 1c-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.4a9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6c.1-.1.1-.3.2-.5l.1-.4c0-.2 0-.3-.1-.5l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.6 1 2.8c.1.2 1.8 2.7 4.4 3.8 1.6.7 2.2.7 3 .6.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.4z"/></svg>
+          WhatsApp +94 766 550 249
+        </a>
+        <a href={`tel:${BUSINESS.phone}`}
+          class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+          Call us
+        </a>
+        <button onclick="openEnquiry([])"
+          class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan">
+          Send written enquiry
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</Layout>

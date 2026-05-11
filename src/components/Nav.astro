@@ -1,0 +1,115 @@
+---
+interface Props { activeNav?: string; }
+const { activeNav } = Astro.props;
+
+const links = [
+  { href: '/categories', label: 'Categories', key: 'categories' },
+  { href: '/about',      label: 'About Us',   key: 'about'      },
+  { href: '/contact',    label: 'Contact Us', key: 'contact'    },
+];
+---
+
+<header id="site-nav" class="sticky top-0 z-40 transition-all duration-300">
+  <!-- Utility bar -->
+  <div class="hidden md:flex items-center justify-between border-b hairline px-6 py-1.5 font-mono text-[10px] tracking-widest uppercase text-chrome-200/60">
+    <div class="flex items-center gap-5">
+      <span class="flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>24/7 Service
+      </span>
+      <span>NTN · NSK · NACHI · KOYO · FAG · SKF · TIMKEN</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="tel:+94766550249" class="hover:text-gold">+94 766 550 249</a>
+      <span class="text-chrome-200/30">·</span>
+      <a href="mailto:info@royalcrownbearings.com" class="hover:text-gold">info@royalcrownbearings.com</a>
+    </div>
+  </div>
+
+  <!-- Main nav bar -->
+  <div class="flex items-center justify-between gap-4 px-4 md:px-6 py-3">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2.5" aria-label="Home">
+      <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-md border hairline-strong bg-gradient-to-b from-ink-500 to-ink-700 grid place-items-center overflow-hidden">
+        <div class="w-7 h-7 sm:w-8 sm:h-8" style="
+          background: linear-gradient(135deg, #F5F6F8 0%, #D4AF37 40%, #C49B2A 70%, #D4AF37 100%);
+          -webkit-mask-image: url(/logo.svg);
+          mask-image: url(/logo.svg);
+          -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+          -webkit-mask-position: center; mask-position: center;
+          -webkit-mask-size: contain; mask-size: contain;
+        "></div>
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(60% 50% at 50% 0%, rgba(212,175,55,0.20), transparent 70%)"></div>
+      </div>
+      <div class="leading-tight">
+        <div class="font-display text-[14px] sm:text-[15px] font-semibold tracking-tight text-chrome-50">Royal Crown</div>
+        <div class="font-mono text-[9px] tracking-[0.28em] uppercase text-chrome-200/60">Bearings · LK</div>
+      </div>
+    </a>
+
+    <!-- Desktop nav links -->
+    <nav class="hidden lg:flex items-center gap-1">
+      {links.map(l => (
+        <a href={l.href}
+          class={`relative px-3 py-2 text-sm tracking-tight transition-colors ${activeNav === l.key ? 'text-gold' : 'text-chrome-100 hover:text-chrome-50'}`}>
+          {l.label}
+          {activeNav === l.key && <span class="absolute left-3 right-3 -bottom-px h-px bg-gold"></span>}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right controls -->
+    <div class="flex items-center gap-2">
+      <!-- Search (desktop) -->
+      <button class="open-search hidden sm:flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong bg-ink-600/60 text-chrome-200/80 hover:text-chrome-50 hover:border-gold/40 text-sm min-w-[200px]">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+        <span class="font-mono text-[11px] tracking-widest uppercase">Search part / category</span>
+        <span class="ml-auto font-mono text-[10px] text-chrome-200/40 border hairline rounded px-1.5 py-0.5">⌘K</span>
+      </button>
+      <!-- Search (mobile) -->
+      <button class="open-search sm:hidden p-2 rounded-md border hairline-strong text-chrome-50" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+      </button>
+
+      <!-- Enquiry list -->
+      <a href="/enquiry-list"
+        class="relative flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong bg-ink-600/60 hover:border-gold/50 text-chrome-50 text-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h7l4 4v12a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M15 4v5h5"/><path d="M11 13h6"/><path d="M11 17h4"/><path d="M5 8H3"/><path d="M5 13H3"/><path d="M5 18H3"/></svg>
+        <span class="hidden md:inline">Enquiry List</span>
+        <span id="enquiry-count" class="grid place-items-center min-w-[22px] h-[22px] px-1.5 rounded text-[11px] font-mono font-semibold bg-ink-500 text-chrome-100 transition-colors">0</span>
+      </a>
+
+      <!-- Mobile menu toggle -->
+      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-md border hairline-strong text-chrome-50" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav menu -->
+  <div id="mobile-nav" class="lg:hidden hidden border-t hairline px-4 py-3 bg-ink-800/95 backdrop-blur flex flex-col gap-1">
+    {links.map(l => (
+      <a href={l.href}
+        class={`text-left px-2 py-2.5 capitalize transition-colors ${activeNav === l.key ? 'text-gold' : 'text-chrome-50 hover:text-gold'}`}>
+        {l.label}
+      </a>
+    ))}
+  </div>
+</header>
+
+<script>
+  const nav = document.getElementById('site-nav')!;
+  const btn = document.getElementById('mobile-menu-btn')!;
+  const menu = document.getElementById('mobile-nav')!;
+
+  // Scroll glass effect
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 8) {
+      nav.classList.add('backdrop-blur-md', 'bg-ink-900/85', 'border-b', 'hairline');
+    } else {
+      nav.classList.remove('backdrop-blur-md', 'bg-ink-900/85', 'border-b', 'hairline');
+    }
+  }, { passive: true });
+
+  // Mobile menu
+  btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+</script>

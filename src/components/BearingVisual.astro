@@ -1,0 +1,195 @@
+---
+interface Props {
+  iconType: string;
+  size?: number;
+  class?: string;
+}
+const { iconType, size = 280, class: cls = '' } = Astro.props;
+const c = size / 2;
+const outer = size * 0.46;
+const inner = size * 0.30;
+const bore  = size * 0.18;
+const ringR = (outer + inner) / 2;
+const elemR = (outer - inner) / 2 - 1;
+
+const isBelt    = iconType === 'vbelt' || iconType === 'tooth';
+const isSeal    = iconType === 'seal';
+const isHousing = iconType === 'housing';
+
+const bearingType =
+  iconType === 'cylindrical' || iconType === 'needle' ? 'roller' :
+  iconType === 'tapered'                              ? 'tapered' :
+  'ball';
+
+const count = iconType === 'needle' ? 18 : iconType === 'cylindrical' ? 12 : 10;
+const angles = Array.from({ length: count }, (_, i) => (i / count) * Math.PI * 2);
+
+const w = size;
+const h = size;
+---
+
+{isBelt ? (
+  <!-- Belt visual — two pulleys + belt path -->
+  <svg viewBox={`0 0 ${w} ${h}`} class={cls} aria-hidden="true">
+    <defs>
+      <linearGradient id={`beltGrad-${size}`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#102046"/>
+        <stop offset="50%"  stop-color="#2d4980"/>
+        <stop offset="100%" stop-color="#102046"/>
+      </linearGradient>
+      <radialGradient id={`pulley-${size}`} cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0%"   stop-color="#A7A9AC"/>
+        <stop offset="60%"  stop-color="#2d4980"/>
+        <stop offset="100%" stop-color="#0d1b3d"/>
+      </radialGradient>
+    </defs>
+    <!-- Pulleys -->
+    <circle cx={w*0.30} cy={h*0.5} r={w*0.20} fill={`url(#pulley-${size})`} stroke="rgba(255,255,255,0.12)"/>
+    <circle cx={w*0.30} cy={h*0.5} r={w*0.10} fill="#0d1b3d" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <circle cx={w*0.72} cy={h*0.5} r={w*0.14} fill={`url(#pulley-${size})`} stroke="rgba(255,255,255,0.12)"/>
+    <circle cx={w*0.72} cy={h*0.5} r={w*0.06} fill="#0d1b3d" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <!-- Belt path -->
+    <path d={`M ${w*0.30} ${h*0.30} L ${w*0.72} ${h*0.36} A ${w*0.14} ${w*0.14} 0 1 1 ${w*0.72} ${h*0.64} L ${w*0.30} ${h*0.70} A ${w*0.20} ${w*0.20} 0 1 1 ${w*0.30} ${h*0.30} Z`}
+          fill={`url(#beltGrad-${size})`} stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    {iconType === 'tooth' && Array.from({length:14},()=> null)}
+    {iconType === 'tooth' && (
+      <g>
+        {Array.from({length:14},(_,i) => {
+          const x = w*0.30 + (i/13)*(w*0.42);
+          return <line x1={x} y1={h*0.30} x2={x} y2={h*0.34} stroke="rgba(255,255,255,0.22)" stroke-width="0.8"/>;
+        })}
+        {Array.from({length:14},(_,i) => {
+          const x = w*0.30 + (i/13)*(w*0.42);
+          return <line x1={x} y1={h*0.66} x2={x} y2={h*0.70} stroke="rgba(255,255,255,0.22)" stroke-width="0.8"/>;
+        })}
+      </g>
+    )}
+    <!-- Tick marks -->
+    {Array.from({length:60},(_,i) => {
+      const a = (i/60)*Math.PI*2;
+      const cx2=w*0.30, cy2=h*0.5;
+      const r1=w*0.22, r2=w*0.22+(i%5===0?5:3);
+      return <line x1={cx2+Math.cos(a)*r1} y1={cy2+Math.sin(a)*r1} x2={cx2+Math.cos(a)*r2} y2={cy2+Math.sin(a)*r2} stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>;
+    })}
+  </svg>
+) : isSeal ? (
+  <!-- Oil seal -->
+  <svg viewBox={`0 0 ${size} ${size}`} class={cls} aria-hidden="true">
+    <defs>
+      <radialGradient id={`rubber-${size}`} cx="0.5" cy="0.5" r="0.6">
+        <stop offset="0%"   stop-color="#1a2f61"/>
+        <stop offset="60%"  stop-color="#102046"/>
+        <stop offset="100%" stop-color="#0d1b3d"/>
+      </radialGradient>
+    </defs>
+    <circle cx={c} cy={c} r={size*0.46} fill={`url(#rubber-${size})`} stroke="rgba(255,255,255,0.08)"/>
+    <circle cx={c} cy={c} r={size*0.42} fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+    <circle cx={c} cy={c} r={size*0.30} fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+    <circle cx={c} cy={c} r={size*0.26} fill="none" stroke="rgba(212,175,55,0.30)" stroke-width="0.5"/>
+    <circle cx={c} cy={c} r={size*0.22} fill="#0d1b3d" stroke="rgba(255,255,255,0.10)"/>
+    {Array.from({length:36},(_,i) => {
+      const a = (i/36)*Math.PI*2;
+      const r = size*0.245;
+      return <circle cx={c+Math.cos(a)*r} cy={c+Math.sin(a)*r} r={1.4} fill="rgba(212,175,55,0.65)"/>;
+    })}
+  </svg>
+) : isHousing ? (
+  <!-- Pillow block housing -->
+  <svg viewBox={`0 0 ${w} ${h}`} class={cls} aria-hidden="true">
+    <defs>
+      <linearGradient id={`cast-${size}`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#2d4980"/>
+        <stop offset="100%" stop-color="#102046"/>
+      </linearGradient>
+    </defs>
+    <rect x={w*0.10} y={h*0.65} width={w*0.80} height={h*0.10} rx={4} fill={`url(#cast-${size})`} stroke="rgba(255,255,255,0.10)"/>
+    <circle cx={w*0.22} cy={h*0.70} r={w*0.025} fill="#0d1b3d" stroke="rgba(255,255,255,0.18)"/>
+    <circle cx={w*0.78} cy={h*0.70} r={w*0.025} fill="#0d1b3d" stroke="rgba(255,255,255,0.18)"/>
+    <path d={`M ${w*0.22} ${h*0.65} Q ${w*0.5} ${h*0.10} ${w*0.78} ${h*0.65}`} fill={`url(#cast-${size})`} stroke="rgba(255,255,255,0.12)"/>
+    <circle cx={w*0.5} cy={h*0.45} r={w*0.18} fill="#0d1b3d" stroke="rgba(255,255,255,0.15)"/>
+    <circle cx={w*0.5} cy={h*0.45} r={w*0.10} fill="#070e1f" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <rect x={w*0.49} y={h*0.27} width={w*0.02} height={h*0.05} fill="#A7A9AC"/>
+    {Array.from({length:20},(_,i) => (
+      <line x1={w*0.10+(i/19)*w*0.80} y1={h*0.78} x2={w*0.10+(i/19)*w*0.80} y2={h*0.80} stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    ))}
+  </svg>
+) : (
+  <!-- Bearing (ball / roller / tapered / thrust) -->
+  <svg viewBox={`0 0 ${size} ${size}`} class={cls} aria-hidden="true">
+    <defs>
+      <radialGradient id={`chrome-${size}`} cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0%"   stop-color="#F5F6F8"/>
+        <stop offset="40%"  stop-color="#A7A9AC"/>
+        <stop offset="100%" stop-color="#0d1b3d"/>
+      </radialGradient>
+      <radialGradient id={`ball-${size}`} cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0%"   stop-color="#F5F6F8"/>
+        <stop offset="50%"  stop-color="#A7A9AC"/>
+        <stop offset="100%" stop-color="#102046"/>
+      </radialGradient>
+      <radialGradient id={`ringFill-${size}`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%"   stop-color="#1a2f61"/>
+        <stop offset="100%" stop-color="#0d1b3d"/>
+      </radialGradient>
+      <linearGradient id={`rim-${size}`} x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%"   stop-color="#A7A9AC"/>
+        <stop offset="50%"  stop-color="#2d4980"/>
+        <stop offset="100%" stop-color="#A7A9AC"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Outer ring -->
+    <circle cx={c} cy={c} r={outer+2} fill={`url(#rim-${size})`}/>
+    <circle cx={c} cy={c} r={outer}   fill={`url(#ringFill-${size})`}/>
+    <circle cx={c} cy={c} r={outer-1} fill="none" stroke="rgba(212,175,55,0.22)" stroke-width="0.5"/>
+
+    <!-- Tick marks -->
+    {angles.map((_, i) => {
+      const a = (i/60)*Math.PI*2;
+      const r1 = outer+2;
+      const r2 = outer+(i%5===0?6:4);
+      return <line x1={c+Math.cos(a)*r1} y1={c+Math.sin(a)*r1} x2={c+Math.cos(a)*r2} y2={c+Math.sin(a)*r2} stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>;
+    })}
+    {/* extra ticks to reach 60 */}
+    {Array.from({length:60},(_,i) => {
+      const a = (i/60)*Math.PI*2;
+      const r1 = outer+2;
+      const r2 = outer+(i%5===0?6:4);
+      return <line x1={c+Math.cos(a)*r1} y1={c+Math.sin(a)*r1} x2={c+Math.cos(a)*r2} y2={c+Math.sin(a)*r2} stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>;
+    })}
+
+    <!-- Rolling elements -->
+    {angles.map((a) => {
+      const x = c + Math.cos(a) * ringR;
+      const y = c + Math.sin(a) * ringR;
+      if (bearingType === 'roller') {
+        const rw = elemR * 1.4;
+        const rh = elemR * 1.6;
+        return <g transform={`translate(${x} ${y}) rotate(${(a*180/Math.PI)+90})`}>
+          <rect x={-rw/2} y={-rh/2} width={rw} height={rh} rx={1} fill={`url(#chrome-${size})`} stroke="rgba(255,255,255,0.20)" stroke-width="0.5"/>
+        </g>;
+      } else if (bearingType === 'tapered') {
+        const tw = elemR * 1.2;
+        const th = elemR * 2;
+        return <g transform={`translate(${x} ${y}) rotate(${(a*180/Math.PI)+90})`}>
+          <polygon points={`${-tw/2},${th/2} ${tw/2},${th/2} ${tw/2*0.6},${-th/2} ${-tw/2*0.6},${-th/2}`}
+            fill={`url(#chrome-${size})`} stroke="rgba(255,255,255,0.20)" stroke-width="0.5"/>
+        </g>;
+      } else {
+        return <circle cx={x} cy={y} r={elemR} fill={`url(#ball-${size})`} stroke="rgba(255,255,255,0.18)" stroke-width="0.5"/>;
+      }
+    })}
+
+    <!-- Inner ring -->
+    <circle cx={c} cy={c} r={inner}     fill={`url(#rim-${size})`}/>
+    <circle cx={c} cy={c} r={inner-1.5} fill={`url(#ringFill-${size})`}/>
+
+    <!-- Bore -->
+    <circle cx={c} cy={c} r={bore}   fill="#0d1b3d"/>
+    <circle cx={c} cy={c} r={bore}   fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+
+    <!-- Center crosshair -->
+    <line x1={c-bore*0.5} y1={c} x2={c+bore*0.5} y2={c} stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <line x1={c} y1={c-bore*0.5} x2={c} y2={c+bore*0.5} stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+  </svg>
+)}

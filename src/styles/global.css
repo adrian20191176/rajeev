@@ -1,73 +1,149 @@
 @import "tailwindcss";
 
-:root {
-	color-scheme: light;
-	--bg: #f7f5f0;
-	--surface: #ffffff;
-	--text: #111111;
-	--muted: #5f5f5f;
-	--border: #ded8cf;
+@theme {
+  /* Fonts */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: Manrope, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Navy ink scale */
+  --color-ink-900: #070e1f;
+  --color-ink-800: #0d1b3d;
+  --color-ink-700: #102046;
+  --color-ink-600: #142650;
+  --color-ink-500: #1a2f61;
+  --color-ink-400: #223870;
+  --color-ink-300: #2d4980;
+  --color-ink-200: #4a6398;
+  --color-ink-100: #7088b0;
+
+  /* Chrome / silver scale */
+  --color-chrome-50: #f5f6f8;
+  --color-chrome-100: #dddee2;
+  --color-chrome-200: #a7a9ac;
+
+  /* Brand accents */
+  --color-gold: #d4af37;
+  --color-gold-dark: #c49b2a;
+
+  /* Keep cyan/amber aliases so Tailwind classes match the design */
+  --color-cyan-brand: #d4af37;
+  --color-amber-signal: #c49b2a;
+
+  /* Custom shadows */
+  --shadow-glow-cyan:  0 0 0 1px rgba(212,175,55,0.35), 0 12px 40px -8px rgba(212,175,55,0.45);
+  --shadow-glow-amber: 0 0 0 1px rgba(196,155,42,0.35), 0 12px 40px -8px rgba(196,155,42,0.45);
+  --shadow-card:       0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 60px -28px rgba(0,0,0,0.6);
 }
 
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
+/* ─── Base ──────────────────────────────────────────────────────────────── */
+html, body {
+  background: #0d1b3d;
+  color: #f5f6f8;
 }
-
-html {
-	-webkit-text-size-adjust: 100%;
-	text-size-adjust: 100%;
-}
-
 body {
-	margin: 0;
-	min-height: 100vh;
-	background: var(--bg);
-	color: var(--text);
-	font-family: Inter, system-ui, sans-serif;
-	line-height: 1.5;
+  font-family: Manrope, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  min-height: 100vh;
+}
+html { font-feature-settings: "ss01", "cv11"; }
+*, *::before, *::after { box-sizing: border-box; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ─── Technical grid backgrounds ──────────────────────────────────────── */
+.tech-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.tech-grid-fine {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 14px 14px;
 }
 
-body,
-h1,
-p {
-	margin-block: 0;
+/* ─── Gold radial spotlight ────────────────────────────────────────────── */
+.spot {
+  background: radial-gradient(60% 50% at 50% 0%, rgba(212,175,55,0.14), transparent 70%);
 }
 
-img,
-picture,
-video,
-canvas,
-svg {
-	display: block;
-	max-width: 100%;
+/* ─── Gold chrome border via gradient mask ─────────────────────────────── */
+.chrome-border { position: relative; }
+.chrome-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(212,175,55,0.32),
+    rgba(212,175,55,0.05) 30%,
+    rgba(212,175,55,0.05) 70%,
+    rgba(212,175,55,0.24));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
-button,
-input,
-textarea,
-select {
-	font: inherit;
+/* ─── Striped placeholder ───────────────────────────────────────────────── */
+.placeholder-stripe {
+  background-image: repeating-linear-gradient(135deg,
+    rgba(255,255,255,0.04) 0 8px,
+    rgba(255,255,255,0.02) 8px 16px);
 }
 
-a {
-	color: inherit;
-	text-decoration: none;
-}
+/* ─── Hairline borders ──────────────────────────────────────────────────── */
+.hairline       { border-color: rgba(255,255,255,0.08); }
+.hairline-strong{ border-color: rgba(255,255,255,0.13); }
 
-.app-shell {
-	min-height: 100vh;
-	display: grid;
-	align-content: center;
-	justify-items: start;
-	gap: 0.75rem;
-	padding: 2rem;
-}
+/* ─── Animations ────────────────────────────────────────────────────────── */
+@keyframes spin-slow  { to { transform: rotate(360deg); } }
+.spin-slow   { animation: spin-slow 60s  linear infinite; }
+.spin-slower { animation: spin-slow 180s linear infinite; }
+.spin-rev    { animation: spin-slow 100s linear infinite reverse; }
 
-.eyebrow {
-	color: var(--muted);
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	font-size: 0.75rem;
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
 }
+.fade-up { animation: fade-up 0.5s ease-out both; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.toast-in { animation: toast-in 0.25s ease-out both; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee { animation: marquee 50s linear infinite; }
+
+/* ─── Button shine ──────────────────────────────────────────────────────── */
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.btn-shine:hover::after { transform: translateX(120%); }
+
+/* ─── Scrollbars ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar              { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb        { background: #1a2f61; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover  { background: #223870; }
+::-webkit-scrollbar-track        { background: transparent; }
+
+/* ─── Selection / focus ─────────────────────────────────────────────────── */
+::selection   { background: rgba(212,175,55,0.30); color: #fff; }
+:focus-visible{ outline: 2px solid #d4af37; outline-offset: 2px; border-radius: 4px; }
+
+/* ─── Dialog / modal backdrop ───────────────────────────────────────────── */
+dialog::backdrop { background: rgba(7,14,31,0.82); backdrop-filter: blur(6px); }
+dialog[open] { display: flex; flex-direction: column; }
