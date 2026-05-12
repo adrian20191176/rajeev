@@ -13,18 +13,25 @@ export const BUSINESS = {
 };
 
 export const BRANDS = [
-  { name: "NTN",        country: "Japan"      },
-  { name: "NSK",        country: "Japan"      },
-  { name: "NACHI",      country: "Japan"      },
-  { name: "KOYO",       country: "Japan"      },
-  { name: "FAG",        country: "Germany"    },
-  { name: "SKF",        country: "Sweden"     },
-  { name: "TIMKEN",     country: "USA"        },
-  { name: "FYH",        country: "Japan"      },
-  { name: "ASAHI",      country: "Japan"      },
-  { name: "FBJ",        country: "Singapore"  },
-  { name: "MITSUBOSHI", country: "Japan"      },
-  { name: "FENNER",     country: "UK"         },
+  { name: "NTN",        logo: "/brands/ntn.svg"        },
+  { name: "NSK",        logo: "/brands/nsk.svg"        },
+  { name: "NACHI",      logo: "/brands/nachi.svg"      },
+  { name: "KOYO",       logo: "/brands/koyo.svg"       },
+  { name: "FAG",        logo: "/brands/fag.svg"        },
+  { name: "SKF",        logo: "/brands/skf.svg"        },
+  { name: "TIMKEN",     logo: "/brands/timken.svg"     },
+  { name: "INA",        logo: "/brands/ina.svg"        },
+  { name: "FBJ",        logo: "/brands/fbj.svg"        },
+  { name: "FYH",        logo: "/brands/fyh.svg"        },
+  { name: "ASAHI",      logo: "/brands/asahi.svg"      },
+  { name: "IKO",        logo: "/brands/iko.svg"        },
+  { name: "MITSUBOSHI", logo: "/brands/mitsuboshi.svg" },
+  { name: "MEGADYNE",   logo: "/brands/megadyne.svg"   },
+  { name: "FENNER",     logo: "/brands/fenner.svg"     },
+  { name: "KSM",        logo: "/brands/ksm.svg"        },
+  { name: "RHP",        logo: "/brands/rhp.svg"        },
+  { name: "HIWIN",      logo: "/brands/hiwin.svg"      },
+  { name: "OPTIBELT",   logo: "/brands/optibelt.svg"   },
 ];
 
 export const CATEGORIES = [

@@ -46,9 +46,9 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <!-- Spec strip -->
         <div class="mt-8 sm:mt-10 grid grid-cols-3 gap-px rounded-md overflow-hidden border hairline-strong bg-white/5">
           {[
-            { k:'24/7', v:'Service Window' },
-            { k:'12+',  v:'Trusted Brands' },
-            { k:'100%', v:'Quality Assured' },
+            { k:'24/7',              v:'Service Window' },
+            { k:`${BRANDS.length}+`, v:'Trusted Brands' },
+            { k:'100%',              v:'Quality Assured' },
           ].map(s => (
             <div class="bg-ink-600/80 p-3 sm:p-4">
               <div class="font-display text-lg sm:text-2xl text-chrome-50 font-semibold">{s.k}</div>
@@ -86,12 +86,12 @@ const featuredCats = CATEGORIES.slice(0, 6);
 
   <!-- ── BRAND MARQUEE ─────────────────────────────────────────────── -->
   <section class="border-b hairline overflow-hidden">
-    <div class="py-5 flex items-center gap-12 marquee" style="width:max-content">
+    <div class="py-6 flex items-center gap-14 marquee" style="width:max-content">
       {[...BRANDS, ...BRANDS].map((b) => (
-        <div class="flex items-center gap-3 font-display text-2xl tracking-[0.04em] text-chrome-100/80">
-          <span class="w-1.5 h-1.5 rounded-full bg-gold/70"></span>
-          <span class="font-semibold">{b.name}</span>
-          <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/40">{b.country}</span>
+        <div class="flex items-center shrink-0" title={b.name}>
+          <div class="h-8 sm:h-9 w-24 sm:w-28 grid place-items-center">
+            <img src={b.logo} alt={`${b.name} logo`} loading="lazy" class="brand-logo" />
+          </div>
         </div>
       ))}
     </div>
@@ -185,9 +185,11 @@ const featuredCats = CATEGORIES.slice(0, 6);
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
         {BRANDS.map(b => (
-          <div class="bg-ink-700 hover:bg-ink-600 transition-colors p-5 sm:p-6 text-center group">
-            <div class="font-display text-lg sm:text-xl font-semibold text-chrome-50 tracking-tight group-hover:text-gold transition-colors">{b.name}</div>
-            <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 mt-1">{b.country}</div>
+          <div class="bg-ink-700 hover:bg-ink-600 transition-colors p-5 sm:p-6 text-center group flex flex-col items-center justify-center gap-3">
+            <div class="h-12 sm:h-14 w-full grid place-items-center">
+              <img src={b.logo} alt={`${b.name} logo`} loading="lazy" class="brand-logo" />
+            </div>
+            <div class="font-display text-base sm:text-lg font-semibold text-chrome-50 tracking-tight group-hover:text-gold transition-colors">{b.name}</div>
           </div>
         ))}
       </div>

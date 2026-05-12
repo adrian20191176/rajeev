@@ -90,9 +90,11 @@ import { BUSINESS, BRANDS } from '../data/rcb.js';
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {BRANDS.map(b => (
-          <div class="flex flex-col items-center gap-2 rounded-xl border hairline bg-ink-800/60 px-4 py-5" style="box-shadow: var(--shadow-card)">
-            <div class="font-display text-lg font-bold text-chrome-50">{b.name}</div>
-            <div class="font-mono text-[9px] tracking-widest uppercase text-chrome-200/40">{b.country}</div>
+          <div class="flex flex-col items-center justify-center gap-3 rounded-xl border hairline bg-ink-800/60 px-4 py-5 min-h-[140px]" style="box-shadow: var(--shadow-card)">
+            <div class="h-12 w-full grid place-items-center">
+              <img src={b.logo} alt={`${b.name} logo`} loading="lazy" class="brand-logo" />
+            </div>
+            <div class="font-display text-base font-bold text-chrome-50">{b.name}</div>
           </div>
         ))}
       </div>
