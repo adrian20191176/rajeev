@@ -88,13 +88,17 @@ import { BUSINESS, BRANDS } from '../data/rcb.js';
         <h2 data-reveal data-split-words data-split-scroll="1" class="font-display text-2xl md:text-3xl font-bold text-chrome-50">Brands We Carry</h2>
         <p data-reveal class="mt-2 text-chrome-200/50 text-sm max-w-xl mx-auto">Authorised stockist of {BRANDS.length} world-class bearing and power-transmission brands.</p>
       </div>
-      <div data-reveal-group data-reveal-stagger="0.04" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div data-reveal-group data-reveal-stagger="0.05" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
         {BRANDS.map(b => (
-          <div data-reveal-item data-tilt data-tilt-max="5" class="flex flex-col items-center justify-center gap-3 rounded-xl border hairline bg-ink-800/60 px-4 py-5 min-h-[140px]" style="box-shadow: var(--shadow-card)">
-            <div class="h-12 w-full grid place-items-center">
-              <img src={b.logo} alt={`${b.name} logo`} loading="lazy" class="brand-logo" />
+          <div data-reveal-item class="bg-ink-700 hover:bg-ink-600 transition-colors p-5 sm:p-6 text-center group flex flex-col items-center justify-center min-h-[152px] sm:min-h-[168px]">
+            <div class="h-[104px] sm:h-28 w-full flex items-center justify-center">
+              <img
+                src={b.logo}
+                alt={`${b.name} logo`}
+                loading="lazy"
+                class={`brand-logo ${b.name === "INA" ? "brand-logo-ina" : ""}`}
+              />
             </div>
-            <div class="font-display text-base font-bold text-chrome-50">{b.name}</div>
           </div>
         ))}
       </div>

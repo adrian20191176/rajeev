@@ -1,4 +1,6 @@
 ---
+import { BRANDS } from '../data/rcb.js';
+
 interface Props { activeNav?: string; }
 const { activeNav } = Astro.props;
 
@@ -12,16 +14,16 @@ const links = [
 <header id="site-nav" class="sticky top-0 z-40 transition-all duration-300">
   <!-- Utility bar -->
   <div class="hidden md:flex items-center justify-between border-b hairline px-6 py-1.5 font-mono text-[10px] tracking-widest uppercase text-chrome-200/60">
-    <div class="flex items-center gap-5">
-      <span class="flex items-center gap-1.5">
+    <div class="flex items-center gap-5 min-w-0 flex-1">
+      <span class="flex items-center gap-1.5 flex-shrink-0">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>24/7 Service
       </span>
-      <span>NTN · NSK · NACHI · KOYO · FAG · SKF · TIMKEN</span>
+      <span class="truncate">{BRANDS.map(b => b.name).join(' · ')}</span>
     </div>
-    <div class="flex items-center gap-5">
-      <a href="tel:+94766550249" class="hover:text-gold">+94 766 550 249</a>
+    <div class="flex items-center gap-5 flex-shrink-0">
+      <a href="tel:+94766550249" class="hover:text-gold whitespace-nowrap">+94 766 550 249</a>
       <span class="text-chrome-200/30">·</span>
-      <a href="mailto:info@royalcrownbearings.com" class="hover:text-gold">info@royalcrownbearings.com</a>
+      <a href="mailto:info@royalcrownbearings.com" class="hover:text-gold whitespace-nowrap">info@royalcrownbearings.com</a>
     </div>
   </div>
 
