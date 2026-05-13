@@ -160,3 +160,41 @@ a { color: inherit; text-decoration: none; }
 /* ─── Dialog / modal backdrop ───────────────────────────────────────────── */
 dialog::backdrop { background: rgba(7,14,31,0.82); backdrop-filter: blur(6px); }
 dialog[open] { display: flex; flex-direction: column; }
+
+/* ─── GSAP pre-anim guards (prevents flash before JS runs) ────────────── */
+.rcb-anim [data-reveal],
+.rcb-anim [data-reveal-item],
+.rcb-anim [data-hero-step] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.rcb-anim [data-hero-step],
+.rcb-anim [data-reveal],
+.rcb-anim [data-reveal-item] {
+  transform: translateY(24px);
+}
+.rcb-anim [data-hero-visual] { opacity: 0; }
+
+/* Tilt cards need 3D context for clean rotateX/Y */
+[data-tilt] { transform-style: preserve-3d; }
+[data-tilt] > * { transform: translateZ(0); }
+
+/* Disable pre-hide for reduced-motion users */
+.rcb-no-anim [data-reveal],
+.rcb-no-anim [data-reveal-item],
+.rcb-no-anim [data-hero-step],
+.rcb-no-anim [data-hero-visual] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ─── Nav scroll elevation ───────────────────────────────────────────── */
+#site-nav.nav-elevated {
+  background: rgba(7, 14, 31, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Split-word reveal helper ───────────────────────────────────────── */
+.split-word { will-change: opacity, transform; }

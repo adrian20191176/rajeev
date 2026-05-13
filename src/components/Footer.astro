@@ -5,9 +5,9 @@ const cats = CATEGORIES.slice(0, 9);
 
 <footer class="relative border-t hairline mt-24 bg-ink-900">
   <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
-  <div class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-12 gap-8">
+  <div data-reveal-group data-reveal-stagger="0.08" class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-12 gap-8">
     <!-- Brand -->
-    <div class="col-span-2 md:col-span-4">
+    <div data-reveal-item class="col-span-2 md:col-span-4">
       <a href="/" class="flex items-center gap-2.5">
         <div class="relative w-10 h-10 rounded-md border hairline-strong bg-gradient-to-b from-ink-500 to-ink-700 grid place-items-center overflow-hidden">
           <div class="w-7 h-7" style="
@@ -42,7 +42,7 @@ const cats = CATEGORIES.slice(0, 9);
     </div>
 
     <!-- Categories -->
-    <div class="col-span-1 md:col-span-5">
+    <div data-reveal-item class="col-span-1 md:col-span-5">
       <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60 mb-4">Categories</div>
       <ul class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
         {cats.map(c => (
@@ -54,7 +54,7 @@ const cats = CATEGORIES.slice(0, 9);
     </div>
 
     <!-- Company -->
-    <div class="col-span-1 md:col-span-3">
+    <div data-reveal-item class="col-span-1 md:col-span-3">
       <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60 mb-4">Company</div>
       <ul class="flex flex-col gap-2 text-sm">
         {[

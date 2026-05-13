@@ -37,15 +37,15 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
         <span class="text-chrome-200/70">{cat.name}</span>
       </div>
       <div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
-        <div class="shrink-0 w-20 h-20 md:w-24 md:h-24 opacity-90">
+        <div data-hero-step class="shrink-0 w-20 h-20 md:w-24 md:h-24 opacity-90 spin-slower">
           <BearingVisual iconType={cat.iconType} size={96} />
         </div>
         <div>
-          <div class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{cat.family}</div>
-          <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-chrome-50 tracking-tight">{cat.name}</h1>
-          <p class="mt-3 text-chrome-200/70 max-w-2xl text-sm md:text-base leading-relaxed">{cat.description}</p>
-          <div class="mt-4 flex items-center gap-4 font-mono text-[11px] tracking-widest uppercase text-chrome-200/50">
-            <span id="visible-count">{products.length}</span><span>products</span>
+          <div data-hero-step class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{cat.family}</div>
+          <h1 data-hero-step data-split-words class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-chrome-50 tracking-tight">{cat.name}</h1>
+          <p data-hero-step class="mt-3 text-chrome-200/70 max-w-2xl text-sm md:text-base leading-relaxed">{cat.description}</p>
+          <div data-hero-step class="mt-4 flex items-center gap-4 font-mono text-[11px] tracking-widest uppercase text-chrome-200/50">
+            <span id="visible-count" data-counter data-counter-to={products.length}>{products.length}</span><span>products</span>
             <span class="text-chrome-200/20">·</span>
             <span>{brands.length} brands</span>
           </div>
@@ -121,7 +121,7 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
       <p class="text-chrome-200/50 text-sm">Try adjusting filters or search term.</p>
     </div>
 
-    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div id="products-grid" data-reveal-group data-reveal-stagger="0.04" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {products.map(p => (
         <a
           href={`/products/${p.id}`}
@@ -129,7 +129,10 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
           data-brand={p.brand}
           data-code={p.code.toLowerCase()}
           data-bore={p.bore ?? 9999}
-          class="product-card group flex flex-col rounded-xl border hairline bg-ink-800/60 hover:border-gold/40 hover:-translate-y-px transition-all duration-200 overflow-hidden"
+          data-reveal-item
+          data-tilt
+          data-tilt-max="6"
+          class="product-card group flex flex-col rounded-xl border hairline bg-ink-800/60 hover:border-gold/40 transition-all duration-200 overflow-hidden"
           style="box-shadow: var(--shadow-card)"
         >
           {p.image
@@ -255,7 +258,27 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
     // Re-order DOM
     visible.forEach(card => grid.appendChild(card));
 
-    countEl.textContent = String(visible.length);
+    // Animate the count change
+    const prev = Number(countEl.textContent) || 0;
+    const next = visible.length;
+    const w = window as any;
+    if (w.rcbAnim?.gsap && prev !== next) {
+      const obj = { v: prev };
+      w.rcbAnim.gsap.to(obj, {
+        v: next, duration: 0.5, ease: 'power2.out',
+        onUpdate: () => { countEl.textContent = String(Math.round(obj.v)); },
+      });
+    } else {
+      countEl.textContent = String(next);
+    }
+
+    // Re-reveal newly visible cards with a quick stagger
+    if (w.rcbAnim?.gsap) {
+      w.rcbAnim.gsap.fromTo(visible,
+        { opacity: 0.4, y: 6 },
+        { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out', stagger: 0.02 }
+      );
+    }
     noResults.classList.toggle('hidden', visible.length > 0);
   }
 

@@ -29,16 +29,19 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
       <div class="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1
+            data-hero-step
+            data-split-words
             class="font-display text-3xl md:text-4xl font-bold text-chrome-50 tracking-tight"
           >
             Enquiry List
           </h1>
-          <p class="mt-2 text-chrome-200/60 text-sm" id="list-summary">
+          <p data-hero-step class="mt-2 text-chrome-200/60 text-sm" id="list-summary">
             Loading…
           </p>
         </div>
         <button
           id="clear-all-btn"
+          data-hero-step
           class="hidden font-mono text-[11px] tracking-wider uppercase px-4 py-2 rounded border border-red-500/30 text-red-400/70 hover:border-red-500/60 hover:text-red-400 transition-colors"
         >
           Clear All
@@ -47,7 +50,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
     </div>
   </section>
 
-  <section class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14">
+  <section data-reveal class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14">
     <!-- Empty state -->
     <div
       id="empty-state"
@@ -321,12 +324,34 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
         .join("");
 
       rows.querySelectorAll(".remove-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
           const id = Number(btn.dataset.remove);
-          window.rcbList?.remove(id);
-          render();
+          const row = btn.closest("tr");
+          const w = window;
+          if (row && w.rcbAnim?.gsap) {
+            w.rcbAnim.gsap.to(row, {
+              opacity: 0,
+              x: 40,
+              duration: 0.35,
+              ease: "power3.in",
+              onComplete: () => { w.rcbList?.remove(id); render(); },
+            });
+          } else {
+            w.rcbList?.remove(id);
+            render();
+          }
         });
       });
+
+      // Animate rows in
+      if (window.rcbAnim?.gsap) {
+        const newRows = rows.querySelectorAll("tr");
+        window.rcbAnim.gsap.fromTo(newRows,
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power3.out", stagger: 0.05 }
+        );
+      }
     }
 
     // WhatsApp message

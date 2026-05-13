@@ -28,7 +28,7 @@ const links = [
   <!-- Main nav bar -->
   <div class="flex items-center justify-between gap-4 px-4 md:px-6 py-3">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2.5" aria-label="Home">
+    <a href="/" class="flex items-center gap-2.5" aria-label="Home" data-magnetic data-magnetic-strength="6">
       <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-md border hairline-strong bg-gradient-to-b from-ink-500 to-ink-700 grid place-items-center overflow-hidden">
         <div class="w-7 h-7 sm:w-8 sm:h-8" style="
           background: linear-gradient(135deg, #F5F6F8 0%, #D4AF37 40%, #C49B2A 70%, #D4AF37 100%);
@@ -97,19 +97,9 @@ const links = [
 </header>
 
 <script>
-  const nav = document.getElementById('site-nav')!;
+  // Nav scroll-elevation is handled centrally by src/scripts/animations.ts
+  // (adds/removes `.nav-elevated` class). Mobile menu animation also runs there.
   const btn = document.getElementById('mobile-menu-btn')!;
   const menu = document.getElementById('mobile-nav')!;
-
-  // Scroll glass effect
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 8) {
-      nav.classList.add('backdrop-blur-md', 'bg-ink-900/85', 'border-b', 'hairline');
-    } else {
-      nav.classList.remove('backdrop-blur-md', 'bg-ink-900/85', 'border-b', 'hairline');
-    }
-  }, { passive: true });
-
-  // Mobile menu
   btn.addEventListener('click', () => menu.classList.toggle('hidden'));
 </script>

@@ -16,10 +16,10 @@ import { BUSINESS } from '../data/rcb.js';
         <span class="text-chrome-200/30">/</span>
         <span>Contact</span>
       </div>
-      <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-chrome-50 tracking-tight">
+      <h1 data-hero-step data-split-words class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-chrome-50 tracking-tight">
         Get in Touch
       </h1>
-      <p class="mt-3 text-chrome-200/70 max-w-xl text-sm md:text-base leading-relaxed">
+      <p data-hero-step class="mt-3 text-chrome-200/70 max-w-xl text-sm md:text-base leading-relaxed">
         We're available 24/7 to assist with product availability, pricing, and technical questions.
       </p>
     </div>
@@ -32,7 +32,7 @@ import { BUSINESS } from '../data/rcb.js';
       <div class="lg:col-span-2 flex flex-col gap-6">
 
         <!-- Quick contact cards -->
-        <div class="rounded-xl border hairline bg-ink-800/60 p-6" style="box-shadow: var(--shadow-card)">
+        <div data-reveal data-tilt data-tilt-max="3" class="rounded-xl border hairline bg-ink-800/60 p-6" style="box-shadow: var(--shadow-card)">
           <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 mb-4">Direct Contact</div>
           <div class="flex flex-col gap-5">
             <a href={`tel:${BUSINESS.phone.replace(/\s/g,'')}`}
@@ -69,7 +69,7 @@ import { BUSINESS } from '../data/rcb.js';
         </div>
 
         <!-- Service hours -->
-        <div class="rounded-xl border hairline bg-ink-800/60 p-6" style="box-shadow: var(--shadow-card)">
+        <div data-reveal class="rounded-xl border hairline bg-ink-800/60 p-6" style="box-shadow: var(--shadow-card)">
           <div class="flex items-center gap-2 mb-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <div class="font-mono text-[10px] tracking-widest uppercase text-emerald-400/80">Currently Open</div>
@@ -82,6 +82,8 @@ import { BUSINESS } from '../data/rcb.js';
         <a href={`https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent('Hi Royal Crown Bearings, I have an enquiry.')}`}
            target="_blank"
            rel="noopener noreferrer"
+           data-reveal
+           data-magnetic
            class="btn-shine flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white font-medium text-sm transition-all">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.557 4.126 1.533 5.862L.057 23.5l5.784-1.517A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 0 1-5.001-1.372l-.358-.213-3.726.977.995-3.633-.233-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.573 6.573 2.182 12 2.182S21.818 6.573 21.818 12 17.427 21.818 12 21.818z"/></svg>
           Chat on WhatsApp Now
@@ -91,7 +93,7 @@ import { BUSINESS } from '../data/rcb.js';
 
       <!-- Enquiry form -->
       <div class="lg:col-span-3">
-        <div class="rounded-xl border hairline bg-ink-800/60 p-6 md:p-8" style="box-shadow: var(--shadow-card)">
+        <div data-reveal class="rounded-xl border hairline bg-ink-800/60 p-6 md:p-8" style="box-shadow: var(--shadow-card)">
           <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 mb-1">Send a Message</div>
           <h2 class="font-display text-xl font-semibold text-chrome-50 mb-6">Enquiry Form</h2>
 

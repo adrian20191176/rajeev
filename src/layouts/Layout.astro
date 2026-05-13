@@ -35,6 +35,13 @@ const catIndex = CATEGORIES.map(c => ({
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script is:inline>
+    /* Flag <html> so CSS can pre-hide animated elements (prevents flash before GSAP runs). */
+    document.documentElement.classList.add('rcb-anim');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('rcb-no-anim');
+    }
+  </script>
 </head>
 <body class="font-body antialiased min-h-screen flex flex-col">
 
@@ -332,6 +339,20 @@ const catIndex = CATEGORIES.map(c => ({
     enquiryCancel?.addEventListener('click', () => enquiryDialog?.close());
     enquiryDialog?.addEventListener('click', (e) => { if (e.target === enquiryDialog) enquiryDialog?.close(); });
 
+    // Animate added-to-list count badge in the nav
+    let lastCount = getList().length;
+    window.addEventListener('rcb:list-updated', () => {
+      const el = document.getElementById('enquiry-count');
+      const n = getList().length;
+      if (el && (window as any).rcbAnim?.gsap && n !== lastCount) {
+        (window as any).rcbAnim.gsap.fromTo(el,
+          { scale: 0.6, rotate: -10 },
+          { scale: 1, rotate: 0, duration: 0.55, ease: 'elastic.out(1, 0.5)' }
+        );
+      }
+      lastCount = n;
+    });
+
     enquiryForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.currentTarget as HTMLFormElement;
@@ -351,6 +372,11 @@ const catIndex = CATEGORIES.map(c => ({
         showToast({ tone: 'error', title: "Couldn't send enquiry", message: 'Please try again, or WhatsApp +94 766 550 249.' });
       }
     });
+  </script>
+
+  <!-- ── GSAP animations (bundled) ─────────────────────────────────── -->
+  <script>
+    import '../scripts/animations';
   </script>
 </body>
 </html>
