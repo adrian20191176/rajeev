@@ -1,0 +1,141 @@
+---
+export const prerender = true;
+
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Admin Sign in | Royal Crown Bearings"
+  description="Sign in to manage Royal Crown Bearings products."
+  activeNav=""
+>
+  <section class="min-h-[calc(100vh-200px)] grid place-items-center px-5 sm:px-6 py-12 sm:py-16 relative overflow-hidden">
+    <div class="absolute inset-0 tech-grid opacity-40 pointer-events-none"></div>
+    <div class="absolute inset-0 spot pointer-events-none"></div>
+
+    <div class="relative w-full max-w-md fade-up">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+          <span class="w-6 h-px bg-gold"></span> Admin · Restricted
+        </div>
+        <h1 class="mt-4 font-display text-3xl sm:text-4xl font-semibold tracking-tight text-chrome-50">
+          Sign in to manage products.
+        </h1>
+        <p class="mt-2 text-sm text-chrome-100/70">
+          Only authorised personnel of Royal Crown Bearings.
+        </p>
+      </div>
+
+      <form id="admin-login-form" class="chrome-border rounded-xl bg-ink-800/70 backdrop-blur p-6 sm:p-7">
+        <label class="block">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Username</span>
+          <input
+            id="admin-user"
+            name="username"
+            type="text"
+            autocomplete="username"
+            placeholder="admin"
+            class="w-full px-3 py-3 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/30 focus:border-gold/60 focus:outline-none"
+          />
+        </label>
+
+        <label class="block mt-4">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Password</span>
+          <div class="relative">
+            <input
+              id="admin-pass"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full px-3 py-3 pr-20 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/30 focus:border-gold/60 focus:outline-none"
+            />
+            <button
+              type="button"
+              id="admin-pass-toggle"
+              class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-[11px] font-mono tracking-[0.18em] uppercase text-chrome-200/60 hover:text-gold border hairline rounded"
+              aria-label="Show password"
+            >Show</button>
+          </div>
+        </label>
+
+        <div
+          id="admin-login-error"
+          class="hidden mt-4 px-3 py-2 rounded-md border border-red-400/30 bg-red-500/10 text-red-300/90 text-sm items-center gap-2"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+          <span data-error-msg>Invalid username or password</span>
+        </div>
+
+        <button
+          type="submit"
+          id="admin-login-submit"
+          class="btn-shine w-full mt-5 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold disabled:opacity-60"
+        >
+          <span data-label>Sign in</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
+        </button>
+
+      </form>
+
+      <a href="/" class="mt-6 mx-auto block w-fit font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 hover:text-gold">
+        ← Back to public site
+      </a>
+    </div>
+  </section>
+
+  <script>
+    import '../../scripts/admin';
+
+    const form     = document.getElementById('admin-login-form') as HTMLFormElement;
+    const userEl   = document.getElementById('admin-user')       as HTMLInputElement;
+    const passEl   = document.getElementById('admin-pass')       as HTMLInputElement;
+    const toggle   = document.getElementById('admin-pass-toggle')!;
+    const errBox   = document.getElementById('admin-login-error')!;
+    const errMsg   = errBox.querySelector('[data-error-msg]') as HTMLElement;
+    const submit   = document.getElementById('admin-login-submit') as HTMLButtonElement;
+    const label    = submit.querySelector('[data-label]') as HTMLElement;
+
+    function showError(msg: string) {
+      errMsg.textContent = msg;
+      errBox.classList.remove('hidden');
+      errBox.classList.add('flex');
+    }
+    function hideError() {
+      errBox.classList.add('hidden');
+      errBox.classList.remove('flex');
+    }
+
+    // If already authed, jump straight to the dashboard
+    if (window.RCBAdmin?.isAuthed()) {
+      window.location.href = '/admin';
+    }
+
+    toggle.addEventListener('click', () => {
+      const isPwd = passEl.type === 'password';
+      passEl.type = isPwd ? 'text' : 'password';
+      toggle.textContent = isPwd ? 'Hide' : 'Show';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+      const user = userEl.value.trim();
+      const pass = passEl.value;
+      if (!user || !pass) { showError('Enter username and password'); return; }
+
+      submit.disabled = true;
+      label.textContent = 'Signing in…';
+      await new Promise(r => setTimeout(r, 400));
+
+      if (window.RCBAdmin.login(user, pass)) {
+        window.showToast?.({ tone: 'success', title: 'Welcome back, admin', message: 'You are signed in.' });
+        window.location.href = '/admin';
+      } else {
+        showError('Invalid username or password');
+        submit.disabled = false;
+        label.textContent = 'Sign in';
+      }
+    });
+  </script>
+</Layout>

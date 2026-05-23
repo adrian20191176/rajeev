@@ -33,21 +33,21 @@ const h = size;
   <svg viewBox={`0 0 ${w} ${h}`} class={cls} aria-hidden="true">
     <defs>
       <linearGradient id={`beltGrad-${size}`} x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%"   stop-color="#102046"/>
-        <stop offset="50%"  stop-color="#2d4980"/>
-        <stop offset="100%" stop-color="#102046"/>
+        <stop offset="0%"   stop-color="#0F141E"/>
+        <stop offset="50%"  stop-color="#3A4558"/>
+        <stop offset="100%" stop-color="#0F141E"/>
       </linearGradient>
       <radialGradient id={`pulley-${size}`} cx="0.3" cy="0.3" r="0.8">
-        <stop offset="0%"   stop-color="#A7A9AC"/>
-        <stop offset="60%"  stop-color="#2d4980"/>
-        <stop offset="100%" stop-color="#0d1b3d"/>
+        <stop offset="0%"   stop-color="#C2CCDB"/>
+        <stop offset="60%"  stop-color="#3A4558"/>
+        <stop offset="100%" stop-color="#0A0E14"/>
       </radialGradient>
     </defs>
     <!-- Pulleys -->
     <circle cx={w*0.30} cy={h*0.5} r={w*0.20} fill={`url(#pulley-${size})`} stroke="rgba(255,255,255,0.12)"/>
-    <circle cx={w*0.30} cy={h*0.5} r={w*0.10} fill="#0d1b3d" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <circle cx={w*0.30} cy={h*0.5} r={w*0.10} fill="#0A0E14" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
     <circle cx={w*0.72} cy={h*0.5} r={w*0.14} fill={`url(#pulley-${size})`} stroke="rgba(255,255,255,0.12)"/>
-    <circle cx={w*0.72} cy={h*0.5} r={w*0.06} fill="#0d1b3d" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <circle cx={w*0.72} cy={h*0.5} r={w*0.06} fill="#0A0E14" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
     <!-- Belt path -->
     <path d={`M ${w*0.30} ${h*0.30} L ${w*0.72} ${h*0.36} A ${w*0.14} ${w*0.14} 0 1 1 ${w*0.72} ${h*0.64} L ${w*0.30} ${h*0.70} A ${w*0.20} ${w*0.20} 0 1 1 ${w*0.30} ${h*0.30} Z`}
           fill={`url(#beltGrad-${size})`} stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
@@ -77,16 +77,16 @@ const h = size;
   <svg viewBox={`0 0 ${size} ${size}`} class={cls} aria-hidden="true">
     <defs>
       <radialGradient id={`rubber-${size}`} cx="0.5" cy="0.5" r="0.6">
-        <stop offset="0%"   stop-color="#1a2f61"/>
-        <stop offset="60%"  stop-color="#102046"/>
-        <stop offset="100%" stop-color="#0d1b3d"/>
+        <stop offset="0%"   stop-color="#1C2333"/>
+        <stop offset="60%"  stop-color="#0F141E"/>
+        <stop offset="100%" stop-color="#0A0E14"/>
       </radialGradient>
     </defs>
     <circle cx={c} cy={c} r={size*0.46} fill={`url(#rubber-${size})`} stroke="rgba(255,255,255,0.08)"/>
     <circle cx={c} cy={c} r={size*0.42} fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
     <circle cx={c} cy={c} r={size*0.30} fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
     <circle cx={c} cy={c} r={size*0.26} fill="none" stroke="rgba(212,175,55,0.30)" stroke-width="0.5"/>
-    <circle cx={c} cy={c} r={size*0.22} fill="#0d1b3d" stroke="rgba(255,255,255,0.10)"/>
+    <circle cx={c} cy={c} r={size*0.22} fill="#0A0E14" stroke="rgba(255,255,255,0.10)"/>
     {Array.from({length:36},(_,i) => {
       const a = (i/36)*Math.PI*2;
       const r = size*0.245;
@@ -98,17 +98,17 @@ const h = size;
   <svg viewBox={`0 0 ${w} ${h}`} class={cls} aria-hidden="true">
     <defs>
       <linearGradient id={`cast-${size}`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#2d4980"/>
-        <stop offset="100%" stop-color="#102046"/>
+        <stop offset="0%"   stop-color="#3A4558"/>
+        <stop offset="100%" stop-color="#0F141E"/>
       </linearGradient>
     </defs>
     <rect x={w*0.10} y={h*0.65} width={w*0.80} height={h*0.10} rx={4} fill={`url(#cast-${size})`} stroke="rgba(255,255,255,0.10)"/>
-    <circle cx={w*0.22} cy={h*0.70} r={w*0.025} fill="#0d1b3d" stroke="rgba(255,255,255,0.18)"/>
-    <circle cx={w*0.78} cy={h*0.70} r={w*0.025} fill="#0d1b3d" stroke="rgba(255,255,255,0.18)"/>
+    <circle cx={w*0.22} cy={h*0.70} r={w*0.025} fill="#0A0E14" stroke="rgba(255,255,255,0.18)"/>
+    <circle cx={w*0.78} cy={h*0.70} r={w*0.025} fill="#0A0E14" stroke="rgba(255,255,255,0.18)"/>
     <path d={`M ${w*0.22} ${h*0.65} Q ${w*0.5} ${h*0.10} ${w*0.78} ${h*0.65}`} fill={`url(#cast-${size})`} stroke="rgba(255,255,255,0.12)"/>
-    <circle cx={w*0.5} cy={h*0.45} r={w*0.18} fill="#0d1b3d" stroke="rgba(255,255,255,0.15)"/>
-    <circle cx={w*0.5} cy={h*0.45} r={w*0.10} fill="#070e1f" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
-    <rect x={w*0.49} y={h*0.27} width={w*0.02} height={h*0.05} fill="#A7A9AC"/>
+    <circle cx={w*0.5} cy={h*0.45} r={w*0.18} fill="#0A0E14" stroke="rgba(255,255,255,0.15)"/>
+    <circle cx={w*0.5} cy={h*0.45} r={w*0.10} fill="#05080F" stroke="rgba(212,175,55,0.40)" stroke-width="0.5"/>
+    <rect x={w*0.49} y={h*0.27} width={w*0.02} height={h*0.05} fill="#C2CCDB"/>
     {Array.from({length:20},(_,i) => (
       <line x1={w*0.10+(i/19)*w*0.80} y1={h*0.78} x2={w*0.10+(i/19)*w*0.80} y2={h*0.80} stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
     ))}
@@ -118,23 +118,23 @@ const h = size;
   <svg viewBox={`0 0 ${size} ${size}`} class={cls} aria-hidden="true">
     <defs>
       <radialGradient id={`chrome-${size}`} cx="0.3" cy="0.3" r="0.8">
-        <stop offset="0%"   stop-color="#F5F6F8"/>
-        <stop offset="40%"  stop-color="#A7A9AC"/>
-        <stop offset="100%" stop-color="#0d1b3d"/>
+        <stop offset="0%"   stop-color="#F4F6FA"/>
+        <stop offset="40%"  stop-color="#C2CCDB"/>
+        <stop offset="100%" stop-color="#0A0E14"/>
       </radialGradient>
       <radialGradient id={`ball-${size}`} cx="0.3" cy="0.3" r="0.8">
-        <stop offset="0%"   stop-color="#F5F6F8"/>
-        <stop offset="50%"  stop-color="#A7A9AC"/>
-        <stop offset="100%" stop-color="#102046"/>
+        <stop offset="0%"   stop-color="#F4F6FA"/>
+        <stop offset="50%"  stop-color="#C2CCDB"/>
+        <stop offset="100%" stop-color="#0F141E"/>
       </radialGradient>
       <radialGradient id={`ringFill-${size}`} cx="0.5" cy="0.5" r="0.5">
-        <stop offset="0%"   stop-color="#1a2f61"/>
-        <stop offset="100%" stop-color="#0d1b3d"/>
+        <stop offset="0%"   stop-color="#1C2333"/>
+        <stop offset="100%" stop-color="#0A0E14"/>
       </radialGradient>
       <linearGradient id={`rim-${size}`} x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%"   stop-color="#A7A9AC"/>
-        <stop offset="50%"  stop-color="#2d4980"/>
-        <stop offset="100%" stop-color="#A7A9AC"/>
+        <stop offset="0%"   stop-color="#C2CCDB"/>
+        <stop offset="50%"  stop-color="#3A4558"/>
+        <stop offset="100%" stop-color="#C2CCDB"/>
       </linearGradient>
     </defs>
 
@@ -185,7 +185,7 @@ const h = size;
     <circle cx={c} cy={c} r={inner-1.5} fill={`url(#ringFill-${size})`}/>
 
     <!-- Bore -->
-    <circle cx={c} cy={c} r={bore}   fill="#0d1b3d"/>
+    <circle cx={c} cy={c} r={bore}   fill="#0A0E14"/>
     <circle cx={c} cy={c} r={bore}   fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
 
     <!-- Center crosshair -->

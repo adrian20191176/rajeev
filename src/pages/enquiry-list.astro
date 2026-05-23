@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
 import { BUSINESS } from "../data/rcb.js";
 
@@ -113,10 +115,6 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
               <th
                 class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50"
                 >Part Code</th
-              >
-              <th
-                class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 hidden sm:table-cell"
-                >Brand</th
               >
               <th
                 class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 hidden md:table-cell"
@@ -309,9 +307,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
           <td class="px-4 py-3 font-mono text-[11px] text-chrome-200/30">${i + 1}</td>
           <td class="px-4 py-3">
             <a href="/products/${p.id}" class="font-display text-sm font-semibold text-chrome-50 hover:text-gold transition-colors">${p.code}</a>
-            <div class="font-mono text-[9px] tracking-widest uppercase text-chrome-200/40 mt-0.5">${p.name}</div>
           </td>
-          <td class="px-4 py-3 text-sm text-chrome-200/70 hidden sm:table-cell">${p.brand}</td>
           <td class="px-4 py-3 font-mono text-xs text-chrome-200/40 hidden md:table-cell">${p.diameter || "—"}</td>
           <td class="px-4 py-3 text-right">
             <button data-remove="${p.id}" class="remove-btn p-1.5 rounded border hairline text-chrome-200/30 hover:border-red-500/40 hover:text-red-400 transition-colors">
@@ -381,29 +377,42 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
     form?.classList.toggle("hidden");
   });
 
-  document.getElementById("enquiry-form")?.addEventListener("submit", (e) => {
+  document.getElementById("enquiry-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const form = e.target;
     const items = load();
-    const fd = new FormData(e.target);
-    const name = fd.get("name");
-    const lines = [
-      `New Enquiry from ${name}`,
-      `Phone: ${fd.get("phone")}`,
-      fd.get("email") ? `Email: ${fd.get("email")}` : "",
-      fd.get("message") ? `Message: ${fd.get("message")}` : "",
-      "",
-      "Products:",
-      ...items.map(
-        (p, i) =>
-          `${i + 1}. ${p.name}${p.diameter ? " (" + p.diameter + ")" : ""}`,
-      ),
-    ].filter((l) => l !== undefined);
-    const waUrl = waBase + "?text=" + encodeURIComponent(lines.join("\n"));
-    window.open(waUrl, "_blank", "noopener");
-    window.showToast?.({
-      title: "Enquiry sent via WhatsApp!",
-      tone: "success",
-    });
+    const fd = new FormData(form);
+    const btn = form.querySelector('[type=submit]');
+    const originalLabel = btn?.textContent;
+    if (btn) { btn.textContent = "Sending…"; btn.disabled = true; }
+
+    try {
+      await window.submitEnquiry({
+        name:    String(fd.get("name")    || "").trim(),
+        phone:   String(fd.get("phone")   || "").trim(),
+        email:   String(fd.get("email")   || "").trim(),
+        message: String(fd.get("message") || "").trim(),
+        source:  "enquiry-list",
+        products: items.map((p) => ({ id: p.id })),
+      });
+      window.showToast?.({
+        tone: "success",
+        title: "Enquiry sent successfully",
+        message: "Our team will reply within the hour.",
+      });
+      form.reset();
+      window.rcbList?.clear();
+      document.getElementById("inline-form")?.classList.add("hidden");
+      render();
+    } catch (err) {
+      window.showToast?.({
+        tone: "error",
+        title: "Couldn't send enquiry",
+        message: err?.message || "Please try again.",
+      });
+    } finally {
+      if (btn) { btn.textContent = originalLabel; btn.disabled = false; }
+    }
   });
 
   window.addEventListener("rcb:list-updated", render);

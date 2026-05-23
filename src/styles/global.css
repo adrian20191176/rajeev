@@ -6,40 +6,40 @@
   --font-body: Manrope, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  /* Navy ink scale */
-  --color-ink-900: #070e1f;
-  --color-ink-800: #0d1b3d;
-  --color-ink-700: #102046;
-  --color-ink-600: #142650;
-  --color-ink-500: #1a2f61;
-  --color-ink-400: #223870;
-  --color-ink-300: #2d4980;
-  --color-ink-200: #4a6398;
-  --color-ink-100: #7088b0;
+  /* Graphite ink scale (matches fetched design — #05080F base) */
+  --color-ink-900: #05080F;
+  --color-ink-800: #0A0E14;
+  --color-ink-700: #0F141E;
+  --color-ink-600: #151B28;
+  --color-ink-500: #1C2333;
+  --color-ink-400: #2A3344;
+  --color-ink-300: #3A4558;
+  --color-ink-200: #5C6A82;
+  --color-ink-100: #8A98B0;
 
   /* Chrome / silver scale */
-  --color-chrome-50: #f5f6f8;
-  --color-chrome-100: #dddee2;
-  --color-chrome-200: #a7a9ac;
+  --color-chrome-50: #F4F6FA;
+  --color-chrome-100: #E2E7F0;
+  --color-chrome-200: #C2CCDB;
 
   /* Brand accents */
-  --color-gold: #d4af37;
-  --color-gold-dark: #c49b2a;
+  --color-gold: #D4AF37;
+  --color-gold-dark: #C49B2A;
 
   /* Keep cyan/amber aliases so Tailwind classes match the design */
-  --color-cyan-brand: #d4af37;
-  --color-amber-signal: #c49b2a;
+  --color-cyan-brand: #D4AF37;
+  --color-amber-signal: #FFB347;
 
   /* Custom shadows */
   --shadow-glow-cyan:  0 0 0 1px rgba(212,175,55,0.35), 0 12px 40px -8px rgba(212,175,55,0.45);
-  --shadow-glow-amber: 0 0 0 1px rgba(196,155,42,0.35), 0 12px 40px -8px rgba(196,155,42,0.45);
+  --shadow-glow-amber: 0 0 0 1px rgba(255,179,71,0.35), 0 12px 40px -8px rgba(255,179,71,0.45);
   --shadow-card:       0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 60px -28px rgba(0,0,0,0.6);
 }
 
 /* ─── Base ──────────────────────────────────────────────────────────────── */
 html, body {
-  background: #0d1b3d;
-  color: #f5f6f8;
+  background: #05080F;
+  color: #E2E7F0;
 }
 body {
   font-family: Manrope, system-ui, sans-serif;
@@ -68,7 +68,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ─── Gold radial spotlight ────────────────────────────────────────────── */
 .spot {
-  background: radial-gradient(60% 50% at 50% 0%, rgba(212,175,55,0.14), transparent 70%);
+  background: radial-gradient(60% 50% at 50% 0%, rgba(212,175,55,0.12), transparent 70%);
 }
 
 /* ─── Gold chrome border via gradient mask ─────────────────────────────── */
@@ -149,8 +149,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ─── Scrollbars ────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar              { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb        { background: #1a2f61; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover  { background: #223870; }
+::-webkit-scrollbar-thumb        { background: #1C2333; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover  { background: #2A3344; }
 ::-webkit-scrollbar-track        { background: transparent; }
 
 /* ─── Selection / focus ─────────────────────────────────────────────────── */
@@ -158,7 +158,7 @@ a { color: inherit; text-decoration: none; }
 :focus-visible{ outline: 2px solid #d4af37; outline-offset: 2px; border-radius: 4px; }
 
 /* ─── Dialog / modal backdrop ───────────────────────────────────────────── */
-dialog::backdrop { background: rgba(7,14,31,0.82); backdrop-filter: blur(6px); }
+dialog::backdrop { background: rgba(5,8,15,0.82); backdrop-filter: blur(6px); }
 dialog[open] { display: flex; flex-direction: column; }
 
 /* ─── GSAP pre-anim guards (prevents flash before JS runs) ────────────── */
@@ -190,7 +190,7 @@ dialog[open] { display: flex; flex-direction: column; }
 
 /* ─── Nav scroll elevation ───────────────────────────────────────────── */
 #site-nav.nav-elevated {
-  background: rgba(7, 14, 31, 0.85);
+  background: rgba(5, 8, 15, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.5);

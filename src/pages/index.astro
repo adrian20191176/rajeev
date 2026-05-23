@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
 import BearingVisual from "../components/BearingVisual.astro";
 import { BUSINESS, BRANDS, CATEGORIES } from "../data/rcb.js";
@@ -52,7 +54,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <div data-hero-step class="mt-6 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
           <a
             href="/categories"
-            data-magnetic
             class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan"
           >
             View Categories
@@ -70,7 +71,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
             >
           </a>
           <button
-            data-magnetic
             class="open-search btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 hover:text-gold bg-ink-600/40 backdrop-blur"
           >
             <svg
@@ -91,7 +91,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
           </button>
           <button
             onclick="openEnquiry([])"
-            data-magnetic
             class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold hover:shadow-glow-amber"
           >
             Enquire Now
@@ -242,7 +241,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <a
           href="/categories"
           data-reveal
-          data-magnetic
           class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40 whitespace-nowrap"
         >
           All categories
@@ -532,7 +530,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
           href={`https://wa.me/${BUSINESS.whatsapp}`}
           target="_blank"
           rel="noopener"
-          data-magnetic
           class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md bg-amber-signal text-ink-900 hover:bg-gold hover:shadow-glow-amber"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
@@ -544,7 +541,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
         </a>
         <a
           href={`tel:${BUSINESS.phone}`}
-          data-magnetic
           class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40"
         >
           <svg
@@ -564,7 +560,6 @@ const featuredCats = CATEGORIES.slice(0, 6);
         </a>
         <button
           onclick="openEnquiry([])"
-          data-magnetic
           class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan"
         >
           Send written enquiry

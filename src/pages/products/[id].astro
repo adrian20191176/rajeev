@@ -1,18 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
-import { CATEGORIES, PRODUCTS } from '../../data/rcb.js';
+import { CATEGORIES, getProducts } from '../../data/rcb.js';
 
-export async function getStaticPaths() {
-  return PRODUCTS.map(product => ({
-    params: { id: String(product.id) },
-    props: { product },
-  }));
-}
+const id = Number(Astro.params.id);
+const allProducts = await getProducts();
+const product = allProducts.find(p => p.id === id);
+if (!product) return new Response(null, { status: 404, statusText: 'Product not found' });
 
-const { product } = Astro.props;
 const cat = CATEGORIES.find(c => c.slug === product.category);
-const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
 const specs = [
   product.bore  !== undefined && { label: 'Bore (d)',     value: `${product.bore} mm` },
@@ -22,16 +19,14 @@ const specs = [
   product.section !== undefined && { label: 'Section',     value: product.section },
   product.pitch !== undefined && { label: 'Pitch',         value: product.pitch },
   product.series !== undefined && { label: 'Series',       value: product.series },
-  { label: 'Brand',             value: product.brand },
   { label: 'Category',          value: cat?.name ?? product.category },
-  { label: 'Availability',      value: product.availability },
 ].filter(Boolean);
 
 const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name} (ID: ${product.id}). Please send availability and pricing.`);
 ---
 
 <Layout
-  title={`${product.code} — ${product.brand} | Royal Crown Bearings`}
+  title={`${product.code} | Royal Crown Bearings`}
   description={`${product.name}. ${product.diameter || ''} — ${cat?.short || ''}`}
   activeNav="categories"
 >
@@ -66,13 +61,13 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
 
         <!-- Info -->
         <div class="flex-1">
-          <div data-hero-step class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{product.brand} · {cat?.family}</div>
+          <div data-hero-step class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{cat?.family}</div>
           <h1 data-hero-step data-split-words class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-chrome-50 tracking-tight">{product.code}</h1>
           {product.diameter && <p data-hero-step class="mt-1 font-mono text-sm text-chrome-200/60">{product.diameter}</p>}
 
-          <div class={`mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 rounded-full ${product.availability === 'In Stock' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-gold/10 text-gold'}`}>
-            {product.availability === 'In Stock' && <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>}
-            {product.availability}
+          <div class="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            In Stock
           </div>
 
           <!-- Specs table -->
@@ -91,8 +86,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
           <div data-hero-step class="mt-6 flex flex-wrap gap-3">
             <button
               id="add-enquiry-btn"
-              data-magnetic
-              data-product={JSON.stringify({ id: product.id, code: product.code, name: product.name, brand: product.brand, category: product.category, diameter: product.diameter || '' })}
+              data-product={JSON.stringify({ id: product.id, code: product.code, name: product.name, category: product.category, diameter: product.diameter || '' })}
               class="btn-shine inline-flex items-center gap-2 px-5 py-3 rounded-md bg-gold text-ink-900 font-medium text-sm hover:shadow-glow-cyan transition-all"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h7l4 4v12a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M15 4v5h5"/><path d="M11 13h6"/><path d="M11 17h4"/><path d="M5 8H3"/><path d="M5 13H3"/><path d="M5 18H3"/></svg>
@@ -100,8 +94,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
             </button>
             <button
               id="enquire-now-btn"
-              data-magnetic
-              data-product={JSON.stringify({ id: product.id, code: product.code, name: product.name, brand: product.brand, category: product.category, diameter: product.diameter || '' })}
+              data-product={JSON.stringify({ id: product.id, code: product.code, name: product.name, category: product.category, diameter: product.diameter || '' })}
               class="btn-shine inline-flex items-center gap-2 px-5 py-3 rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 hover:text-gold font-medium text-sm bg-ink-600/40 transition-all"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -111,7 +104,6 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
               href={`https://wa.me/94766550249?text=${waMsg}`}
               target="_blank"
               rel="noopener noreferrer"
-              data-magnetic
               class="btn-shine inline-flex items-center gap-2 px-5 py-3 rounded-md bg-emerald-600/90 hover:bg-emerald-500 text-white font-medium text-sm transition-all"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.557 4.126 1.533 5.862L.057 23.5l5.784-1.517A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 0 1-5.001-1.372l-.358-.213-3.726.977.995-3.633-.233-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.573 6.573 2.182 12 2.182S21.818 6.573 21.818 12 17.427 21.818 12 21.818z"/></svg>
@@ -153,8 +145,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
               }
             </div>
             <div class="p-3">
-              <div class="font-mono text-[9px] tracking-widest uppercase text-gold/50 mb-0.5">{p.brand}</div>
-              <div class="font-display text-xs font-semibold text-chrome-50 group-hover:text-gold transition-colors">{p.code}</div>
+              <div class="font-display text-sm font-semibold text-chrome-50 group-hover:text-gold transition-colors">{p.code}</div>
               {p.diameter && <div class="mt-0.5 text-[10px] text-chrome-200/40 font-mono truncate">{p.diameter}</div>}
             </div>
           </a>

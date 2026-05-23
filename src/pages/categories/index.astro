@@ -1,8 +1,11 @@
 ---
+export const prerender = true;
+
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
-import { CATEGORIES, PRODUCTS } from '../../data/rcb.js';
+import { CATEGORIES, getProducts } from '../../data/rcb.js';
 
+const PRODUCTS = await getProducts();
 const families = ['All', ...new Set(CATEGORIES.map(c => c.family))];
 const countMap: Record<string, number> = {};
 PRODUCTS.forEach(p => { countMap[p.category] = (countMap[p.category] || 0) + 1; });

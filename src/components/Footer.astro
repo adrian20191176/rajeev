@@ -11,7 +11,7 @@ const cats = CATEGORIES.slice(0, 9);
       <a href="/" class="flex items-center gap-2.5">
         <div class="relative w-10 h-10 rounded-md border hairline-strong bg-gradient-to-b from-ink-500 to-ink-700 grid place-items-center overflow-hidden">
           <div class="w-7 h-7" style="
-            background: linear-gradient(135deg, #F5F6F8 0%, #D4AF37 40%, #C49B2A 70%, #D4AF37 100%);
+            background: linear-gradient(135deg, #F4F6FA 0%, #D4AF37 40%, #C49B2A 70%, #D4AF37 100%);
             -webkit-mask-image: url(/logo.svg); mask-image: url(/logo.svg);
             -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
             -webkit-mask-position: center; mask-position: center;
@@ -72,7 +72,11 @@ const cats = CATEGORIES.slice(0, 9);
   <div class="border-t hairline">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50">
       <span>© 2026 Royal Crown Bearings · www.royalcrownbearings.com</span>
-      <span>RCB · Powering Performance, Ensuring Reliability</span>
+      <div class="flex items-center gap-4">
+        <a href="/admin/login" class="hover:text-gold transition-colors">Staff Sign-in</a>
+        <span class="text-chrome-200/30">·</span>
+        <span>RCB · Powering Performance, Ensuring Reliability</span>
+      </div>
     </div>
   </div>
 </footer>

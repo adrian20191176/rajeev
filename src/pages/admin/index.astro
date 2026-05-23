@@ -1,0 +1,850 @@
+---
+export const prerender = true;
+
+import Layout from '../../layouts/Layout.astro';
+import { CATEGORIES, BRANDS } from '../../data/rcb.js';
+
+// Reference data for the client runtime (products are fetched live from Supabase).
+const categoriesJson = JSON.stringify(CATEGORIES);
+const brandsJson     = JSON.stringify(BRANDS);
+---
+
+<Layout
+  title="Admin Console | Royal Crown Bearings"
+  description="Manage Royal Crown Bearings products."
+  activeNav=""
+>
+  <!-- Reference data for the admin runtime -->
+  <script id="rcb-admin-categories" type="application/json" set:html={categoriesJson}></script>
+  <script id="rcb-admin-brands"     type="application/json" set:html={brandsJson}></script>
+
+  <main id="admin-shell" class="hidden max-w-7xl mx-auto px-5 sm:px-6 pt-8 sm:pt-10 pb-20">
+    <!-- ── Header ──────────────────────────────────────────────── -->
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <div>
+        <div class="flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+          <span class="w-6 h-px bg-gold"></span> Admin Console
+        </div>
+        <h1 class="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-chrome-50">
+          Product Management
+        </h1>
+        <p class="mt-1.5 text-sm text-chrome-100/70">Add, edit and remove products. Categories are fixed by HQ.</p>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button id="admin-logout" class="inline-flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong text-chrome-100 hover:text-gold hover:border-gold/40 text-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sign out
+        </button>
+        <button id="admin-add" class="btn-shine inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Product
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Stat strip ──────────────────────────────────────────── -->
+    <div id="admin-stats" class="mt-6 sm:mt-8 grid grid-cols-3 gap-px rounded-lg overflow-hidden border hairline-strong bg-white/5"></div>
+
+    <!-- ── Toolbar ─────────────────────────────────────────────── -->
+    <div class="mt-6 sm:mt-8 flex items-center gap-2 sm:gap-3 flex-wrap">
+      <div class="flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong bg-ink-800 flex-1 min-w-[200px] sm:max-w-md">
+        <svg class="text-chrome-200/60 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+        <input id="admin-q" type="text" placeholder="Search by code, name or brand…"
+          class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/40 text-sm min-w-0" />
+        <button id="admin-q-clear" class="hidden text-chrome-200/60 hover:text-chrome-50" aria-label="Clear search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+      </div>
+      <select id="admin-cat" class="bg-ink-800 border hairline-strong rounded-md px-2.5 py-2 text-sm text-chrome-50 outline-none focus:border-gold/50">
+        <option value="All">All categories</option>
+      </select>
+      <span id="admin-count" class="ml-auto font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-chrome-200/60"></span>
+    </div>
+
+    <!-- ── Desktop table ───────────────────────────────────────── -->
+    <div class="mt-5 hidden md:block">
+      <div class="overflow-x-auto rounded-lg border hairline-strong">
+        <table class="w-full text-sm">
+          <thead class="bg-ink-800/80">
+            <tr class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 text-left">
+              <th class="px-3 py-3 w-16">Image</th>
+              <th class="px-3 py-3">Part Code</th>
+              <th class="px-3 py-3">Brand</th>
+              <th class="px-3 py-3">Category</th>
+              <th class="px-3 py-3">Size / Spec</th>
+              <th class="px-3 py-3 text-right pr-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-tbody" class="divide-y divide-white/[0.04]"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Mobile cards ────────────────────────────────────────── -->
+    <div id="admin-cards" class="mt-5 md:hidden flex flex-col gap-3"></div>
+  </main>
+
+  <!-- ── Auth gate placeholder (until JS decides what to show) ─ -->
+  <div id="admin-gate" class="min-h-[40vh] grid place-items-center text-chrome-200/50 font-mono text-[10px] tracking-[0.22em] uppercase">
+    Checking session…
+  </div>
+
+  <!-- ── Product Form modal ──────────────────────────────────── -->
+  <dialog
+    id="admin-form-dialog"
+    class="fixed inset-0 w-full max-w-3xl mx-auto my-auto p-0 rounded-xl bg-ink-700 border hairline shadow-card fade-up max-h-[92vh] overflow-y-auto"
+  >
+    <form id="admin-form" class="p-5 sm:p-7">
+      <div class="flex items-start justify-between gap-4 mb-5">
+        <div>
+          <div class="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+            <span class="w-6 h-px bg-gold"></span> <span id="admin-form-eyebrow">Add Product</span>
+          </div>
+          <h3 id="admin-form-title" class="mt-2 font-display text-xl sm:text-2xl font-semibold tracking-tight text-chrome-50">New product to the catalogue</h3>
+          <p id="admin-form-sub" class="text-sm text-chrome-100/70 mt-1">Categories are managed by HQ. Pick from the existing list.</p>
+        </div>
+        <button type="button" id="admin-form-close" class="p-2 rounded-md border hairline-strong text-chrome-100 hover:text-chrome-50" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Category -->
+      <div class="rounded-md border hairline bg-ink-900/40 p-3 mb-5">
+        <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mb-2 flex items-center gap-2">
+          Category <span class="text-chrome-200/40">· managed by HQ</span>
+        </div>
+        <select name="category" id="f-category"
+          class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm focus:border-gold/60 outline-none">
+        </select>
+        <div id="f-category-locked" class="hidden text-[11px] text-chrome-200/50 mt-1.5">Category cannot be changed after creation.</div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Part code -->
+        <label class="block">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Part Code</span>
+          <input name="code" id="f-code" type="text" placeholder="e.g. 6201-2RS"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="code" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+
+        <!-- Brand -->
+        <label class="block">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Brand</span>
+          <select name="brand" id="f-brand"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm focus:border-gold/60 outline-none">
+          </select>
+          <div data-err-for="brand" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+
+        <!-- Bearing/Seal dimensions -->
+        <label class="block" data-show-when="bearingDims">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
+          <input name="bore" id="f-bore" type="number" min="0" step="0.1" placeholder="12"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="bore" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+        <label class="block" data-show-when="bearingDims">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Outer Ø (mm)</span>
+          <input name="od" id="f-od" type="number" min="0" step="0.1" placeholder="32"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="od" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+        <label class="block" data-show-when="bearingDims">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Width (mm)</span>
+          <input name="width" id="f-width" type="number" min="0" step="0.1" placeholder="10"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="width" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+
+        <!-- Belt dimensions -->
+        <label class="block" data-show-when="beltDims">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5" id="f-belt-label">Section / Pitch</span>
+          <input name="section" id="f-section" type="text" placeholder="SPA"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="section" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+        <label class="block" data-show-when="beltDims">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Length (mm)</span>
+          <input name="length" id="f-length" type="number" min="0" placeholder="1320"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="length" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+
+        <!-- Housing dimensions -->
+        <label class="block" data-show-when="housing">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Series</span>
+          <input name="series" id="f-series" type="text" placeholder="UCP, UCF, UCFC, UCT"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="series" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+        <label class="block" data-show-when="housing">
+          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
+          <input name="housingBore" id="f-housing-bore" type="number" min="0" placeholder="25"
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+          <div data-err-for="housingBore" class="hidden text-[12px] text-red-300/90 mt-1"></div>
+        </label>
+
+        <!-- Image upload -->
+        <div class="sm:col-span-2">
+          <div class="flex items-center gap-3 mb-1.5">
+            <span class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70">Product Image</span>
+            <div class="flex border hairline rounded overflow-hidden">
+              <button type="button" data-img-mode="upload"
+                class="px-2 py-1 text-[10px] tracking-[0.18em] uppercase bg-ink-700 text-gold">Upload</button>
+              <button type="button" data-img-mode="url"
+                class="px-2 py-1 text-[10px] tracking-[0.18em] uppercase text-chrome-200/60 hover:text-chrome-50">Paste URL</button>
+            </div>
+          </div>
+
+          <!-- Upload dropzone -->
+          <div id="img-upload-zone"
+            class="relative rounded-md border-2 border-dashed border-white/15 hover:border-gold/50 bg-ink-900/50 p-6 cursor-pointer transition">
+            <input id="img-file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden" />
+            <div id="img-upload-empty" class="text-center py-2">
+              <div class="mx-auto w-12 h-12 rounded-full border hairline-strong grid place-items-center mb-2">
+                <svg id="img-upload-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/70"><path d="M12 16V4"/><polyline points="7,9 12,4 17,9"/><rect x="4" y="16" width="16" height="4" rx="1"/></svg>
+                <div id="img-upload-spinner" class="hidden w-5 h-5 border-2 border-gold border-t-transparent rounded-full" style="animation: spin-slow 0.8s linear infinite;"></div>
+              </div>
+              <div class="text-sm text-chrome-50" id="img-upload-text">Click, drag, or paste an image</div>
+              <div class="text-[12px] text-chrome-200/60 mt-1">PNG, JPG or WEBP · up to 12 MB · auto-resized</div>
+            </div>
+            <div id="img-upload-filled" class="hidden flex items-center gap-3">
+              <div class="w-20 h-20 shrink-0 rounded border hairline bg-white grid place-items-center overflow-hidden">
+                <img id="img-upload-thumb" alt="" class="max-w-full max-h-full object-contain" />
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="text-chrome-50 text-sm font-medium">Image attached</div>
+                <div id="img-upload-meta" class="text-[12px] text-chrome-200/60 mt-0.5 truncate">Uploaded · resized to ≤ 900px</div>
+                <div class="mt-2 flex gap-2">
+                  <button type="button" id="img-replace" class="px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40">Replace</button>
+                  <button type="button" id="img-remove"  class="px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- URL mode -->
+          <div id="img-url-zone" class="hidden">
+            <input id="img-url-input" type="url" placeholder="https://example.com/bearing.png"
+              class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            <div class="text-[11px] text-chrome-200/50 mt-1">Direct image URL (must be publicly accessible).</div>
+            <div id="img-url-preview" class="hidden mt-2 flex items-center gap-3 p-2 rounded border hairline bg-ink-900/40">
+              <div class="w-12 h-12 rounded border hairline bg-white grid place-items-center overflow-hidden">
+                <img id="img-url-thumb" alt="" class="max-w-full max-h-full object-contain" />
+              </div>
+              <div id="img-url-meta" class="text-[12px] text-chrome-200/70 truncate flex-1"></div>
+              <button type="button" id="img-url-clear" class="px-2 py-1 text-[10px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300">Clear</button>
+            </div>
+          </div>
+
+          <div id="img-error" class="hidden text-[12px] text-red-300/90 mt-1.5"></div>
+        </div>
+      </div>
+
+      <!-- Live preview -->
+      <div class="mt-5 rounded-md border hairline bg-ink-900/40 p-4">
+        <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mb-3">Live preview</div>
+        <div class="flex items-center gap-4">
+          <div class="w-20 h-20 shrink-0 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center" id="preview-image-wrap">
+            <img id="preview-image" alt="" class="hidden max-w-[80%] max-h-[80%] object-contain" />
+            <div id="preview-image-fallback" class="w-10 h-10 rounded-full border hairline-strong"></div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="preview-family-pill" class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[10px] tracking-[0.18em] uppercase border hairline text-chrome-100"></span>
+            </div>
+            <div class="mt-1.5 font-display text-base font-semibold text-chrome-50">
+              <span id="preview-name"></span>
+            </div>
+            <div class="mt-0.5 font-mono text-[12px] text-gold/90" id="preview-dim"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-center justify-end gap-2">
+        <button type="button" id="admin-form-cancel" class="inline-flex items-center px-4 py-2.5 text-sm font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40">Cancel</button>
+        <button type="submit" id="admin-form-submit" class="btn-shine inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold">
+          <span data-submit-label>Add product</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    import '../../scripts/admin';
+
+    type AnyProduct = {
+      id: number; code: string; name: string; brand: string;
+      category: string; family: string; iconType: string;
+      bore?: number; od?: number; width?: number;
+      section?: string; pitch?: string; length?: number; series?: string;
+      diameter: string;
+      image: string | null;
+    };
+
+    const Admin = (window as any).RCBAdmin;
+
+    // ── Auth gate ──
+    if (!Admin?.isAuthed()) {
+      window.location.href = '/admin/login';
+    } else {
+      document.getElementById('admin-gate')?.remove();
+      document.getElementById('admin-shell')!.classList.remove('hidden');
+      boot().catch((err) => {
+        console.error(err);
+        (window as any).showToast?.({ tone: 'error', title: 'Failed to load products', message: err.message });
+      });
+    }
+
+    async function boot() {
+      const categories = Admin.categories();
+      const brands     = Admin.brands();
+
+      // ── Populate selects ──
+      const catSelect = document.getElementById('admin-cat') as HTMLSelectElement;
+      categories.forEach((c: any) => {
+        const o = document.createElement('option');
+        o.value = c.slug; o.textContent = c.name;
+        catSelect.appendChild(o);
+      });
+
+      const fCat = document.getElementById('f-category') as HTMLSelectElement;
+      categories.forEach((c: any) => {
+        const o = document.createElement('option');
+        o.value = c.slug; o.textContent = `${c.name} · ${c.family}`;
+        fCat.appendChild(o);
+      });
+
+      const fBrand = document.getElementById('f-brand') as HTMLSelectElement;
+      brands.forEach((b: any) => {
+        const o = document.createElement('option');
+        o.value = b.name; o.textContent = b.name;
+        fBrand.appendChild(o);
+      });
+
+      // ── List state ──
+      let q = '';
+      let cat = 'All';
+
+      const qEl       = document.getElementById('admin-q')       as HTMLInputElement;
+      const qClear    = document.getElementById('admin-q-clear') as HTMLButtonElement;
+      const tbody     = document.getElementById('admin-tbody')!;
+      const cards     = document.getElementById('admin-cards')!;
+      const countEl   = document.getElementById('admin-count')!;
+      const statsEl   = document.getElementById('admin-stats')!;
+
+      qEl.addEventListener('input', () => {
+        q = qEl.value;
+        qClear.classList.toggle('hidden', !q);
+        renderList();
+      });
+      qClear.addEventListener('click', () => { qEl.value = ''; q = ''; qClear.classList.add('hidden'); renderList(); });
+      catSelect.addEventListener('change', () => { cat = catSelect.value; renderList(); });
+
+      // ── Header buttons ──
+      document.getElementById('admin-logout')!.addEventListener('click', () => {
+        Admin.logout();
+        (window as any).showToast?.({ tone: 'info', title: 'Signed out' });
+        window.location.href = '/';
+      });
+      document.getElementById('admin-add')!.addEventListener('click', () => openForm(null));
+
+      // ── Initial product load from Supabase ──
+      await Admin.refreshProducts();
+
+      // ── Helpers ──
+      const escapeHtml = (s: any) => String(s ?? '').replace(/[&<>"']/g, ch =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch] as string));
+
+      function renderStats() {
+        const products = Admin.products();
+        const items = [
+          { k: products.length,   v: 'Total products' },
+          { k: categories.length, v: 'Categories' },
+          { k: brands.length,     v: 'Brands' },
+        ];
+        statsEl.innerHTML = items.map(s => `
+          <div class="bg-ink-800 p-3 sm:p-4">
+            <div class="font-display text-xl sm:text-2xl font-semibold text-chrome-50">${s.k}</div>
+            <div class="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mt-1">${s.v}</div>
+          </div>`).join('');
+      }
+
+      function filtered(): AnyProduct[] {
+        const products: AnyProduct[] = Admin.products();
+        let res = products;
+        if (q.trim()) {
+          const s = q.toLowerCase();
+          res = res.filter(p => p.name.toLowerCase().includes(s) || p.code.toLowerCase().includes(s) || p.brand.toLowerCase().includes(s));
+        }
+        if (cat !== 'All') res = res.filter(p => p.category === cat);
+        return res;
+      }
+
+      function thumb(p: AnyProduct, big = false) {
+        if (p.image) {
+          return `<img src="${escapeHtml(p.image)}" alt="" class="max-w-[80%] max-h-[80%] object-contain" />`;
+        }
+        return big
+          ? `<div class="w-10 h-10 rounded-full border hairline-strong opacity-60"></div>`
+          : `<div class="w-7 h-7 rounded-full border hairline-strong opacity-60"></div>`;
+      }
+
+      function renderList() {
+        renderStats();
+        const rows = filtered();
+        const totalProducts = Admin.products().length;
+        countEl.textContent = `${rows.length} of ${totalProducts}`;
+
+        // Desktop table
+        if (rows.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="px-3 py-16 text-center text-chrome-200/60 text-sm">No products match your filters.</td></tr>`;
+        } else {
+          tbody.innerHTML = rows.map(p => {
+            const c = categories.find((c: any) => c.slug === p.category);
+            return `
+              <tr class="bg-ink-800/40 hover:bg-ink-700/60 transition-colors">
+                <td class="px-3 py-2">
+                  <div class="w-12 h-12 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center">${thumb(p, false)}</div>
+                </td>
+                <td class="px-3 py-2">
+                  <div class="font-mono text-chrome-50 text-[13px]">${escapeHtml(p.code)}</div>
+                </td>
+                <td class="px-3 py-2 text-chrome-100">${escapeHtml(p.brand)}</td>
+                <td class="px-3 py-2 text-chrome-100">${escapeHtml(c?.name || p.category)}</td>
+                <td class="px-3 py-2 font-mono text-gold/90 text-[12.5px]">${escapeHtml(p.diameter)}</td>
+                <td class="px-3 py-2 text-right">
+                  <div class="inline-flex items-center gap-1">
+                    <a href="/products/${p.id}"
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[11px] font-mono uppercase tracking-[0.18em]" title="View public page">View</a>
+                    <button data-action="edit"   data-id="${p.id}"
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[11px] font-mono uppercase tracking-[0.18em]">Edit</button>
+                    <button data-action="delete" data-id="${p.id}"
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40 text-[11px] font-mono uppercase tracking-[0.18em]">Delete</button>
+                  </div>
+                </td>
+              </tr>`;
+          }).join('');
+        }
+
+        // Mobile cards
+        if (rows.length === 0) {
+          cards.innerHTML = `<div class="border hairline-strong rounded-lg p-10 text-center text-chrome-200/60 text-sm">No products match your filters.</div>`;
+        } else {
+          cards.innerHTML = rows.map(p => {
+            const c = categories.find((c: any) => c.slug === p.category);
+            return `
+              <div class="chrome-border rounded-lg bg-ink-800 p-3">
+                <div class="flex gap-3">
+                  <div class="w-16 h-16 shrink-0 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center">${thumb(p, true)}</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="font-mono text-sm text-chrome-50">${escapeHtml(p.code)}</span>
+                      <span class="font-mono text-[10px] tracking-[0.18em] uppercase px-2 py-0.5 rounded border hairline text-chrome-100">${escapeHtml(p.brand)}</span>
+                    </div>
+                    <div class="mt-1 text-[12px] text-chrome-200/70 truncate">${escapeHtml(c?.name || '')}</div>
+                    <div class="mt-1 font-mono text-[12px] text-gold/90">${escapeHtml(p.diameter)}</div>
+                  </div>
+                </div>
+                <div class="mt-3 grid grid-cols-3 gap-2">
+                  <a href="/products/${p.id}" class="text-center py-2 rounded border hairline text-chrome-100 text-[11px] font-mono uppercase tracking-[0.18em]">View</a>
+                  <button data-action="edit"   data-id="${p.id}" class="py-2 rounded border border-gold/40 text-gold text-[11px] font-mono uppercase tracking-[0.18em]">Edit</button>
+                  <button data-action="delete" data-id="${p.id}" class="py-2 rounded border hairline text-chrome-100 hover:text-red-300 text-[11px] font-mono uppercase tracking-[0.18em]">Delete</button>
+                </div>
+              </div>`;
+          }).join('');
+        }
+      }
+
+      // Delegated edit / delete buttons
+      async function onListClick(ev: Event) {
+        const t = ev.target as HTMLElement;
+        const btn = t.closest('[data-action]') as HTMLElement | null;
+        if (!btn) return;
+        const id = Number(btn.dataset.id);
+        const action = btn.dataset.action;
+        const products = Admin.products();
+        const product = products.find((p: any) => p.id === id);
+        if (!product) return;
+        if (action === 'edit') openForm(product);
+        else if (action === 'delete') {
+          if (!confirm(`Delete "${product.name}"?\n\nThis permanently removes the product from the catalogue.`)) return;
+          try {
+            await Admin.deleteProduct(id);
+            (window as any).showToast?.({ tone: 'info', title: 'Product deleted', message: product.name });
+          } catch (err: any) {
+            (window as any).showToast?.({ tone: 'error', title: "Couldn't delete product", message: err.message });
+          }
+        }
+      }
+      tbody.addEventListener('click', onListClick);
+      cards.addEventListener('click', onListClick);
+
+      renderList();
+      window.addEventListener('rcb:data-change', renderList);
+
+      // ─────────────────────────────────────────────────────────────
+      //  Product form
+      // ─────────────────────────────────────────────────────────────
+      const dialog  = document.getElementById('admin-form-dialog') as HTMLDialogElement;
+      const form    = document.getElementById('admin-form')        as HTMLFormElement;
+      const closeBtn= document.getElementById('admin-form-close')!;
+      const cancelBtn= document.getElementById('admin-form-cancel')!;
+      const eyebrow = document.getElementById('admin-form-eyebrow')!;
+      const title   = document.getElementById('admin-form-title')!;
+      const sub     = document.getElementById('admin-form-sub')!;
+      const submitBtn = document.getElementById('admin-form-submit') as HTMLButtonElement;
+      const submitLabel = submitBtn.querySelector('[data-submit-label]') as HTMLElement;
+
+      const fCodeEl   = document.getElementById('f-code')         as HTMLInputElement;
+      const fBoreEl   = document.getElementById('f-bore')         as HTMLInputElement;
+      const fOdEl     = document.getElementById('f-od')           as HTMLInputElement;
+      const fWidthEl  = document.getElementById('f-width')        as HTMLInputElement;
+      const fSecEl    = document.getElementById('f-section')      as HTMLInputElement;
+      const fLenEl    = document.getElementById('f-length')       as HTMLInputElement;
+      const fSerEl    = document.getElementById('f-series')       as HTMLInputElement;
+      const fHBoreEl  = document.getElementById('f-housing-bore') as HTMLInputElement;
+      const fBeltLab  = document.getElementById('f-belt-label')!;
+      const fCatLocked= document.getElementById('f-category-locked')!;
+
+      // Image state
+      let imgValue = ''; // data URL or http URL
+      let imgMode  = 'upload';
+
+      const dropZone   = document.getElementById('img-upload-zone')!;
+      const fileInput  = document.getElementById('img-file-input')  as HTMLInputElement;
+      const uploadEmpty= document.getElementById('img-upload-empty')!;
+      const uploadFilled = document.getElementById('img-upload-filled')!;
+      const uploadIcon = document.getElementById('img-upload-icon')!;
+      const uploadSpinner = document.getElementById('img-upload-spinner')!;
+      const uploadText = document.getElementById('img-upload-text')!;
+      const uploadThumb = document.getElementById('img-upload-thumb') as HTMLImageElement;
+      const uploadMeta = document.getElementById('img-upload-meta')!;
+      const replaceBtn = document.getElementById('img-replace')!;
+      const removeBtn  = document.getElementById('img-remove')!;
+      const urlZone    = document.getElementById('img-url-zone')!;
+      const urlInput   = document.getElementById('img-url-input')   as HTMLInputElement;
+      const urlPreview = document.getElementById('img-url-preview')!;
+      const urlThumb   = document.getElementById('img-url-thumb')   as HTMLImageElement;
+      const urlMeta    = document.getElementById('img-url-meta')!;
+      const urlClear   = document.getElementById('img-url-clear')!;
+      const imgError   = document.getElementById('img-error')!;
+      const modeBtns   = document.querySelectorAll('[data-img-mode]');
+
+      function setImgMode(m: string) {
+        imgMode = m;
+        modeBtns.forEach(b => {
+          const el = b as HTMLElement;
+          const active = el.dataset.imgMode === m;
+          el.classList.toggle('bg-ink-700', active);
+          el.classList.toggle('text-gold', active);
+          el.classList.toggle('text-chrome-200/60', !active);
+        });
+        dropZone.classList.toggle('hidden', m !== 'upload');
+        urlZone.classList.toggle('hidden',  m !== 'url');
+      }
+      modeBtns.forEach(b => b.addEventListener('click', () => setImgMode((b as HTMLElement).dataset.imgMode!)));
+
+      function clearImgError() { imgError.classList.add('hidden'); imgError.textContent = ''; }
+      function showImgError(msg: string) { imgError.classList.remove('hidden'); imgError.textContent = msg; }
+
+      function paintImageState() {
+        if (imgValue) {
+          uploadEmpty.classList.add('hidden');
+          uploadFilled.classList.remove('hidden');
+          uploadFilled.classList.add('flex');
+          uploadThumb.src = imgValue;
+          uploadMeta.textContent = imgValue.startsWith('data:')
+            ? 'Uploaded · resized to ≤ 900px'
+            : imgValue;
+          if (!imgValue.startsWith('data:')) {
+            urlPreview.classList.remove('hidden');
+            urlPreview.classList.add('flex');
+            urlThumb.src = imgValue;
+            urlMeta.textContent = imgValue;
+            if (urlInput.value !== imgValue) urlInput.value = imgValue;
+          } else {
+            urlPreview.classList.add('hidden');
+          }
+        } else {
+          uploadEmpty.classList.remove('hidden');
+          uploadFilled.classList.add('hidden');
+          uploadFilled.classList.remove('flex');
+          urlPreview.classList.add('hidden');
+          urlPreview.classList.remove('flex');
+          urlInput.value = '';
+        }
+        updatePreview();
+      }
+
+      // ── Image upload pipeline ──
+      async function processFile(file: File) {
+        if (!file || !file.type?.startsWith('image/')) { showImgError('Please drop or pick an image file (PNG, JPG, WEBP).'); return; }
+        if (file.size > 12 * 1024 * 1024) { showImgError('Image is too large. Pick something under 12 MB.'); return; }
+        clearImgError();
+        uploadIcon.classList.add('hidden');
+        uploadSpinner.classList.remove('hidden');
+        uploadText.textContent = 'Processing…';
+        try {
+          const dataUrl: string = await new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(r.result as string);
+            r.onerror = () => rej(r.error);
+            r.readAsDataURL(file);
+          });
+          const img: HTMLImageElement = await new Promise((res, rej) => {
+            const im = new Image();
+            im.onload = () => res(im);
+            im.onerror = () => rej(new Error("Couldn't read image."));
+            im.src = dataUrl;
+          });
+          const MAX = 900;
+          const ratio = Math.min(1, MAX / Math.max(img.width, img.height));
+          const w = Math.round(img.width  * ratio);
+          const h = Math.round(img.height * ratio);
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d')!;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          imgValue = canvas.toDataURL('image/jpeg', 0.86);
+          paintImageState();
+        } catch (e: any) {
+          showImgError(e?.message || "Couldn't process that image.");
+        } finally {
+          uploadIcon.classList.remove('hidden');
+          uploadSpinner.classList.add('hidden');
+          uploadText.textContent = 'Click, drag, or paste an image';
+        }
+      }
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', () => {
+        const f = fileInput.files?.[0]; if (f) processFile(f);
+      });
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-gold', 'bg-gold/5');
+        dropZone.classList.remove('border-white/15');
+      });
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-gold', 'bg-gold/5');
+        dropZone.classList.add('border-white/15');
+      });
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-gold', 'bg-gold/5');
+        dropZone.classList.add('border-white/15');
+        const f = e.dataTransfer?.files?.[0]; if (f) processFile(f);
+      });
+      form.addEventListener('paste', (e) => {
+        const item = [...(e.clipboardData?.items || [])].find(it => it.type?.startsWith('image/'));
+        if (item) { e.preventDefault(); processFile(item.getAsFile()!); }
+      });
+      replaceBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
+      removeBtn.addEventListener('click', (e) => { e.stopPropagation(); imgValue = ''; paintImageState(); });
+      urlInput.addEventListener('input', () => { imgValue = urlInput.value.trim(); paintImageState(); });
+      urlClear.addEventListener('click', () => { imgValue = ''; paintImageState(); });
+
+      // ── Dynamic field visibility ──
+      function familyFlags(slug: string) {
+        const c = categories.find((c: any) => c.slug === slug) || categories[0];
+        const family = c.family;
+        const bearingDims = ['Ball Bearings','Roller Bearings','Thrust','Mounted Units'].includes(family) || c.slug === 'uc-bearings';
+        const beltDims = family === 'Belts';
+        const sealDims = c.slug === 'oil-seals';
+        const housing  = c.slug === 'housings';
+        return { c, family, bearingDims: bearingDims || sealDims, beltDims, housing };
+      }
+
+      function updateVisibility() {
+        const { c, beltDims, bearingDims, housing } = familyFlags((document.getElementById('f-category') as HTMLSelectElement).value);
+        document.querySelectorAll('[data-show-when]').forEach(el => {
+          const w = (el as HTMLElement).dataset.showWhen;
+          const show =
+            (w === 'bearingDims' && bearingDims && !housing) ||
+            (w === 'beltDims'    && beltDims) ||
+            (w === 'housing'     && housing);
+          (el as HTMLElement).classList.toggle('hidden', !show);
+        });
+        if (beltDims) {
+          fBeltLab.textContent = c.slug.startsWith('v-') ? 'Section (A, B, SPA…)' : 'Pitch (3M, 5M, T10…)';
+          fSecEl.setAttribute('placeholder', c.slug.startsWith('v-') ? 'SPA' : '5M');
+          fSecEl.setAttribute('name', c.slug.startsWith('v-') ? 'section' : 'pitch');
+        }
+        updatePreview();
+      }
+      fCat.addEventListener('change', updateVisibility);
+      [fCodeEl, fBoreEl, fOdEl, fWidthEl, fSecEl, fLenEl, fSerEl, fHBoreEl].forEach(el => el?.addEventListener('input', updatePreview));
+
+      function computeDiameter() {
+        const { c, beltDims, bearingDims, housing } = familyFlags(fCat.value);
+        if (beltDims) {
+          const sec = fSecEl.value;
+          return sec && fLenEl.value ? `${sec} · ${fLenEl.value} mm` : '';
+        }
+        if (housing) {
+          return fSerEl.value && fHBoreEl.value ? `${fSerEl.value} · Ø${fHBoreEl.value} mm bore` : '';
+        }
+        if (bearingDims) {
+          if (fBoreEl.value && fOdEl.value && fWidthEl.value) return `Ø${fBoreEl.value} × Ø${fOdEl.value} × ${fWidthEl.value} mm`;
+        }
+        return '';
+      }
+
+      function updatePreview() {
+        const { c } = familyFlags(fCat.value);
+        (document.getElementById('preview-family-pill') as HTMLElement).textContent = c.family;
+        (document.getElementById('preview-name')        as HTMLElement).textContent = fCodeEl.value || '(part code)';
+        (document.getElementById('preview-dim')         as HTMLElement).textContent = computeDiameter() || '(enter dimensions)';
+
+        const pImg = document.getElementById('preview-image') as HTMLImageElement;
+        const pFallback = document.getElementById('preview-image-fallback')!;
+        if (imgValue) {
+          pImg.src = imgValue;
+          pImg.classList.remove('hidden');
+          pFallback.classList.add('hidden');
+        } else {
+          pImg.classList.add('hidden');
+          pFallback.classList.remove('hidden');
+        }
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('[data-err-for]').forEach(el => {
+          el.classList.add('hidden');
+          (el as HTMLElement).textContent = '';
+        });
+      }
+      function setError(name: string, msg: string) {
+        const el = document.querySelector(`[data-err-for="${name}"]`) as HTMLElement | null;
+        if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+      }
+
+      function validate(): boolean {
+        clearErrors();
+        let ok = true;
+        if (!fCodeEl.value.trim()) { setError('code', 'Required'); ok = false; }
+        const { beltDims, bearingDims, housing } = familyFlags(fCat.value);
+        if (bearingDims && !housing) {
+          if (!fBoreEl.value)  { setError('bore', 'Required'); ok = false; }
+          if (!fOdEl.value)    { setError('od', 'Required'); ok = false; }
+          if (!fWidthEl.value) { setError('width', 'Required'); ok = false; }
+        }
+        if (beltDims) {
+          if (!fSecEl.value)   { setError('section', 'Required'); ok = false; }
+          if (!fLenEl.value)   { setError('length', 'Required'); ok = false; }
+        }
+        if (housing) {
+          if (!fSerEl.value)   { setError('series', 'Required'); ok = false; }
+          if (!fHBoreEl.value) { setError('housingBore', 'Required'); ok = false; }
+        }
+        return ok;
+      }
+
+      let editingId: number | null = null;
+
+      function openForm(product: AnyProduct | null) {
+        editingId = product?.id ?? null;
+        const isEdit = !!product;
+        eyebrow.textContent = isEdit ? 'Edit Product' : 'Add Product';
+        title.textContent   = isEdit ? `Editing ${product!.name}` : 'New product to the catalogue';
+        sub.textContent     = isEdit ? 'Update details below — changes appear instantly on the public site.'
+                                     : 'Categories are managed by HQ. Pick from the existing list.';
+        submitLabel.textContent = isEdit ? 'Save changes' : 'Add product';
+
+        // Reset
+        clearErrors();
+        clearImgError();
+        setImgMode('upload');
+        imgValue = product?.image || '';
+
+        fCat.value      = product?.category || categories[0].slug;
+        fCat.disabled   = isEdit;
+        fCat.classList.toggle('opacity-70', isEdit);
+        fCat.classList.toggle('cursor-not-allowed', isEdit);
+        fCatLocked.classList.toggle('hidden', !isEdit);
+
+        fBrand.value    = product?.brand || brands[0]?.name || '';
+
+        fCodeEl.value   = product?.code  || '';
+        fBoreEl.value   = product?.bore != null ? String(product.bore) : '';
+        fOdEl.value     = product?.od   != null ? String(product.od)   : '';
+        fWidthEl.value  = product?.width!= null ? String(product.width): '';
+        fSecEl.value    = product?.section || product?.pitch || '';
+        fLenEl.value    = product?.length != null ? String(product.length) : '';
+        fSerEl.value    = product?.series || '';
+        fHBoreEl.value  = product?.bore != null && product?.series ? String(product.bore) : '';
+
+        updateVisibility();
+        paintImageState();
+        try { dialog.showModal(); } catch { dialog.setAttribute('open', ''); }
+      }
+
+      function closeForm() {
+        try { dialog.close(); } catch { dialog.removeAttribute('open'); }
+      }
+      closeBtn.addEventListener('click', closeForm);
+      cancelBtn.addEventListener('click', closeForm);
+      dialog.addEventListener('click', (e) => { if (e.target === dialog) closeForm(); });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+
+        const { c } = familyFlags(fCat.value);
+        const toNum = (v: string) => v === '' ? undefined : Number(v);
+        const isSection = c.slug.startsWith('v-');
+        const code = fCodeEl.value.trim();
+        const built = {
+          code,
+          brand: fBrand.value,
+          name: code,
+          category: fCat.value,
+          family: c.family,
+          iconType: c.iconType,
+          bore:    c.slug === 'housings' ? toNum(fHBoreEl.value) : toNum(fBoreEl.value),
+          od:      toNum(fOdEl.value),
+          width:   toNum(fWidthEl.value),
+          section: isSection ? (fSecEl.value || undefined) : undefined,
+          pitch:   !isSection ? (fSecEl.value || undefined) : undefined,
+          length:  toNum(fLenEl.value),
+          series:  fSerEl.value || undefined,
+          diameter: computeDiameter(),
+          image: imgValue || null,
+        };
+
+        submitBtn.disabled = true;
+        const originalLabel = submitLabel.textContent;
+
+        try {
+          if (built.image && built.image.startsWith('data:')) {
+            submitLabel.textContent = 'Uploading image…';
+            built.image = await Admin.uploadProductImage(built.image);
+          }
+          submitLabel.textContent = editingId != null ? 'Saving…' : 'Adding…';
+
+          if (editingId != null) {
+            await Admin.updateProduct(editingId, built);
+            (window as any).showToast?.({ tone: 'success', title: 'Product updated', message: built.name });
+          } else {
+            await Admin.addProduct(built);
+            (window as any).showToast?.({ tone: 'success', title: 'Product added', message: built.name });
+          }
+          closeForm();
+        } catch (err: any) {
+          (window as any).showToast?.({ tone: 'error', title: "Couldn't save product", message: err.message });
+        } finally {
+          submitBtn.disabled = false;
+          submitLabel.textContent = originalLabel;
+        }
+      });
+
+      // Expose for the header Add button (already wired); also surface to other handlers if needed
+      (window as any).__rcbOpenForm = openForm;
+    }
+  </script>
+</Layout>

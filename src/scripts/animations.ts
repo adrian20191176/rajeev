@@ -132,25 +132,6 @@ function initHeroVisual() {
   }
 }
 
-// ── Magnetic buttons ──────────────────────────────────────────────────
-function initMagnetic() {
-  if (prefersReducedMotion || !window.matchMedia('(pointer: fine)').matches) return;
-
-  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
-    const strength = Number(el.dataset.magneticStrength ?? 14);
-
-    el.addEventListener('mousemove', (e) => {
-      const b = el.getBoundingClientRect();
-      const x = ((e.clientX - b.left) / b.width - 0.5) * strength;
-      const y = ((e.clientY - b.top) / b.height - 0.5) * strength;
-      gsap.to(el, { x, y, duration: 0.4, ease: 'power3.out' });
-    });
-    el.addEventListener('mouseleave', () => {
-      gsap.to(el, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
-    });
-  });
-}
-
 // ── Card subtle tilt on hover ────────────────────────────────────────
 function initTilt() {
   if (prefersReducedMotion || !window.matchMedia('(pointer: fine)').matches) return;
@@ -316,7 +297,6 @@ function boot() {
   initCounters();
   initEyebrows();
   initSplitWords();
-  initMagnetic();
   initTilt();
   initMarquee();
   initDialogs();

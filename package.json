@@ -12,6 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.5.4",
+    "@supabase/supabase-js": "^2.106.1",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.2.1",
     "gsap": "^3.15.0",

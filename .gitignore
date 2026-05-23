@@ -2,6 +2,10 @@
 dist/
 # generated types
 .astro/
+# cloudflare miniflare local state
+.wrangler/
+# claude code local settings
+.claude/
 
 # dependencies
 node_modules/

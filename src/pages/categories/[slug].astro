@@ -1,21 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
-import { CATEGORIES, PRODUCTS } from '../../data/rcb.js';
+import { CATEGORIES, getProducts } from '../../data/rcb.js';
 
-export async function getStaticPaths() {
-  return CATEGORIES.map(cat => ({
-    params: { slug: cat.slug },
-    props: {
-      cat,
-      products: PRODUCTS.filter(p => p.category === cat.slug),
-    },
-  }));
-}
+const { slug } = Astro.params;
+const cat = CATEGORIES.find(c => c.slug === slug);
+if (!cat) return new Response(null, { status: 404, statusText: 'Category not found' });
 
-const { cat, products } = Astro.props;
-
-const brands = [...new Set(products.map(p => p.brand))].sort();
+const allProducts = await getProducts();
+const products = allProducts.filter(p => p.category === slug);
 ---
 
 <Layout
@@ -46,8 +39,6 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
           <p data-hero-step class="mt-3 text-chrome-200/70 max-w-2xl text-sm md:text-base leading-relaxed">{cat.description}</p>
           <div data-hero-step class="mt-4 flex items-center gap-4 font-mono text-[11px] tracking-widest uppercase text-chrome-200/50">
             <span id="visible-count" data-counter data-counter-to={products.length}>{products.length}</span><span>products</span>
-            <span class="text-chrome-200/20">·</span>
-            <span>{brands.length} brands</span>
           </div>
         </div>
       </div>
@@ -57,29 +48,6 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
   <!-- Filter toolbar -->
   <section class="sticky top-[var(--nav-h,64px)] z-30 border-b hairline bg-ink-900/90 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex flex-wrap items-center gap-3">
-
-      <!-- Brand filter -->
-      <div class="relative" id="brand-dropdown">
-        <button
-          id="brand-btn"
-          class="flex items-center gap-2 px-3 py-2 rounded border hairline-strong text-sm text-chrome-200/80 hover:text-chrome-50 hover:border-gold/40 transition-colors font-mono text-[11px] tracking-wider uppercase"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
-          Brand
-          <span id="brand-count-badge" class="hidden px-1.5 py-0.5 rounded bg-gold/20 text-gold text-[10px] font-semibold"></span>
-        </button>
-        <div id="brand-panel" class="hidden absolute top-full left-0 mt-1 min-w-[180px] rounded-lg border hairline bg-ink-800 shadow-xl z-50 py-2">
-          {brands.map(b => (
-            <label class="flex items-center gap-2.5 px-4 py-2 text-sm text-chrome-100 hover:bg-ink-700/60 cursor-pointer transition-colors">
-              <input type="checkbox" data-brand={b} class="brand-check accent-gold w-3.5 h-3.5 rounded" />
-              <span>{b}</span>
-            </label>
-          ))}
-          <div class="border-t hairline mt-2 pt-2 px-4">
-            <button id="clear-brands" class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 hover:text-gold transition-colors">Clear</button>
-          </div>
-        </div>
-      </div>
 
       <!-- Sort -->
       <select id="sort-select" class="sort-select px-3 py-2 rounded border hairline-strong bg-ink-800 text-sm text-chrome-100 font-mono text-[11px] tracking-wider uppercase hover:border-gold/40 transition-colors cursor-pointer appearance-none pr-8">
@@ -121,12 +89,31 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
       <p class="text-chrome-200/50 text-sm">Try adjusting filters or search term.</p>
     </div>
 
+    {products.length === 0 && (
+      <div class="text-center py-20 rounded-xl border hairline-strong bg-ink-800/40">
+        <div class="mx-auto w-14 h-14 rounded-full border hairline-strong grid place-items-center mb-4 opacity-60">
+          <BearingVisual iconType={cat.iconType} size={40} />
+        </div>
+        <div class="font-mono text-[11px] tracking-widest uppercase text-chrome-200/40 mb-2">No products listed yet</div>
+        <p class="text-chrome-200/60 text-sm max-w-md mx-auto px-4">
+          We stock {cat.name.toLowerCase()} — contact us for availability and pricing.
+        </p>
+        <div class="mt-5 flex items-center justify-center gap-3 flex-wrap">
+          <a href="/contact" class="btn-shine inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gold text-ink-900 font-medium text-sm hover:shadow-glow-cyan transition-all">
+            Contact us
+          </a>
+          <a href="/categories" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 hover:text-gold font-medium text-sm bg-ink-600/40 transition-all">
+            Browse other categories
+          </a>
+        </div>
+      </div>
+    )}
+
     <div id="products-grid" data-reveal-group data-reveal-stagger="0.04" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {products.map(p => (
         <a
           href={`/products/${p.id}`}
           data-id={p.id}
-          data-brand={p.brand}
           data-code={p.code.toLowerCase()}
           data-bore={p.bore ?? 9999}
           data-reveal-item
@@ -146,12 +133,11 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
               </div>
           }
           <div class="p-4 flex flex-col flex-1">
-            <div class="font-mono text-[9px] tracking-widest uppercase text-gold/60 mb-1">{p.brand}</div>
             <div class="font-display text-sm font-semibold text-chrome-50 group-hover:text-gold transition-colors leading-snug">{p.code}</div>
             {p.diameter && <div class="mt-1 text-xs text-chrome-200/50 font-mono">{p.diameter}</div>}
             <div class="mt-auto pt-3 flex items-center justify-between">
-              <span class={`font-mono text-[9px] tracking-widest uppercase px-2 py-1 rounded ${p.availability === 'In Stock' ? 'bg-emerald-500/10 text-emerald-400/80' : 'bg-gold/10 text-gold/70'}`}>
-                {p.availability}
+              <span class="font-mono text-[9px] tracking-widest uppercase px-2 py-1 rounded bg-emerald-500/10 text-emerald-400/80">
+                In Stock
               </span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-chrome-200/30 group-hover:text-gold group-hover:translate-x-0.5 transition-all"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
             </div>
@@ -193,8 +179,6 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
 </style>
 
 <script>
-  // Brand filter
-  const brandChecks = document.querySelectorAll<HTMLInputElement>('.brand-check');
   const sortSelect  = document.getElementById('sort-select') as HTMLSelectElement;
   const catSearch   = document.getElementById('cat-search') as HTMLInputElement;
   const grid        = document.getElementById('products-grid')!;
@@ -202,48 +186,14 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
   const noResults   = document.getElementById('no-results')!;
   const countEl     = document.getElementById('visible-count')!;
 
-  // Brand dropdown toggle
-  const brandBtn   = document.getElementById('brand-btn')!;
-  const brandPanel = document.getElementById('brand-panel')!;
-  const clearBrands = document.getElementById('clear-brands')!;
-  const brandBadge  = document.getElementById('brand-count-badge')!;
-
-  brandBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    brandPanel.classList.toggle('hidden');
-  });
-  document.addEventListener('click', () => brandPanel.classList.add('hidden'));
-  brandPanel.addEventListener('click', e => e.stopPropagation());
-  clearBrands.addEventListener('click', () => {
-    brandChecks.forEach(c => { c.checked = false; });
-    updateFilter();
-  });
-
-  function getActiveBrands() {
-    return Array.from(brandChecks).filter(c => c.checked).map(c => c.dataset.brand!);
-  }
-
   function updateFilter() {
-    const activeBrands = getActiveBrands();
     const query = catSearch.value.toLowerCase().trim();
     const sort = sortSelect.value;
 
-    // Update brand badge
-    if (activeBrands.length > 0) {
-      brandBadge.textContent = String(activeBrands.length);
-      brandBadge.classList.remove('hidden');
-    } else {
-      brandBadge.classList.add('hidden');
-    }
-
-    // Filter
     let visible = allCards.filter(card => {
-      const brandOk = activeBrands.length === 0 || activeBrands.includes(card.dataset.brand!);
-      const searchOk = !query || card.dataset.code!.includes(query) || card.dataset.brand!.toLowerCase().includes(query);
-      return brandOk && searchOk;
+      return !query || card.dataset.code!.includes(query);
     });
 
-    // Sort
     visible.sort((a, b) => {
       if (sort === 'code-asc')  return a.dataset.code!.localeCompare(b.dataset.code!);
       if (sort === 'code-desc') return b.dataset.code!.localeCompare(a.dataset.code!);
@@ -255,10 +205,8 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
     const hiddenSet = new Set(allCards.filter(c => !visible.includes(c)));
     allCards.forEach(card => card.toggleAttribute('data-hidden', hiddenSet.has(card)));
 
-    // Re-order DOM
     visible.forEach(card => grid.appendChild(card));
 
-    // Animate the count change
     const prev = Number(countEl.textContent) || 0;
     const next = visible.length;
     const w = window as any;
@@ -272,7 +220,6 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
       countEl.textContent = String(next);
     }
 
-    // Re-reveal newly visible cards with a quick stagger
     if (w.rcbAnim?.gsap) {
       w.rcbAnim.gsap.fromTo(visible,
         { opacity: 0.4, y: 6 },
@@ -282,7 +229,6 @@ const brands = [...new Set(products.map(p => p.brand))].sort();
     noResults.classList.toggle('hidden', visible.length > 0);
   }
 
-  brandChecks.forEach(c => c.addEventListener('change', updateFilter));
   sortSelect.addEventListener('change', updateFilter);
   catSearch.addEventListener('input', updateFilter);
 
