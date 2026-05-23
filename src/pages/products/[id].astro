@@ -3,13 +3,21 @@ import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
 import { getCategories, getProducts } from '../../data/rcb.js';
 
-const id = Number(Astro.params.id);
-const [allProducts, CATEGORIES] = await Promise.all([getProducts(), getCategories()]);
-const product = allProducts.find(p => p.id === id);
-if (!product) return new Response(null, { status: 404, statusText: 'Product not found' });
+export async function getStaticPaths() {
+  const [allProducts, CATEGORIES] = await Promise.all([getProducts(), getCategories()]);
+  return allProducts.map((product) => {
+    const cat = CATEGORIES.find((c) => c.slug === product.category);
+    const related = allProducts
+      .filter((p) => p.category === product.category && p.id !== product.id)
+      .slice(0, 4);
+    return {
+      params: { id: String(product.id) },
+      props: { product, cat, related },
+    };
+  });
+}
 
-const cat = CATEGORIES.find(c => c.slug === product.category);
-const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+const { product, cat, related } = Astro.props;
 
 const specs = [
   product.bore  !== undefined && { label: 'Bore (d)',     value: `${product.bore} mm` },

@@ -3,13 +3,18 @@ import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
 import { getCategories, getProducts } from '../../data/rcb.js';
 
-const { slug } = Astro.params;
-const CATEGORIES = await getCategories();
-const cat = CATEGORIES.find(c => c.slug === slug);
-if (!cat) return new Response(null, { status: 404, statusText: 'Category not found' });
+export async function getStaticPaths() {
+  const [CATEGORIES, allProducts] = await Promise.all([getCategories(), getProducts()]);
+  return CATEGORIES.map((cat) => ({
+    params: { slug: cat.slug },
+    props: {
+      cat,
+      products: allProducts.filter((p) => p.category === cat.slug),
+    },
+  }));
+}
 
-const allProducts = await getProducts();
-const products = allProducts.filter(p => p.category === slug);
+const { cat, products } = Astro.props;
 ---
 
 <Layout
