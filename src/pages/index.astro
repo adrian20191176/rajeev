@@ -3,8 +3,13 @@ export const prerender = true;
 
 import Layout from "../layouts/Layout.astro";
 import BearingVisual from "../components/BearingVisual.astro";
-import { BUSINESS, BRANDS, CATEGORIES } from "../data/rcb.js";
+import { getBusiness, getBrands, getCategories } from "../data/rcb.js";
 
+const [BUSINESS, BRANDS, CATEGORIES] = await Promise.all([
+  getBusiness(),
+  getBrands(),
+  getCategories(),
+]);
 const featuredCats = CATEGORIES.slice(0, 6);
 ---
 

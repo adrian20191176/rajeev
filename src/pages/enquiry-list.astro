@@ -2,8 +2,9 @@
 export const prerender = true;
 
 import Layout from "../layouts/Layout.astro";
-import { BUSINESS } from "../data/rcb.js";
+import { getBusiness } from "../data/rcb.js";
 
+const BUSINESS = await getBusiness();
 const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
 ---
 

@@ -2,7 +2,7 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import { CATEGORIES, getProducts } from '../data/rcb.js';
+import { getCategories, getProducts } from '../data/rcb.js';
 
 interface Props {
   title?: string;
@@ -16,7 +16,7 @@ const {
   activeNav,
 } = Astro.props;
 
-const PRODUCTS = await getProducts();
+const [PRODUCTS, CATEGORIES] = await Promise.all([getProducts(), getCategories()]);
 
 const searchIndex = PRODUCTS.map(p => ({
   id: p.id, code: p.code, name: p.name, brand: p.brand,

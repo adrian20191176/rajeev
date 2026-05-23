@@ -2,7 +2,9 @@
 export const prerender = true;
 
 import Layout from '../layouts/Layout.astro';
-import { BUSINESS, BRANDS } from '../data/rcb.js';
+import { getBusiness, getBrands } from '../data/rcb.js';
+
+const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
 ---
 
 <Layout title="About Us | Royal Crown Bearings" description="Learn about Royal Crown Bearings — Sri Lanka's trusted supplier of bearings, V-belts, oil seals and industrial components." activeNav="about">

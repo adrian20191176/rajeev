@@ -2,7 +2,9 @@
 export const prerender = true;
 
 import Layout from '../../layouts/Layout.astro';
-import { CATEGORIES, BRANDS } from '../../data/rcb.js';
+import { getCategories, getBrands } from '../../data/rcb.js';
+
+const [CATEGORIES, BRANDS] = await Promise.all([getCategories(), getBrands()]);
 
 // Reference data for the client runtime (products are fetched live from Supabase).
 const categoriesJson = JSON.stringify(CATEGORIES);

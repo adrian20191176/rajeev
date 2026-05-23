@@ -1,8 +1,9 @@
 ---
-import { BRANDS } from '../data/rcb.js';
+import { getBrands } from '../data/rcb.js';
 
 interface Props { activeNav?: string; }
 const { activeNav } = Astro.props;
+const BRANDS = await getBrands();
 
 const links = [
   { href: '/categories', label: 'Categories', key: 'categories' },

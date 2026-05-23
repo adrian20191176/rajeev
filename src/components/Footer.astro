@@ -1,5 +1,6 @@
 ---
-import { CATEGORIES } from '../data/rcb.js';
+import { getCategories } from '../data/rcb.js';
+const CATEGORIES = await getCategories();
 const cats = CATEGORIES.slice(0, 9);
 ---
 
