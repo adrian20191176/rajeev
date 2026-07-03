@@ -354,7 +354,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
             class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50"
             style="text-wrap:balance"
           >
-            Five reasons fleets and factories switch.
+            Reasons fleets and factories switch.
           </h2>
         </div>
       </div>
@@ -366,41 +366,33 @@ const featuredCats = CATEGORIES.slice(0, 6);
         {
           [
             {
-              n: "01",
               t: "Quality Assurance",
               d: "Every shipment audited against OEM specifications. We sell what we'd run on our own machines.",
             },
             {
-              n: "02",
               t: "Reliability",
               d: "Factory-direct sourcing from NTN, NSK, NACHI, FAG, SKF, KOYO and TIMKEN — no grey market.",
             },
             {
-              n: "03",
               t: "Fast Availability",
               d: "Deep stock across Colombo and onward dispatch nationwide. Same-day fulfilment on common sizes.",
             },
             {
-              n: "04",
               t: "Technical Knowledge",
               d: "Engineers on the line, not call-centre operators. Tell us the application — we'll spec the part.",
             },
             {
-              n: "05",
               t: "Customer-focused",
               d: "24/7 enquiry response. We work to your downtime window, not ours.",
             },
             {
-              n: "06",
               t: "Value-driven Supply",
               d: "Cost-effective without cutting corners. Volume pricing for workshops and OEMs on request.",
             },
           ].map((v) => (
             <div data-reveal-item class="bg-ink-700 p-5 sm:p-6">
-              <div class="font-mono text-[12px] tracking-widest uppercase text-gold">
-                {v.n}
-              </div>
-              <h3 class="mt-2 font-display text-base sm:text-lg font-semibold text-chrome-50">
+              <div class="w-6 h-px bg-gold" />
+              <h3 class="mt-3 font-display text-base sm:text-lg font-semibold text-chrome-50">
                 {v.t}
               </h3>
               <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">
@@ -409,6 +401,101 @@ const featuredCats = CATEGORIES.slice(0, 6);
             </div>
           ))
         }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DELIVERY ──────────────────────────────────────────────────── -->
+  <section class="py-16 sm:py-20 border-b hairline">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6">
+      <div class="flex flex-col gap-3 mb-10">
+        <div
+          data-reveal
+          data-eyebrow
+          class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
+        >
+          <span class="inline-block w-6 h-px bg-gold"></span>Island-wide
+          Delivery
+        </div>
+        <h2
+          data-reveal
+          data-split-words
+          data-split-scroll="1"
+          class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[26ch]"
+          style="text-wrap:balance"
+        >
+          From our shelves to your machines — fast.
+        </h2>
+        <p data-reveal class="text-chrome-100/80 max-w-[60ch] leading-relaxed">
+          Confirmed orders are dispatched from Colombo without delay, so your
+          downtime stays short wherever in Sri Lanka you operate.
+        </p>
+      </div>
+      <div
+        data-reveal-group
+        data-reveal-stagger="0.07"
+        class="grid sm:grid-cols-2 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong"
+      >
+        <div data-reveal-item class="bg-ink-700 p-6 sm:p-8">
+          <div
+            class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M12 21s-6-5.1-6-10a6 6 0 1 1 12 0c0 4.9-6 10-6 10z"
+              ></path><circle cx="12" cy="11" r="2.5"></circle></svg
+            >
+            Colombo Area
+          </div>
+          <h3
+            class="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-chrome-50"
+          >
+            Delivered within a day
+          </h3>
+          <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">
+            Anywhere in the Colombo area, your parts reach you within a day of
+            confirming the order.
+          </p>
+        </div>
+        <div data-reveal-item class="bg-ink-700 p-6 sm:p-8">
+          <div
+            class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><rect x="1" y="3" width="15" height="13"></rect><polygon
+                points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle
+                cx="5.5"
+                cy="18.5"
+                r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"
+              ></circle></svg
+            >
+            Rest of Sri Lanka
+          </div>
+          <h3
+            class="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-chrome-50"
+          >
+            Delivered within 2–3 days
+          </h3>
+          <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">
+            Every other district island-wide — dispatched from Colombo and with
+            you within 2–3 days.
+          </p>
+        </div>
       </div>
     </div>
   </section>

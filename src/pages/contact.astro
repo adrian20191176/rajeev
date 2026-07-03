@@ -82,6 +82,16 @@ const BUSINESS = await getBusiness();
           <p class="mt-1 text-sm text-chrome-200/70">We're available around the clock to assist with enquiries and urgent orders.</p>
         </div>
 
+        <!-- Delivery -->
+        <div data-reveal class="rounded-xl border hairline bg-ink-800/60 p-6" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 mb-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="font-mono text-[12px] tracking-widest uppercase text-gold/80">Fast Delivery</div>
+          </div>
+          <div class="font-display text-lg font-semibold text-chrome-50">Within a day in Colombo</div>
+          <p class="mt-1 text-sm text-chrome-200/70">Orders for the Colombo area are delivered within a day — everywhere else in Sri Lanka within 2–3 days.</p>
+        </div>
+
         <!-- WhatsApp CTA -->
         <a href={`https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent('Hi Royal Crown Bearings, I have an enquiry.')}`}
            target="_blank"
