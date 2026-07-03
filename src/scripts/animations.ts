@@ -249,24 +249,6 @@ function initDialogs() {
   });
 }
 
-// ── Mobile menu slide ─────────────────────────────────────────────────
-function initMobileMenu() {
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-nav');
-  if (!btn || !menu) return;
-
-  const items = menu.querySelectorAll<HTMLElement>('a');
-  // We don't override the click, but augment it: when menu becomes visible, animate.
-  const observer = new MutationObserver(() => {
-    if (!menu.classList.contains('hidden')) {
-      if (prefersReducedMotion) return;
-      gsap.fromTo(menu, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power3.out' });
-      gsap.fromTo(items, { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.35, ease: 'power3.out', stagger: 0.05, delay: 0.05 });
-    }
-  });
-  observer.observe(menu, { attributes: true, attributeFilter: ['class'] });
-}
-
 // ── Page-load: fade main shell in ─────────────────────────────────────
 function initPageEnter() {
   if (prefersReducedMotion) return;
@@ -300,7 +282,6 @@ function boot() {
   initTilt();
   initMarquee();
   initDialogs();
-  initMobileMenu();
   initPageEnter();
   initNavScroll();
 }

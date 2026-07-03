@@ -33,10 +33,10 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <div
           data-hero-step
           data-eyebrow
-          class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold mb-4"
+          class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold mb-4"
         >
-          <span class="inline-block w-6 h-px bg-gold"></span>Royal Crown
-          Bearings · Est. 2026
+          <span class="inline-block w-6 h-px bg-gold"></span>{BRANDS.length} Global Brands · Island-wide
+          Delivery
         </div>
         <h1
           data-hero-step
@@ -59,7 +59,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <div data-hero-step class="mt-6 sm:mt-7 flex flex-wrap gap-2 sm:gap-3">
           <a
             href="/categories"
-            class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan"
+            class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 hover:text-gold bg-ink-600/40 backdrop-blur"
           >
             View Categories
             <svg
@@ -92,7 +92,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
                 x2="15.5"
                 y2="15.5"></line></svg
             >
-            Browse Products
+            Search Products
           </button>
           <button
             onclick="openEnquiry([])"
@@ -131,7 +131,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
                     ? <span data-counter data-counter-to={s.counter.to} data-counter-suffix={s.counter.suffix}>0{s.counter.suffix}</span>
                     : s.k}
                 </div>
-                <div class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase text-chrome-200/60 mt-1">
+                <div class="font-mono text-[11px] sm:text-[12px] tracking-widest uppercase text-chrome-200/75 mt-1">
                   {s.v}
                 </div>
               </div>
@@ -166,7 +166,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
         </div>
         <!-- HUD overlay labels -->
         <div
-          class="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[10px] tracking-widest uppercase text-chrome-200/50"
+          class="absolute top-4 left-4 right-4 flex items-center justify-between font-mono text-[12px] tracking-widest uppercase text-chrome-200/70"
         >
           <span class="flex items-center gap-2"
             ><span class="w-1.5 h-1.5 rounded-full bg-gold"></span>RCB · CORE</span
@@ -174,7 +174,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           <span>Ø60 · Ø95 · 18mm</span>
         </div>
         <div
-          class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2 font-mono text-[10px] tracking-widest uppercase"
+          class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2 font-mono text-[12px] tracking-widest uppercase"
         >
           {
             [
@@ -183,7 +183,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
               ["TEMP", "-20→+150°"],
             ].map(([k, v]) => (
               <div class="border hairline rounded px-2 py-1.5 bg-ink-900/60 backdrop-blur">
-                <div class="text-chrome-200/50 text-[9px]">{k}</div>
+                <div class="text-chrome-200/70 text-[11px]">{k}</div>
                 <div class="text-gold mt-0.5">{v}</div>
               </div>
             ))
@@ -224,7 +224,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           <div
             data-reveal
             data-eyebrow
-            class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold"
+            class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
           >
             <span class="inline-block w-6 h-px bg-gold"></span>Catalogue · 18
             Categories
@@ -279,7 +279,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
               <div class="absolute inset-0 tech-grid-fine opacity-0 group-hover:opacity-100 transition-opacity" />
               <div class="relative flex items-start justify-between gap-4">
                 <div class="flex-1 min-w-0">
-                  <div class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/50">
+                  <div class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70">
                     {String(i + 1).padStart(2, "0")} · {c.family}
                   </div>
                   <h3 class="mt-2 font-display text-lg sm:text-xl font-semibold tracking-tight text-chrome-50 group-hover:text-gold transition-colors">
@@ -288,7 +288,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
                   <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">
                     {c.short}
                   </p>
-                  <div class="mt-4 flex items-center gap-2 font-mono text-[10px] tracking-widest uppercase text-transparent group-hover:text-gold transition-colors">
+                  <div class="mt-4 flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-transparent group-hover:text-gold transition-colors">
                     Browse
                     <svg
                       width="12"
@@ -343,7 +343,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           <div
             data-reveal
             data-eyebrow
-            class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold"
+            class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
           >
             <span class="inline-block w-6 h-px bg-gold"></span>Why Royal Crown
           </div>
@@ -397,7 +397,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
             },
           ].map((v) => (
             <div data-reveal-item class="bg-ink-700 p-5 sm:p-6">
-              <div class="font-mono text-[10px] tracking-widest uppercase text-gold">
+              <div class="font-mono text-[12px] tracking-widest uppercase text-gold">
                 {v.n}
               </div>
               <h3 class="mt-2 font-display text-base sm:text-lg font-semibold text-chrome-50">
@@ -420,7 +420,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
         <div
           data-reveal
           data-eyebrow
-          class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold"
+          class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold"
         >
           <span class="inline-block w-6 h-px bg-gold"></span>Authorised
           Distribution
@@ -480,7 +480,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           <div data-reveal data-tilt data-tilt-max="4" class="relative chrome-border rounded-lg p-7 sm:p-8 bg-ink-700/40">
             <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
             <div
-              class={`flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase mb-3 ${b.accent === "gold" ? "text-gold" : "text-amber-signal"}`}
+              class={`flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase mb-3 ${b.accent === "gold" ? "text-gold" : "text-amber-signal"}`}
             >
               <span
                 class={`inline-block w-6 h-px ${b.accent === "gold" ? "bg-gold" : "bg-amber-signal"}`}
@@ -512,7 +512,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
     <div class="relative max-w-5xl mx-auto px-5 sm:px-6 text-center">
       <div
         data-reveal
-        class="flex items-center justify-center gap-2 font-mono text-[11px] tracking-widest uppercase text-amber-signal mb-4"
+        class="flex items-center justify-center gap-2 font-mono text-[12px] tracking-widest uppercase text-amber-signal mb-4"
       >
         <span class="inline-block w-6 h-px bg-amber-signal"></span>Talk to a
         specialist
@@ -565,7 +565,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
         </a>
         <button
           onclick="openEnquiry([])"
-          class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md bg-gold text-ink-900 hover:shadow-glow-cyan"
+          class="btn-shine inline-flex items-center gap-2 px-5 py-3.5 text-[15px] font-medium rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40"
         >
           Send written enquiry
           <svg

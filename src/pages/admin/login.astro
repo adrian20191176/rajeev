@@ -15,7 +15,7 @@ import Layout from '../../layouts/Layout.astro';
 
     <div class="relative w-full max-w-md fade-up">
       <div class="text-center mb-8">
-        <div class="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+        <div class="inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.28em] uppercase text-gold">
           <span class="w-6 h-px bg-gold"></span> Admin · Restricted
         </div>
         <h1 class="mt-4 font-display text-3xl sm:text-4xl font-semibold tracking-tight text-chrome-50">
@@ -28,19 +28,19 @@ import Layout from '../../layouts/Layout.astro';
 
       <form id="admin-login-form" class="chrome-border rounded-xl bg-ink-800/70 backdrop-blur p-6 sm:p-7">
         <label class="block">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Username</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Username</span>
           <input
             id="admin-user"
             name="username"
             type="text"
             autocomplete="username"
             placeholder="admin"
-            class="w-full px-3 py-3 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/30 focus:border-gold/60 focus:outline-none"
+            class="w-full px-3 py-3 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/50 focus:border-gold/60 focus:outline-none"
           />
         </label>
 
         <label class="block mt-4">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Password</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Password</span>
           <div class="relative">
             <input
               id="admin-pass"
@@ -48,12 +48,12 @@ import Layout from '../../layouts/Layout.astro';
               type="password"
               autocomplete="current-password"
               placeholder="••••••••"
-              class="w-full px-3 py-3 pr-20 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/30 focus:border-gold/60 focus:outline-none"
+              class="w-full px-3 py-3 pr-20 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 placeholder-chrome-200/50 focus:border-gold/60 focus:outline-none"
             />
             <button
               type="button"
               id="admin-pass-toggle"
-              class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-[11px] font-mono tracking-[0.18em] uppercase text-chrome-200/60 hover:text-gold border hairline rounded"
+              class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-[12px] font-mono tracking-[0.18em] uppercase text-chrome-200/75 hover:text-gold border hairline rounded"
               aria-label="Show password"
             >Show</button>
           </div>
@@ -78,7 +78,7 @@ import Layout from '../../layouts/Layout.astro';
 
       </form>
 
-      <a href="/" class="mt-6 mx-auto block w-fit font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 hover:text-gold">
+      <a href="/" class="mt-6 mx-auto block w-fit font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/75 hover:text-gold">
         ← Back to public site
       </a>
     </div>

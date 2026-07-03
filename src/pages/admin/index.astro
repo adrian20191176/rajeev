@@ -24,7 +24,7 @@ const brandsJson     = JSON.stringify(BRANDS);
     <!-- ── Header ──────────────────────────────────────────────── -->
     <div class="flex items-center justify-between gap-4 flex-wrap">
       <div>
-        <div class="flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+        <div class="flex items-center gap-2 font-mono text-[12px] tracking-[0.28em] uppercase text-gold">
           <span class="w-6 h-px bg-gold"></span> Admin Console
         </div>
         <h1 class="mt-3 font-display text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-chrome-50">
@@ -50,17 +50,17 @@ const brandsJson     = JSON.stringify(BRANDS);
     <!-- ── Toolbar ─────────────────────────────────────────────── -->
     <div class="mt-6 sm:mt-8 flex items-center gap-2 sm:gap-3 flex-wrap">
       <div class="flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong bg-ink-800 flex-1 min-w-[200px] sm:max-w-md">
-        <svg class="text-chrome-200/60 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+        <svg class="text-chrome-200/75 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
         <input id="admin-q" type="text" placeholder="Search by code, name or brand…"
-          class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/40 text-sm min-w-0" />
-        <button id="admin-q-clear" class="hidden text-chrome-200/60 hover:text-chrome-50" aria-label="Clear search">
+          class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/60 text-sm min-w-0" />
+        <button id="admin-q-clear" class="hidden text-chrome-200/75 hover:text-chrome-50" aria-label="Clear search">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
         </button>
       </div>
       <select id="admin-cat" class="bg-ink-800 border hairline-strong rounded-md px-2.5 py-2 text-sm text-chrome-50 outline-none focus:border-gold/50">
         <option value="All">All categories</option>
       </select>
-      <span id="admin-count" class="ml-auto font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-chrome-200/60"></span>
+      <span id="admin-count" class="ml-auto font-mono text-[12px] sm:text-[12px] tracking-[0.22em] uppercase text-chrome-200/75"></span>
     </div>
 
     <!-- ── Desktop table ───────────────────────────────────────── -->
@@ -68,7 +68,7 @@ const brandsJson     = JSON.stringify(BRANDS);
       <div class="overflow-x-auto rounded-lg border hairline-strong">
         <table class="w-full text-sm">
           <thead class="bg-ink-800/80">
-            <tr class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 text-left">
+            <tr class="font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/75 text-left">
               <th class="px-3 py-3 w-16">Image</th>
               <th class="px-3 py-3">Part Code</th>
               <th class="px-3 py-3">Brand</th>
@@ -87,7 +87,7 @@ const brandsJson     = JSON.stringify(BRANDS);
   </main>
 
   <!-- ── Auth gate placeholder (until JS decides what to show) ─ -->
-  <div id="admin-gate" class="min-h-[40vh] grid place-items-center text-chrome-200/50 font-mono text-[10px] tracking-[0.22em] uppercase">
+  <div id="admin-gate" class="min-h-[40vh] grid place-items-center text-chrome-200/70 font-mono text-[12px] tracking-[0.22em] uppercase">
     Checking session…
   </div>
 
@@ -99,7 +99,7 @@ const brandsJson     = JSON.stringify(BRANDS);
     <form id="admin-form" class="p-5 sm:p-7">
       <div class="flex items-start justify-between gap-4 mb-5">
         <div>
-          <div class="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.28em] uppercase text-gold">
+          <div class="inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.28em] uppercase text-gold">
             <span class="w-6 h-px bg-gold"></span> <span id="admin-form-eyebrow">Add Product</span>
           </div>
           <h3 id="admin-form-title" class="mt-2 font-display text-xl sm:text-2xl font-semibold tracking-tight text-chrome-50">New product to the catalogue</h3>
@@ -112,27 +112,27 @@ const brandsJson     = JSON.stringify(BRANDS);
 
       <!-- Category -->
       <div class="rounded-md border hairline bg-ink-900/40 p-3 mb-5">
-        <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mb-2 flex items-center gap-2">
-          Category <span class="text-chrome-200/40">· managed by HQ</span>
+        <div class="font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/75 mb-2 flex items-center gap-2">
+          Category <span class="text-chrome-200/60">· managed by HQ</span>
         </div>
         <select name="category" id="f-category"
           class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm focus:border-gold/60 outline-none">
         </select>
-        <div id="f-category-locked" class="hidden text-[11px] text-chrome-200/50 mt-1.5">Category cannot be changed after creation.</div>
+        <div id="f-category-locked" class="hidden text-[12px] text-chrome-200/70 mt-1.5">Category cannot be changed after creation.</div>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Part code -->
         <label class="block">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Part Code</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Part Code</span>
           <input name="code" id="f-code" type="text" placeholder="e.g. 6201-2RS"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="code" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
 
         <!-- Brand -->
         <label class="block">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Brand</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Brand</span>
           <select name="brand" id="f-brand"
             class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm focus:border-gold/60 outline-none">
           </select>
@@ -141,61 +141,61 @@ const brandsJson     = JSON.stringify(BRANDS);
 
         <!-- Bearing/Seal dimensions -->
         <label class="block" data-show-when="bearingDims">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
           <input name="bore" id="f-bore" type="number" min="0" step="0.1" placeholder="12"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="bore" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
         <label class="block" data-show-when="bearingDims">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Outer Ø (mm)</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Outer Ø (mm)</span>
           <input name="od" id="f-od" type="number" min="0" step="0.1" placeholder="32"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="od" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
         <label class="block" data-show-when="bearingDims">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Width (mm)</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Width (mm)</span>
           <input name="width" id="f-width" type="number" min="0" step="0.1" placeholder="10"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="width" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
 
         <!-- Belt dimensions -->
         <label class="block" data-show-when="beltDims">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5" id="f-belt-label">Section / Pitch</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5" id="f-belt-label">Section / Pitch</span>
           <input name="section" id="f-section" type="text" placeholder="SPA"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="section" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
         <label class="block" data-show-when="beltDims">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Length (mm)</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Length (mm)</span>
           <input name="length" id="f-length" type="number" min="0" placeholder="1320"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="length" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
 
         <!-- Housing dimensions -->
         <label class="block" data-show-when="housing">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Series</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Series</span>
           <input name="series" id="f-series" type="text" placeholder="UCP, UCF, UCFC, UCT"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="series" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
         <label class="block" data-show-when="housing">
-          <span class="block font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
+          <span class="block font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70 mb-1.5">Bore Ø (mm)</span>
           <input name="housingBore" id="f-housing-bore" type="number" min="0" placeholder="25"
-            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           <div data-err-for="housingBore" class="hidden text-[12px] text-red-300/90 mt-1"></div>
         </label>
 
         <!-- Image upload -->
         <div class="sm:col-span-2">
           <div class="flex items-center gap-3 mb-1.5">
-            <span class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/70">Product Image</span>
+            <span class="font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/70">Product Image</span>
             <div class="flex border hairline rounded overflow-hidden">
               <button type="button" data-img-mode="upload"
-                class="px-2 py-1 text-[10px] tracking-[0.18em] uppercase bg-ink-700 text-gold">Upload</button>
+                class="px-2 py-1 text-[12px] tracking-[0.18em] uppercase bg-ink-700 text-gold">Upload</button>
               <button type="button" data-img-mode="url"
-                class="px-2 py-1 text-[10px] tracking-[0.18em] uppercase text-chrome-200/60 hover:text-chrome-50">Paste URL</button>
+                class="px-2 py-1 text-[12px] tracking-[0.18em] uppercase text-chrome-200/75 hover:text-chrome-50">Paste URL</button>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ const brandsJson     = JSON.stringify(BRANDS);
                 <div id="img-upload-spinner" class="hidden w-5 h-5 border-2 border-gold border-t-transparent rounded-full" style="animation: spin-slow 0.8s linear infinite;"></div>
               </div>
               <div class="text-sm text-chrome-50" id="img-upload-text">Click, drag, or paste an image</div>
-              <div class="text-[12px] text-chrome-200/60 mt-1">PNG, JPG or WEBP · up to 12 MB · auto-resized</div>
+              <div class="text-[12px] text-chrome-200/75 mt-1">PNG, JPG or WEBP · up to 12 MB · auto-resized</div>
             </div>
             <div id="img-upload-filled" class="hidden flex items-center gap-3">
               <div class="w-20 h-20 shrink-0 rounded border hairline bg-white grid place-items-center overflow-hidden">
@@ -217,10 +217,10 @@ const brandsJson     = JSON.stringify(BRANDS);
               </div>
               <div class="flex-1 min-w-0">
                 <div class="text-chrome-50 text-sm font-medium">Image attached</div>
-                <div id="img-upload-meta" class="text-[12px] text-chrome-200/60 mt-0.5 truncate">Uploaded · resized to ≤ 900px</div>
+                <div id="img-upload-meta" class="text-[12px] text-chrome-200/75 mt-0.5 truncate">Uploaded · resized to ≤ 900px</div>
                 <div class="mt-2 flex gap-2">
-                  <button type="button" id="img-replace" class="px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40">Replace</button>
-                  <button type="button" id="img-remove"  class="px-2.5 py-1 text-[11px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40">Remove</button>
+                  <button type="button" id="img-replace" class="px-2.5 py-1 text-[12px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40">Replace</button>
+                  <button type="button" id="img-remove"  class="px-2.5 py-1 text-[12px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40">Remove</button>
                 </div>
               </div>
             </div>
@@ -229,14 +229,14 @@ const brandsJson     = JSON.stringify(BRANDS);
           <!-- URL mode -->
           <div id="img-url-zone" class="hidden">
             <input id="img-url-input" type="url" placeholder="https://example.com/bearing.png"
-              class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
-            <div class="text-[11px] text-chrome-200/50 mt-1">Direct image URL (must be publicly accessible).</div>
+              class="w-full px-3 py-2.5 rounded-md border hairline-strong bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
+            <div class="text-[12px] text-chrome-200/70 mt-1">Direct image URL (must be publicly accessible).</div>
             <div id="img-url-preview" class="hidden mt-2 flex items-center gap-3 p-2 rounded border hairline bg-ink-900/40">
               <div class="w-12 h-12 rounded border hairline bg-white grid place-items-center overflow-hidden">
                 <img id="img-url-thumb" alt="" class="max-w-full max-h-full object-contain" />
               </div>
               <div id="img-url-meta" class="text-[12px] text-chrome-200/70 truncate flex-1"></div>
-              <button type="button" id="img-url-clear" class="px-2 py-1 text-[10px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300">Clear</button>
+              <button type="button" id="img-url-clear" class="px-2 py-1 text-[12px] font-mono uppercase tracking-[0.18em] rounded border hairline text-chrome-100 hover:text-red-300">Clear</button>
             </div>
           </div>
 
@@ -246,7 +246,7 @@ const brandsJson     = JSON.stringify(BRANDS);
 
       <!-- Live preview -->
       <div class="mt-5 rounded-md border hairline bg-ink-900/40 p-4">
-        <div class="font-mono text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mb-3">Live preview</div>
+        <div class="font-mono text-[12px] tracking-[0.22em] uppercase text-chrome-200/75 mb-3">Live preview</div>
         <div class="flex items-center gap-4">
           <div class="w-20 h-20 shrink-0 rounded border hairline placeholder-stripe overflow-hidden grid place-items-center" id="preview-image-wrap">
             <img id="preview-image" alt="" class="hidden max-w-[80%] max-h-[80%] object-contain" />
@@ -254,7 +254,7 @@ const brandsJson     = JSON.stringify(BRANDS);
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span id="preview-family-pill" class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[10px] tracking-[0.18em] uppercase border hairline text-chrome-100"></span>
+              <span id="preview-family-pill" class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[12px] tracking-[0.18em] uppercase border hairline text-chrome-100"></span>
             </div>
             <div class="mt-1.5 font-display text-base font-semibold text-chrome-50">
               <span id="preview-name"></span>
@@ -370,7 +370,7 @@ const brandsJson     = JSON.stringify(BRANDS);
         statsEl.innerHTML = items.map(s => `
           <div class="bg-ink-800 p-3 sm:p-4">
             <div class="font-display text-xl sm:text-2xl font-semibold text-chrome-50">${s.k}</div>
-            <div class="font-mono text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-chrome-200/60 mt-1">${s.v}</div>
+            <div class="font-mono text-[11px] sm:text-[12px] tracking-[0.22em] uppercase text-chrome-200/75 mt-1">${s.v}</div>
           </div>`).join('');
       }
 
@@ -402,7 +402,7 @@ const brandsJson     = JSON.stringify(BRANDS);
 
         // Desktop table
         if (rows.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="px-3 py-16 text-center text-chrome-200/60 text-sm">No products match your filters.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" class="px-3 py-16 text-center text-chrome-200/75 text-sm">No products match your filters.</td></tr>`;
         } else {
           tbody.innerHTML = rows.map(p => {
             const c = categories.find((c: any) => c.slug === p.category);
@@ -420,11 +420,11 @@ const brandsJson     = JSON.stringify(BRANDS);
                 <td class="px-3 py-2 text-right">
                   <div class="inline-flex items-center gap-1">
                     <a href="/products/${p.id}"
-                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[11px] font-mono uppercase tracking-[0.18em]" title="View public page">View</a>
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[12px] font-mono uppercase tracking-[0.18em]" title="View public page">View</a>
                     <button data-action="edit"   data-id="${p.id}"
-                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[11px] font-mono uppercase tracking-[0.18em]">Edit</button>
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[12px] font-mono uppercase tracking-[0.18em]">Edit</button>
                     <button data-action="delete" data-id="${p.id}"
-                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40 text-[11px] font-mono uppercase tracking-[0.18em]">Delete</button>
+                      class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-red-300 hover:border-red-400/40 text-[12px] font-mono uppercase tracking-[0.18em]">Delete</button>
                   </div>
                 </td>
               </tr>`;
@@ -433,7 +433,7 @@ const brandsJson     = JSON.stringify(BRANDS);
 
         // Mobile cards
         if (rows.length === 0) {
-          cards.innerHTML = `<div class="border hairline-strong rounded-lg p-10 text-center text-chrome-200/60 text-sm">No products match your filters.</div>`;
+          cards.innerHTML = `<div class="border hairline-strong rounded-lg p-10 text-center text-chrome-200/75 text-sm">No products match your filters.</div>`;
         } else {
           cards.innerHTML = rows.map(p => {
             const c = categories.find((c: any) => c.slug === p.category);
@@ -444,16 +444,16 @@ const brandsJson     = JSON.stringify(BRANDS);
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-1.5 flex-wrap">
                       <span class="font-mono text-sm text-chrome-50">${escapeHtml(p.code)}</span>
-                      <span class="font-mono text-[10px] tracking-[0.18em] uppercase px-2 py-0.5 rounded border hairline text-chrome-100">${escapeHtml(p.brand)}</span>
+                      <span class="font-mono text-[12px] tracking-[0.18em] uppercase px-2 py-0.5 rounded border hairline text-chrome-100">${escapeHtml(p.brand)}</span>
                     </div>
                     <div class="mt-1 text-[12px] text-chrome-200/70 truncate">${escapeHtml(c?.name || '')}</div>
                     <div class="mt-1 font-mono text-[12px] text-gold/90">${escapeHtml(p.diameter)}</div>
                   </div>
                 </div>
                 <div class="mt-3 grid grid-cols-3 gap-2">
-                  <a href="/products/${p.id}" class="text-center py-2 rounded border hairline text-chrome-100 text-[11px] font-mono uppercase tracking-[0.18em]">View</a>
-                  <button data-action="edit"   data-id="${p.id}" class="py-2 rounded border border-gold/40 text-gold text-[11px] font-mono uppercase tracking-[0.18em]">Edit</button>
-                  <button data-action="delete" data-id="${p.id}" class="py-2 rounded border hairline text-chrome-100 hover:text-red-300 text-[11px] font-mono uppercase tracking-[0.18em]">Delete</button>
+                  <a href="/products/${p.id}" class="text-center py-2 rounded border hairline text-chrome-100 text-[12px] font-mono uppercase tracking-[0.18em]">View</a>
+                  <button data-action="edit"   data-id="${p.id}" class="py-2 rounded border border-gold/40 text-gold text-[12px] font-mono uppercase tracking-[0.18em]">Edit</button>
+                  <button data-action="delete" data-id="${p.id}" class="py-2 rounded border hairline text-chrome-100 hover:text-red-300 text-[12px] font-mono uppercase tracking-[0.18em]">Delete</button>
                 </div>
               </div>`;
           }).join('');
@@ -542,7 +542,7 @@ const brandsJson     = JSON.stringify(BRANDS);
           const active = el.dataset.imgMode === m;
           el.classList.toggle('bg-ink-700', active);
           el.classList.toggle('text-gold', active);
-          el.classList.toggle('text-chrome-200/60', !active);
+          el.classList.toggle('text-chrome-200/75', !active);
         });
         dropZone.classList.toggle('hidden', m !== 'upload');
         urlZone.classList.toggle('hidden',  m !== 'url');

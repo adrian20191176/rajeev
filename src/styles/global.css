@@ -111,8 +111,8 @@ a { color: inherit; text-decoration: none; }
 .brand-logo:hover { opacity: 1; }
 
 /* ─── Hairline borders ──────────────────────────────────────────────────── */
-.hairline       { border-color: rgba(255,255,255,0.08); }
-.hairline-strong{ border-color: rgba(255,255,255,0.13); }
+.hairline       { border-color: rgba(255,255,255,0.12); }
+.hairline-strong{ border-color: rgba(255,255,255,0.18); }
 
 /* ─── Animations ────────────────────────────────────────────────────────── */
 @keyframes spin-slow  { to { transform: rotate(360deg); } }
@@ -186,6 +186,21 @@ dialog[open] { display: flex; flex-direction: column; }
 .rcb-no-anim [data-hero-visual] {
   opacity: 1 !important;
   transform: none !important;
+}
+
+/* Continuous decorative animations (marquee, spinning bearing visuals)
+   also need to stop for reduced-motion users — they never settle on their own. */
+.rcb-no-anim .spin-slow,
+.rcb-no-anim .spin-slower,
+.rcb-no-anim .spin-rev,
+.rcb-no-anim .marquee {
+  animation: none !important;
+}
+
+/* Mobile drawer: cut the slide/fade transition for reduced-motion users */
+.rcb-no-anim #mobile-nav,
+.rcb-no-anim #mobile-nav-backdrop {
+  transition: none !important;
 }
 
 /* ─── Nav scroll elevation ───────────────────────────────────────────── */

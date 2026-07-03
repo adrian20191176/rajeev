@@ -2,21 +2,24 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-import { getCategories, getProducts } from '../data/rcb.js';
+import { getCategories, getProducts, getBusiness } from '../data/rcb.js';
 
 interface Props {
   title?: string;
   description?: string;
   activeNav?: string;
+  waMessage?: string;
 }
 
 const {
   title = 'Royal Crown Bearings — Powering Performance, Ensuring Reliability',
   description = 'Royal Crown Bearings supplies premium bearings, V-belts, oil seals and industrial components across Sri Lanka.',
   activeNav,
+  waMessage = 'Hi Royal Crown Bearings, I have an enquiry.',
 } = Astro.props;
 
-const [PRODUCTS, CATEGORIES] = await Promise.all([getProducts(), getCategories()]);
+const [PRODUCTS, CATEGORIES, BUSINESS] = await Promise.all([getProducts(), getCategories(), getBusiness()]);
+const waFabHref = `https://wa.me/${BUSINESS.whatsapp ?? ''}?text=${encodeURIComponent(waMessage)}`;
 
 const searchIndex = PRODUCTS.map(p => ({
   id: p.id, code: p.code, name: p.name, brand: p.brand,
@@ -61,8 +64,8 @@ const catIndex = CATEGORIES.map(c => ({
     <div class="flex items-center gap-3 px-4 py-3 border-b hairline">
       <svg class="text-chrome-200 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
       <input id="search-input" type="text" placeholder="Search bearings, V-belts, brands, part codes…"
-        class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/40 text-base" autocomplete="off" />
-      <button id="search-close" class="font-mono text-[10px] tracking-widest uppercase border hairline rounded px-2 py-1 text-chrome-200 hover:text-chrome-50">ESC</button>
+        class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/60 text-base" autocomplete="off" />
+      <button id="search-close" class="font-mono text-[12px] tracking-widest uppercase border hairline rounded px-2 py-1 text-chrome-200 hover:text-chrome-50">ESC</button>
     </div>
     <div id="search-results" class="overflow-y-auto max-h-[calc(70vh-3.5rem)] p-2"></div>
   </dialog>
@@ -72,7 +75,7 @@ const catIndex = CATEGORIES.map(c => ({
     <form id="modal-enquiry-form" class="p-6 md:p-8">
       <div class="flex items-start justify-between gap-6 mb-6">
         <div>
-          <div class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold mb-2">
+          <div class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold mb-2">
             <span class="inline-block w-6 h-px bg-gold"></span>Send Enquiry
           </div>
           <h3 id="enquiry-title" class="font-display text-2xl font-semibold tracking-tight text-chrome-50">Tell us what you need</h3>
@@ -83,40 +86,40 @@ const catIndex = CATEGORIES.map(c => ({
         </button>
       </div>
       <div id="enquiry-products-list" class="mb-5 rounded-md border hairline bg-ink-900/40 hidden">
-        <div class="px-3 py-2 font-mono text-[10px] tracking-widest uppercase text-chrome-200/60 border-b hairline">Selected Products</div>
+        <div class="px-3 py-2 font-mono text-[12px] tracking-widest uppercase text-chrome-200/75 border-b hairline">Selected Products</div>
         <ul id="enquiry-products-ul" class="divide-y divide-white/[0.04] max-h-40 overflow-y-auto"></ul>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label class="block">
-          <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Full Name</span>
+          <span class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Full Name</span>
           <input name="name" type="text" placeholder="e.g. Nuwan Perera" required
-            class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
         </label>
         <label class="block">
-          <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Phone / WhatsApp</span>
+          <span class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Phone / WhatsApp</span>
           <input name="phone" type="tel" placeholder="+94 7X XXX XXXX" required
-            class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+            class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
         </label>
         <div class="sm:col-span-2">
           <label class="block">
-            <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Email</span>
+            <span class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Email</span>
             <input name="email" type="email" placeholder="you@example.com" required
-              class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none" />
+              class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none" />
           </label>
         </div>
         <div class="sm:col-span-2">
           <label class="block">
-            <span class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Message</span>
+            <span class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Message</span>
             <textarea name="message" rows="4" placeholder="Quantities, delivery location, urgency, application notes…" required
-              class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-sm placeholder-chrome-200/30 focus:border-gold/60 outline-none resize-none"></textarea>
+              class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none resize-none"></textarea>
           </label>
         </div>
       </div>
-      <div class="mt-6 flex items-center justify-between gap-3">
-        <p class="text-[12px] text-chrome-200/60 font-mono tracking-wide">By submitting you agree to be contacted about this enquiry only.</p>
-        <div class="flex items-center gap-2">
-          <button type="button" id="enquiry-cancel" class="inline-flex items-center px-4 py-2.5 text-sm font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40">Cancel</button>
-          <button type="submit" class="btn-shine inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold">
+      <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+        <p class="text-[12px] text-chrome-200/75 font-mono tracking-wide">By submitting you agree to be contacted about this enquiry only.</p>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" id="enquiry-cancel" class="flex-1 sm:flex-none inline-flex items-center justify-center whitespace-nowrap px-4 py-2.5 text-sm font-medium tracking-tight rounded-md border hairline-strong text-chrome-50 hover:border-gold/60 bg-ink-600/40">Cancel</button>
+          <button type="submit" class="flex-1 sm:flex-none btn-shine inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 text-sm font-medium tracking-tight rounded-md bg-amber-signal text-ink-900 hover:bg-gold">
             Send Enquiry
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13,6 19,12 13,18"/></svg>
           </button>
@@ -125,8 +128,20 @@ const catIndex = CATEGORIES.map(c => ({
     </form>
   </dialog>
 
-  <!-- ── Toast container ────────────────────────────────────────────── -->
-  <div id="toast-stack" class="fixed bottom-6 right-4 sm:right-6 z-[80] flex flex-col gap-2 w-[340px] max-w-[calc(100vw-2rem)] pointer-events-none"></div>
+  <!-- ── Floating WhatsApp button ───────────────────────────────────── -->
+  <a
+    href={waFabHref}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat on WhatsApp"
+    class="btn-shine fixed bottom-6 right-4 sm:right-6 z-[70] w-14 h-14 rounded-full bg-emerald-600/95 hover:bg-emerald-500 text-white grid place-items-center"
+    style="box-shadow: 0 10px 30px -8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08) inset;"
+  >
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.557 4.126 1.533 5.862L.057 23.5l5.784-1.517A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 0 1-5.001-1.372l-.358-.213-3.726.977.995-3.633-.233-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.573 6.573 2.182 12 2.182S21.818 6.573 21.818 12 17.427 21.818 12 21.818z"/></svg>
+  </a>
+
+  <!-- ── Toast container (sits above the WhatsApp FAB) ────────────────── -->
+  <div id="toast-stack" class="fixed bottom-24 right-4 sm:right-6 z-[80] flex flex-col gap-2 w-[340px] max-w-[calc(100vw-2rem)] pointer-events-none"></div>
 
   <!-- ── Serialised search data ──────────────────────────────────────── -->
   <script id="rcb-search-data" type="application/json" set:html={JSON.stringify({ products: searchIndex, categories: catIndex })}></script>
@@ -228,7 +243,7 @@ const catIndex = CATEGORIES.map(c => ({
           <div class="text-sm font-medium text-chrome-50">${title}</div>
           ${message ? `<div class="text-[12.5px] text-chrome-100/80 mt-0.5">${message}</div>` : ''}
         </div>
-        <button class="text-chrome-200/60 hover:text-chrome-50 shrink-0" onclick="this.closest('.toast-in').remove()">
+        <button class="text-chrome-200/75 hover:text-chrome-50 shrink-0" onclick="this.closest('.toast-in').remove()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
         </button>`;
       stack.appendChild(el);
@@ -259,19 +274,21 @@ const catIndex = CATEGORIES.map(c => ({
       },
     };
 
-    // ── Enquiry count badge in nav ─────────────────────────────────────
+    // ── Enquiry count badge in nav (header bar + mobile drawer) ─────────
     function refreshCount() {
-      const el = document.getElementById('enquiry-count');
-      if (!el) return;
       const n = getList().length;
-      el.textContent = String(n);
-      if (n > 0) {
-        el.classList.add('bg-amber-signal', 'text-ink-900');
-        el.classList.remove('bg-ink-500', 'text-chrome-100');
-      } else {
-        el.classList.remove('bg-amber-signal', 'text-ink-900');
-        el.classList.add('bg-ink-500', 'text-chrome-100');
-      }
+      ['enquiry-count', 'enquiry-count-drawer'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(n);
+        if (n > 0) {
+          el.classList.add('bg-amber-signal', 'text-ink-900');
+          el.classList.remove('bg-ink-500', 'text-chrome-100');
+        } else {
+          el.classList.remove('bg-amber-signal', 'text-ink-900');
+          el.classList.add('bg-ink-500', 'text-chrome-100');
+        }
+      });
     }
     refreshCount();
     window.addEventListener('rcb:list-updated', refreshCount);
@@ -318,35 +335,35 @@ const catIndex = CATEGORIES.map(c => ({
 
       let html = '';
       if (cats.length) {
-        html += `<div class="px-3 pt-3 pb-2 font-mono text-[10px] tracking-widest uppercase text-chrome-200/60">Categories</div><ul class="mb-2">`;
+        html += `<div class="px-3 pt-3 pb-2 font-mono text-[12px] tracking-widest uppercase text-chrome-200/75">Categories</div><ul class="mb-2">`;
         cats.forEach((c: any) => {
           html += `<li><a href="/categories/${c.slug}" onclick="document.getElementById('search-dialog').close()"
             class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-md hover:bg-ink-600/70">
             <div>
               <div class="text-chrome-50 text-sm">${c.name}</div>
-              <div class="text-[12px] text-chrome-200/60">${c.short}</div>
+              <div class="text-[12px] text-chrome-200/75">${c.short}</div>
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/50 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/70 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
           </a></li>`;
         });
         html += '</ul>';
       }
       if (prods.length) {
-        html += `<div class="px-3 pt-2 pb-2 font-mono text-[10px] tracking-widest uppercase text-chrome-200/60">Products</div><ul>`;
+        html += `<div class="px-3 pt-2 pb-2 font-mono text-[12px] tracking-widest uppercase text-chrome-200/75">Products</div><ul>`;
         prods.forEach((p: any) => {
           html += `<li><a href="/products/${p.id}" onclick="document.getElementById('search-dialog').close()"
             class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-md hover:bg-ink-600/70">
-            <div>
+            <div class="min-w-0">
               <div class="text-chrome-50 text-sm font-mono">${p.code}</div>
-              <div class="text-[12px] text-chrome-200/60">${p.diameter}</div>
+              <div class="text-[12px] text-chrome-200/75 truncate">${p.name} — ${p.brand}${p.diameter ? ' · ' + p.diameter : ''}</div>
             </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/50 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/70 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
           </a></li>`;
         });
         html += '</ul>';
       }
       if (!cats.length && !prods.length && q) {
-        html = `<div class="px-4 py-12 text-center text-chrome-200/60 text-sm">No results for "${q}". Try a part code, brand, or category.</div>`;
+        html = `<div class="px-4 py-12 text-center text-chrome-200/75 text-sm">No results for "${q}". Try a part code, brand, or category.</div>`;
       }
       searchResults.innerHTML = html;
     }
@@ -376,7 +393,7 @@ const catIndex = CATEGORIES.map(c => ({
           listUl.innerHTML = products.map((p: any) =>
             `<li class="px-3 py-2 flex items-center justify-between text-sm">
               <span class="text-chrome-50 font-medium">${p.name}</span>
-              <span class="font-mono text-[11px] text-gold/80">${p.diameter ?? ''}</span>
+              <span class="font-mono text-[12px] text-gold/80">${p.diameter ?? ''}</span>
             </li>`
           ).join('');
         }
@@ -411,7 +428,7 @@ const catIndex = CATEGORIES.map(c => ({
       const btn = form.querySelector<HTMLButtonElement>('[type=submit]');
       if (!btn) return;
       const fd = new FormData(form);
-      const originalLabel = btn.textContent;
+      const originalHtml = btn.innerHTML; // innerHTML, not textContent — the label includes an svg icon
       btn.textContent = 'Sending…';
       btn.disabled = true;
 
@@ -432,7 +449,7 @@ const catIndex = CATEGORIES.map(c => ({
       } catch (err: any) {
         showToast({ tone: 'error', title: "Couldn't send enquiry", message: err?.message || 'Please try again, or WhatsApp +94 766 550 249.' });
       } finally {
-        btn.textContent = originalLabel;
+        btn.innerHTML = originalHtml;
         btn.disabled = false;
       }
     });

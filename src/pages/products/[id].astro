@@ -30,13 +30,21 @@ const specs = [
   { label: 'Category',          value: cat?.name ?? product.category },
 ].filter(Boolean);
 
-const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name} (ID: ${product.id}). Please send availability and pricing.`);
+const waRawMsg = `Hi, I'd like to enquire about: ${product.name} (ID: ${product.id}). Please send availability and pricing.`;
+const waMsg = encodeURIComponent(waRawMsg);
+
+const availabilityBadge = product.availability === 'Pre-order'
+  ? { label: 'Pre-order', dot: 'bg-amber-signal', cls: 'bg-amber-signal/15 text-amber-signal' }
+  : product.availability === 'Out of Stock'
+  ? { label: 'Out of Stock', dot: 'bg-chrome-200/60', cls: 'bg-chrome-200/10 text-chrome-200/70' }
+  : { label: 'In Stock', dot: 'bg-emerald-400', cls: 'bg-emerald-500/10 text-emerald-400' };
 ---
 
 <Layout
   title={`${product.code} | Royal Crown Bearings`}
   description={`${product.name}. ${product.diameter || ''} — ${cat?.short || ''}`}
   activeNav="categories"
+  waMessage={waRawMsg}
 >
 
   <!-- Breadcrumb + header -->
@@ -44,13 +52,13 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
     <div class="absolute inset-0 tech-grid pointer-events-none"></div>
     <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-12 md:pt-14 md:pb-14">
-      <div class="font-mono text-[10px] tracking-widest uppercase text-gold/70 mb-4 flex items-center gap-2 flex-wrap">
+      <div class="font-mono text-[12px] tracking-widest uppercase text-gold/70 mb-4 flex items-center gap-2 flex-wrap">
         <a href="/" class="hover:text-gold transition-colors">Home</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <a href="/categories" class="hover:text-gold transition-colors">Categories</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <a href={`/categories/${product.category}`} class="hover:text-gold transition-colors">{cat?.name}</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <span class="text-chrome-200/70">{product.code}</span>
       </div>
 
@@ -69,13 +77,13 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
 
         <!-- Info -->
         <div class="flex-1">
-          <div data-hero-step class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{cat?.family}</div>
+          <div data-hero-step class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">{cat?.family}</div>
           <h1 data-hero-step data-split-words class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-chrome-50 tracking-tight">{product.code}</h1>
-          {product.diameter && <p data-hero-step class="mt-1 font-mono text-sm text-chrome-200/60">{product.diameter}</p>}
+          {product.diameter && <p data-hero-step class="mt-1 font-mono text-sm text-chrome-200/75">{product.diameter}</p>}
 
-          <div class="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-widest uppercase px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            In Stock
+          <div class={`mt-3 inline-flex items-center gap-1.5 font-mono text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full ${availabilityBadge.cls}`}>
+            <span class={`w-1.5 h-1.5 rounded-full ${availabilityBadge.dot} ${availabilityBadge.label === 'In Stock' ? 'animate-pulse' : ''}`}></span>
+            {availabilityBadge.label}
           </div>
 
           <!-- Specs table -->
@@ -83,7 +91,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
             <div data-reveal-group data-reveal-stagger="0.04" data-reveal-y="10" class="grid grid-cols-2 divide-x divide-y divide-white/[0.05]">
               {specs.map((s: any) => (
                 <div data-reveal-item class="px-4 py-3 bg-ink-800/50">
-                  <div class="font-mono text-[9px] tracking-widest uppercase text-chrome-200/40 mb-0.5">{s.label}</div>
+                  <div class="font-mono text-[11px] tracking-widest uppercase text-chrome-200/60 mb-0.5">{s.label}</div>
                   <div class="text-sm font-medium text-chrome-50">{s.value}</div>
                 </div>
               ))}
@@ -119,7 +127,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
             </a>
           </div>
 
-          <p class="mt-4 text-xs text-chrome-200/40 font-mono">Product ID: {product.id}</p>
+          <p class="mt-4 text-xs text-chrome-200/60 font-mono">Product ID: {product.id}</p>
         </div>
       </div>
     </div>
@@ -130,7 +138,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
     <section class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14">
       <div class="flex items-center justify-between mb-6">
         <h2 data-reveal class="font-display text-lg md:text-xl font-semibold text-chrome-50">More in {cat?.name}</h2>
-        <a href={`/categories/${product.category}`} data-reveal class="font-mono text-[11px] tracking-widest uppercase text-chrome-200/50 hover:text-gold transition-colors flex items-center gap-1">
+        <a href={`/categories/${product.category}`} data-reveal class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 hover:text-gold transition-colors flex items-center gap-1">
           View all
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
         </a>
@@ -154,7 +162,7 @@ const waMsg = encodeURIComponent(`Hi, I'd like to enquire about: ${product.name}
             </div>
             <div class="p-3">
               <div class="font-display text-sm font-semibold text-chrome-50 group-hover:text-gold transition-colors">{p.code}</div>
-              {p.diameter && <div class="mt-0.5 text-[10px] text-chrome-200/40 font-mono truncate">{p.diameter}</div>}
+              {p.diameter && <div class="mt-0.5 text-[12px] text-chrome-200/60 font-mono truncate">{p.diameter}</div>}
             </div>
           </a>
         ))}

@@ -106,6 +106,7 @@ export async function getProducts() {
       family:       cat?.family   ?? '',
       iconType:     cat?.iconType ?? 'groove',
       image:        p.image,
+      availability: p.availability ?? 'In Stock',
     };
   });
 }

@@ -28,11 +28,11 @@ const { cat, products } = Astro.props;
     <div class="absolute inset-0 tech-grid pointer-events-none"></div>
     <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-12 md:pt-16 md:pb-16">
-      <div class="font-mono text-[10px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2 flex-wrap">
+      <div class="font-mono text-[12px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2 flex-wrap">
         <a href="/" class="hover:text-gold transition-colors">Home</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <a href="/categories" class="hover:text-gold transition-colors">Categories</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <span class="text-chrome-200/70">{cat.name}</span>
       </div>
       <div class="flex flex-col md:flex-row md:items-start gap-6 md:gap-10">
@@ -40,10 +40,10 @@ const { cat, products } = Astro.props;
           <BearingVisual iconType={cat.iconType} size={96} />
         </div>
         <div>
-          <div data-hero-step class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">{cat.family}</div>
+          <div data-hero-step class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">{cat.family}</div>
           <h1 data-hero-step data-split-words class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-chrome-50 tracking-tight">{cat.name}</h1>
           <p data-hero-step class="mt-3 text-chrome-200/70 max-w-2xl text-sm md:text-base leading-relaxed">{cat.description}</p>
-          <div data-hero-step class="mt-4 flex items-center gap-4 font-mono text-[11px] tracking-widest uppercase text-chrome-200/50">
+          <div data-hero-step class="mt-4 flex items-center gap-4 font-mono text-[12px] tracking-widest uppercase text-chrome-200/70">
             <span id="visible-count" data-counter data-counter-to={products.length}>{products.length}</span><span>products</span>
           </div>
         </div>
@@ -56,7 +56,7 @@ const { cat, products } = Astro.props;
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex flex-wrap items-center gap-3">
 
       <!-- Sort -->
-      <select id="sort-select" class="sort-select px-3 py-2 rounded border hairline-strong bg-ink-800 text-sm text-chrome-100 font-mono text-[11px] tracking-wider uppercase hover:border-gold/40 transition-colors cursor-pointer appearance-none pr-8">
+      <select id="sort-select" class="sort-select px-3 py-2 rounded border hairline-strong bg-ink-800 text-sm text-chrome-100 font-mono text-[12px] tracking-wider uppercase hover:border-gold/40 transition-colors cursor-pointer appearance-none pr-8">
         <option value="code-asc">Code A-Z</option>
         <option value="code-desc">Code Z-A</option>
         <option value="bore-asc">Bore (asc)</option>
@@ -65,21 +65,21 @@ const { cat, products } = Astro.props;
 
       <!-- Search within category -->
       <div class="flex-1 min-w-[140px] max-w-xs relative">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-chrome-200/40 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-chrome-200/60 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
         <input
           id="cat-search"
           type="search"
           placeholder="Search part code…"
-          class="w-full pl-8 pr-3 py-2 rounded border hairline-strong bg-ink-800 text-sm text-chrome-100 placeholder:text-chrome-200/30 font-mono text-[11px] tracking-wider focus:outline-none focus:border-gold/40"
+          class="w-full pl-8 pr-3 py-2 rounded border hairline-strong bg-ink-800 text-base text-chrome-100 placeholder:text-chrome-200/50 font-mono tracking-wider focus:outline-none focus:border-gold/40"
         />
       </div>
 
       <!-- View toggle -->
       <div class="flex items-center gap-1 ml-auto">
-        <button id="view-grid" aria-label="Grid view" class="view-btn p-2 rounded border hairline-strong text-gold transition-colors" data-view="grid">
+        <button id="view-grid" aria-label="Grid view" class="view-btn w-9 h-9 grid place-items-center rounded border hairline-strong text-gold transition-colors" data-view="grid">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
         </button>
-        <button id="view-list" aria-label="List view" class="view-btn p-2 rounded border hairline text-chrome-200/40 hover:text-chrome-50 transition-colors" data-view="list">
+        <button id="view-list" aria-label="List view" class="view-btn w-9 h-9 grid place-items-center rounded border hairline text-chrome-200/60 hover:text-chrome-50 transition-colors" data-view="list">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
         </button>
       </div>
@@ -91,8 +91,8 @@ const { cat, products } = Astro.props;
   <section class="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
 
     <div id="no-results" class="hidden text-center py-16">
-      <div class="text-chrome-200/30 font-mono text-[11px] tracking-widest uppercase mb-2">No products match</div>
-      <p class="text-chrome-200/50 text-sm">Try adjusting filters or search term.</p>
+      <div class="text-chrome-200/50 font-mono text-[12px] tracking-widest uppercase mb-2">No products match</div>
+      <p class="text-chrome-200/70 text-sm">Try adjusting filters or search term.</p>
     </div>
 
     {products.length === 0 && (
@@ -100,8 +100,8 @@ const { cat, products } = Astro.props;
         <div class="mx-auto w-14 h-14 rounded-full border hairline-strong grid place-items-center mb-4 opacity-60">
           <BearingVisual iconType={cat.iconType} size={40} />
         </div>
-        <div class="font-mono text-[11px] tracking-widest uppercase text-chrome-200/40 mb-2">No products listed yet</div>
-        <p class="text-chrome-200/60 text-sm max-w-md mx-auto px-4">
+        <div class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/60 mb-2">No products listed yet</div>
+        <p class="text-chrome-200/75 text-sm max-w-md mx-auto px-4">
           We stock {cat.name.toLowerCase()} — contact us for availability and pricing.
         </p>
         <div class="mt-5 flex items-center justify-center gap-3 flex-wrap">
@@ -116,7 +116,13 @@ const { cat, products } = Astro.props;
     )}
 
     <div id="products-grid" data-reveal-group data-reveal-stagger="0.04" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {products.map(p => (
+      {products.map(p => {
+        const badge = p.availability === 'Pre-order'
+          ? { label: 'Pre-order', cls: 'bg-amber-signal/15 text-amber-signal' }
+          : p.availability === 'Out of Stock'
+          ? { label: 'Out of Stock', cls: 'bg-chrome-200/10 text-chrome-200/60' }
+          : { label: 'In Stock', cls: 'bg-emerald-500/10 text-emerald-400/80' };
+        return (
         <a
           href={`/products/${p.id}`}
           data-id={p.id}
@@ -139,17 +145,18 @@ const { cat, products } = Astro.props;
               </div>
           }
           <div class="p-4 flex flex-col flex-1">
-            <div class="font-display text-sm font-semibold text-chrome-50 group-hover:text-gold transition-colors leading-snug">{p.code}</div>
-            {p.diameter && <div class="mt-1 text-xs text-chrome-200/50 font-mono">{p.diameter}</div>}
+            <div class="font-display text-base font-semibold text-chrome-50 group-hover:text-gold transition-colors leading-snug">{p.code}</div>
+            {p.diameter && <div class="mt-1 text-xs text-chrome-200/70 font-mono">{p.diameter}</div>}
             <div class="mt-auto pt-3 flex items-center justify-between">
-              <span class="font-mono text-[9px] tracking-widest uppercase px-2 py-1 rounded bg-emerald-500/10 text-emerald-400/80">
-                In Stock
+              <span class={`font-mono text-[11px] tracking-widest uppercase px-2 py-1 rounded ${badge.cls}`}>
+                {badge.label}
               </span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-chrome-200/30 group-hover:text-gold group-hover:translate-x-0.5 transition-all"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-chrome-200/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
             </div>
           </div>
         </a>
-      ))}
+        );
+      })}
     </div>
 
   </section>

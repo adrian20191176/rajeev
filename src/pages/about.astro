@@ -15,14 +15,14 @@ const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
     <div class="absolute inset-0 spot pointer-events-none"></div>
     <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-14 md:pt-20 md:pb-20">
-      <div class="font-mono text-[10px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2">
+      <div class="font-mono text-[12px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2">
         <a href="/" class="hover:text-gold transition-colors">Home</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <span>About Us</span>
       </div>
       <div class="max-w-3xl">
-        <div data-hero-step data-eyebrow class="flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-gold mb-4">
-          <span class="inline-block w-6 h-px bg-gold"></span>Royal Crown Bearings · Est. {BUSINESS.founded}
+        <div data-hero-step data-eyebrow class="flex items-center gap-2 font-mono text-[12px] tracking-widest uppercase text-gold mb-4">
+          <span class="inline-block w-6 h-px bg-gold"></span>{BRANDS.length} Global Brands · Island-wide Delivery
         </div>
         <h1 data-hero-step data-split-words class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-chrome-50 tracking-tight leading-tight">
           Sri Lanka's Trusted<br/>
@@ -42,14 +42,14 @@ const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
         <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center mb-5">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
         </div>
-        <div class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">Our Mission</div>
+        <div class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">Our Mission</div>
         <p class="text-chrome-100/80 leading-relaxed">{BUSINESS.mission}</p>
       </div>
       <div data-reveal-item data-tilt data-tilt-max="5" class="rounded-xl border hairline bg-ink-800/60 p-6 md:p-8" style="box-shadow: var(--shadow-card)">
         <div class="w-10 h-10 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center mb-5">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
-        <div class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">Our Vision</div>
+        <div class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">Our Vision</div>
         <p class="text-chrome-100/80 leading-relaxed">{BUSINESS.vision}</p>
       </div>
     </div>
@@ -59,7 +59,7 @@ const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
   <section class="border-t hairline">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
       <div class="text-center mb-10">
-        <div data-reveal class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">What We Stand For</div>
+        <div data-reveal class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">What We Stand For</div>
         <h2 data-reveal data-split-words data-split-scroll="1" class="font-display text-2xl md:text-3xl font-bold text-chrome-50">Our Core Values</h2>
       </div>
       <div data-reveal-group data-reveal-stagger="0.07" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -88,9 +88,9 @@ const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
   <section class="border-t hairline">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-16">
       <div class="text-center mb-10">
-        <div data-reveal class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-2">Official Stockist</div>
+        <div data-reveal class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-2">Official Stockist</div>
         <h2 data-reveal data-split-words data-split-scroll="1" class="font-display text-2xl md:text-3xl font-bold text-chrome-50">Brands We Carry</h2>
-        <p data-reveal class="mt-2 text-chrome-200/50 text-sm max-w-xl mx-auto">Authorised stockist of {BRANDS.length} world-class bearing and power-transmission brands.</p>
+        <p data-reveal class="mt-2 text-chrome-200/70 text-sm max-w-xl mx-auto">Authorised stockist of {BRANDS.length} world-class bearing and power-transmission brands.</p>
       </div>
       <div data-reveal-group data-reveal-stagger="0.05" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-px bg-white/5 rounded-lg overflow-hidden border hairline-strong">
         {BRANDS.map(b => (
@@ -112,9 +112,9 @@ const [BUSINESS, BRANDS] = await Promise.all([getBusiness(), getBrands()]);
   <!-- CTA -->
   <section class="border-t hairline">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-14 md:py-20 text-center">
-      <div data-reveal class="font-mono text-[10px] tracking-widest uppercase text-gold/60 mb-3">Ready to Order?</div>
+      <div data-reveal class="font-mono text-[12px] tracking-widest uppercase text-gold/60 mb-3">Ready to Order?</div>
       <h2 data-reveal data-split-words data-split-scroll="1" class="font-display text-2xl md:text-3xl font-bold text-chrome-50 mb-4">Get in touch with us today</h2>
-      <p data-reveal class="text-chrome-200/60 text-sm md:text-base mb-8 max-w-lg mx-auto">We offer 24/7 service and fast delivery across Sri Lanka. Contact us via WhatsApp, phone or email.</p>
+      <p data-reveal class="text-chrome-200/75 text-sm md:text-base mb-8 max-w-lg mx-auto">We offer 24/7 service and fast delivery across Sri Lanka. Contact us via WhatsApp, phone or email.</p>
       <div data-reveal class="flex flex-wrap gap-3 justify-center">
         <a href="/contact" class="btn-shine inline-flex items-center gap-2 px-6 py-3.5 rounded-md bg-gold text-ink-900 font-medium text-sm hover:shadow-glow-cyan transition-all">
           Contact Us

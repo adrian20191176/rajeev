@@ -23,10 +23,10 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
       class="relative max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-12 md:pt-16 md:pb-14"
     >
       <div
-        class="font-mono text-[10px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2"
+        class="font-mono text-[12px] tracking-widest uppercase text-gold/70 mb-3 flex items-center gap-2"
       >
         <a href="/" class="hover:text-gold transition-colors">Home</a>
-        <span class="text-chrome-200/30">/</span>
+        <span class="text-chrome-200/50">/</span>
         <span>Enquiry List</span>
       </div>
       <div class="flex items-start justify-between gap-4 flex-wrap">
@@ -38,14 +38,14 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
           >
             Enquiry List
           </h1>
-          <p data-hero-step class="mt-2 text-chrome-200/60 text-sm" id="list-summary">
+          <p data-hero-step class="mt-2 text-chrome-200/75 text-sm" id="list-summary">
             Loading…
           </p>
         </div>
         <button
           id="clear-all-btn"
           data-hero-step
-          class="hidden font-mono text-[11px] tracking-wider uppercase px-4 py-2 rounded border border-red-500/30 text-red-400/70 hover:border-red-500/60 hover:text-red-400 transition-colors"
+          class="hidden font-mono text-[12px] tracking-wider uppercase px-4 py-2 rounded border border-red-500/30 text-red-400/70 hover:border-red-500/60 hover:text-red-400 transition-colors"
         >
           Clear All
         </button>
@@ -77,7 +77,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
       <h2 class="font-display text-xl font-semibold text-chrome-50 mb-2">
         Your enquiry list is empty
       </h2>
-      <p class="text-chrome-200/50 text-sm mb-6 max-w-xs">
+      <p class="text-chrome-200/70 text-sm mb-6 max-w-xs">
         Browse categories and add products to build your enquiry.
       </p>
       <a
@@ -110,15 +110,15 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
           <thead>
             <tr class="border-b hairline bg-ink-700/40">
               <th
-                class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 w-8"
+                class="text-left px-4 py-3 font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 w-8"
                 >#</th
               >
               <th
-                class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50"
+                class="text-left px-4 py-3 font-mono text-[12px] tracking-widest uppercase text-chrome-200/70"
                 >Part Code</th
               >
               <th
-                class="text-left px-4 py-3 font-mono text-[10px] tracking-widest uppercase text-chrome-200/50 hidden md:table-cell"
+                class="text-left px-4 py-3 font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 hidden md:table-cell"
                 >Dimensions</th
               >
               <th class="px-4 py-3 w-10"></th>
@@ -136,7 +136,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
         <h2 class="font-display text-lg font-semibold text-chrome-50 mb-1">
           Send Enquiry
         </h2>
-        <p class="text-chrome-200/50 text-sm mb-6">
+        <p class="text-chrome-200/70 text-sm mb-6">
           Choose how you'd like to send your enquiry to Royal Crown Bearings.
         </p>
 
@@ -190,7 +190,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
             >
               <div class="flex flex-col gap-1.5">
                 <label
-                  class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60"
+                  class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/75"
                   >Full Name *</label
                 >
                 <input
@@ -198,12 +198,12 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
                   required
                   type="text"
                   placeholder="Your name"
-                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-sm placeholder:text-chrome-200/25 focus:outline-none focus:border-gold/40"
+                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-base placeholder:text-chrome-200/50 focus:outline-none focus:border-gold/40"
                 />
               </div>
               <div class="flex flex-col gap-1.5">
                 <label
-                  class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60"
+                  class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/75"
                   >Phone Number *</label
                 >
                 <input
@@ -211,31 +211,31 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
                   required
                   type="tel"
                   placeholder="+94 7XX XXX XXX"
-                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-sm placeholder:text-chrome-200/25 focus:outline-none focus:border-gold/40"
+                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-base placeholder:text-chrome-200/50 focus:outline-none focus:border-gold/40"
                 />
               </div>
               <div class="flex flex-col gap-1.5">
                 <label
-                  class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60"
+                  class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/75"
                   >Email</label
                 >
                 <input
                   name="email"
                   type="email"
                   placeholder="you@example.com"
-                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-sm placeholder:text-chrome-200/25 focus:outline-none focus:border-gold/40"
+                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-base placeholder:text-chrome-200/50 focus:outline-none focus:border-gold/40"
                 />
               </div>
               <div class="flex flex-col gap-1.5">
                 <label
-                  class="font-mono text-[10px] tracking-widest uppercase text-chrome-200/60"
+                  class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/75"
                   >Message</label
                 >
                 <input
                   name="message"
                   type="text"
                   placeholder="Quantity, urgency, etc."
-                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-sm placeholder:text-chrome-200/25 focus:outline-none focus:border-gold/40"
+                  class="px-3 py-2.5 rounded-md border hairline bg-ink-700/50 text-chrome-50 text-base placeholder:text-chrome-200/50 focus:outline-none focus:border-gold/40"
                 />
               </div>
               <div class="sm:col-span-2">
@@ -305,13 +305,13 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
         .map(
           (p, i) => `
         <tr class="border-b hairline last:border-b-0 hover:bg-ink-700/20 transition-colors">
-          <td class="px-4 py-3 font-mono text-[11px] text-chrome-200/30">${i + 1}</td>
+          <td class="px-4 py-3 font-mono text-[12px] text-chrome-200/50">${i + 1}</td>
           <td class="px-4 py-3">
             <a href="/products/${p.id}" class="font-display text-sm font-semibold text-chrome-50 hover:text-gold transition-colors">${p.code}</a>
           </td>
-          <td class="px-4 py-3 font-mono text-xs text-chrome-200/40 hidden md:table-cell">${p.diameter || "—"}</td>
+          <td class="px-4 py-3 font-mono text-xs text-chrome-200/60 hidden md:table-cell">${p.diameter || "—"}</td>
           <td class="px-4 py-3 text-right">
-            <button data-remove="${p.id}" class="remove-btn p-1.5 rounded border hairline text-chrome-200/30 hover:border-red-500/40 hover:text-red-400 transition-colors">
+            <button data-remove="${p.id}" class="remove-btn p-1.5 rounded border hairline text-chrome-200/50 hover:border-red-500/40 hover:text-red-400 transition-colors">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </td>
@@ -384,7 +384,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
     const items = load();
     const fd = new FormData(form);
     const btn = form.querySelector('[type=submit]');
-    const originalLabel = btn?.textContent;
+    const originalHtml = btn?.innerHTML; // innerHTML, not textContent — the label includes an svg icon
     if (btn) { btn.textContent = "Sending…"; btn.disabled = true; }
 
     try {
@@ -412,7 +412,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
         message: err?.message || "Please try again.",
       });
     } finally {
-      if (btn) { btn.textContent = originalLabel; btn.disabled = false; }
+      if (btn) { btn.innerHTML = originalHtml; btn.disabled = false; }
     }
   });
 
