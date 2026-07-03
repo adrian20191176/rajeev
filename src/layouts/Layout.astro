@@ -203,6 +203,15 @@ const catIndex = CATEGORIES.map(c => ({
         const { error: itemsErr } = await supabase.from('enquiry_items').insert(items);
         if (itemsErr) throw new Error(`Saved enquiry but items failed: ${itemsErr.message}`);
       }
+
+      // Fire-and-forget Pushover notification. Must never block or fail
+      // the enquiry itself — the buyer's submission has already succeeded.
+      fetch('/api/notify-enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enquiryId: row.id }),
+      }).catch(() => {});
+
       return { id: row.id };
     }
     window.submitEnquiry = submitEnquiry;
