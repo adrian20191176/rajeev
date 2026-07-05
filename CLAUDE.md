@@ -3,7 +3,7 @@
 ## Project Overview
 **Royal Crown Bearings** marketing site — a Sri Lankan supplier of bearings, V-belts, oil seals and industrial components. Static Astro 6 site styled with Tailwind CSS v4 (via `@tailwindcss/vite`), TypeScript strict mode.
 
-The site is brochure + lightweight catalogue: 18 product categories × ~120 generated products, a client-side enquiry list (no backend), a Cmd/Ctrl+K search palette, and an enquiry modal that currently fakes submission.
+The site is brochure + lightweight catalogue: 18 product categories × ~120 products (catalogue + business data served from Supabase), a client-side enquiry list (localStorage) that submits to Supabase, a Cmd/Ctrl+K search palette, and an enquiry modal with real Supabase-backed submission.
 
 ## Project Structure & Module Organization
 
@@ -23,24 +23,24 @@ The site is brochure + lightweight catalogue: 18 product categories × ~120 gene
 ### Layout (`src/layouts/Layout.astro`)
 The global shell. Owns Nav, Footer, **and the entire client runtime**:
 - `<dialog id="search-dialog">` — Cmd/Ctrl+K search palette; data serialized into `#rcb-search-data` JSON script tag (PRODUCTS + CATEGORIES indices).
-- `<dialog id="enquiry-dialog">` — enquiry form modal; submission is faked (`setTimeout` + random success).
+- `<dialog id="enquiry-dialog">` — enquiry form modal; submission is real, via `window.submitEnquiry` → Supabase (`enquiries` + `enquiry_items` tables).
 - Toast stack rendered into `#toast-stack`.
 - Exposes globals on `window`: `rcbList` (`get/add/remove/clear`, backed by `localStorage` key `rcb.enquiryList.v1`), `openEnquiry(products[])`, `showToast({title, message, tone})`.
 - Dispatches custom event `rcb:list-updated` when the list changes; Nav listens to update the badge.
 - Accepts props: `title`, `description`, `activeNav`.
 
 ### Data (`src/data/rcb.js`)
-**Single source of truth.** Exports:
-- `BUSINESS` — phone, email, whatsapp, mission, vision, etc.
-- `BRANDS` — 12 manufacturers (NTN, NSK, FAG, SKF, …).
-- `CATEGORIES` — 18 categories with `slug`, `name`, `family`, `short`, `description`, `iconType`, optional `image`.
-- `PRODUCTS` — generated at module load from per-category seed entries; assigns a brand by cycling, builds a `diameter` string, sets `availability` (`In Stock` / `Pre-order`). Each product has `id`, `code`, `name`, `brand`, `bore/od/width` or `section/length` or `pitch/length` or `series/bore`, plus `category`, `family`, `iconType`, `image`.
+**Single source of truth for the frontend — backed by Supabase, not in-memory arrays.** Exports memoized async loaders that fetch from Supabase (via `src/lib/supabase.ts`) and adapt DB column names to the shapes the rest of the app expects. Pages `await` these from Astro frontmatter:
+- `getBusiness()` — phone, email, whatsapp, mission, vision, etc.
+- `getBrands()` — manufacturers (NTN, NSK, FAG, SKF, …), ordered by `display_order`.
+- `getCategories()` — categories with `slug`, `name`, `family`, `short`, `description`, `iconType` (mapped from `icon_type`), optional `image`.
+- `getProducts()` — one entry per product: `id`, `code`, `name`, `brand` (from `brand_name`), `bore/od/width` or `section/length` or `pitch/length` or `series/bore`, `diameter`, `availability` (`In Stock` / `Pre-order` / `Out of Stock`), plus `category`, `family`, `iconType`, `image`.
 
-Touch this file carefully — it powers the homepage cards, search index, footer, every dynamic route, and product specs.
+The admin console (`src/pages/admin/`, `src/scripts/admin.ts`) writes to the same `products` table. Touch this file carefully — it powers the homepage cards, search index, footer, every dynamic route, and product specs.
 
 ### Styles (`src/styles/global.css`)
 Tailwind v4 with custom `@theme` tokens:
-- **Ink scale** `--color-ink-900..100` (navy palette; bg defaults to `ink-800` / `#0d1b3d`).
+- **Ink scale** `--color-ink-900..100` (graphite palette; page background is `ink-900` / `#05080F`).
 - **Chrome scale** `--color-chrome-50..200` (silver text).
 - **Brand accents** `--color-gold` (`#d4af37`), `--color-gold-dark`. Aliases `--color-cyan-brand` and `--color-amber-signal` exist so existing Tailwind classes (`bg-amber-signal`, `shadow-glow-cyan`, etc.) keep working — don't rename without auditing usages.
 - **Fonts** Space Grotesk (display), Manrope (body), JetBrains Mono (mono) — loaded from Google Fonts in `Layout.astro` head.
@@ -58,9 +58,9 @@ Use Node.js `>=22.12.0`.
 - `npm run preview` serves the production build locally.
 
 ## Architecture Notes & Gotchas
-- **No backend.** Enquiry submission is faked client-side. If wiring up real submission, the form is `#enquiry-form` inside `Layout.astro` — replace the `setTimeout` block.
+- **Supabase backend.** All catalogue/business data and enquiry submission go through Supabase (`src/lib/supabase.ts`; env vars `PUBLIC_SUPABASE_URL` / `PUBLIC_SUPABASE_ANON_KEY`). Enquiry submission logic lives in `window.submitEnquiry` in `Layout.astro`, shared by the enquiry modal, the enquiry-list page, and the contact form.
 - **Globals leak across pages by design.** Any page that uses `onclick="openEnquiry(...)"` or buttons with `.open-search` relies on `Layout.astro` having set up those handlers. Don't drop pages out of `<Layout>`.
-- **All dynamic routes are static-generated** via `getStaticPaths` from the in-memory `rcb.js` arrays — no SSR, no fetch.
+- **All dynamic routes are static-generated** (`prerender = true`) via `getStaticPaths`, fetching from Supabase through `rcb.js` at build time — no SSR.
 - **Search index is a JSON `<script>` tag** in the rendered HTML, parsed once on page load. Keep `PRODUCTS` reasonably sized.
 - **Tailwind v4 + Vite plugin** (not the PostCSS workflow). Config lives in `astro.config.mjs` and theme tokens in `src/styles/global.css` — there is no `tailwind.config.js`.
 
@@ -79,7 +79,7 @@ Follow the current Astro, CSS, and Tailwind conventions:
 - Lowercase route filenames (`about.astro`, `enquiry-list.astro`); `PascalCase` for reusable components (`BearingVisual.astro`, `Nav.astro`).
 - Tailwind CSS is part of the project toolchain and must not be removed. Existing plain CSS in `src/styles/global.css` may stay as-is; use Tailwind utilities where they make new UI work faster and clearer.
 - Prefer the custom utility classes already in `global.css` (`hairline`, `tech-grid`, `chrome-border`, `btn-shine`, `fade-up`, etc.) over redefining the same effect inline.
-- Keep design tokens consistent: navy ink for surfaces, chrome for text, gold (`text-gold` / `bg-gold`) for accents, `amber-signal` for CTAs.
+- Keep design tokens consistent: graphite ink for surfaces, chrome for text, gold (`text-gold` / `bg-gold`) for brand/identity accents, `amber-signal` for action CTAs. Keep one filled/primary CTA per section — demote the rest to the outline (`border hairline-strong`) style.
 
 ## Testing Guidelines
 There is no test suite yet. Build checks are not required unless explicitly requested.
