@@ -7,7 +7,7 @@ import { getBusiness } from '../data/rcb.js';
 const BUSINESS = await getBusiness();
 ---
 
-<Layout title="Contact Us | Royal Crown Bearings" description="Get in touch with Royal Crown Bearings — phone, WhatsApp, email or our online enquiry form." activeNav="contact">
+<Layout title="Contact Us | Royal Crown Bearings" description="Get in touch with Royal Crown Bearings by phone, WhatsApp, email or our online enquiry form." activeNav="contact">
 
   <!-- Header -->
   <section class="relative border-b hairline overflow-hidden">
@@ -89,7 +89,7 @@ const BUSINESS = await getBusiness();
             <div class="font-mono text-[12px] tracking-widest uppercase text-gold/80">Fast Delivery</div>
           </div>
           <div class="font-display text-lg font-semibold text-chrome-50">Within a day in Colombo</div>
-          <p class="mt-1 text-sm text-chrome-200/70">Orders for the Colombo area are delivered within a day — everywhere else in Sri Lanka within 2–3 days.</p>
+          <p class="mt-1 text-sm text-chrome-200/70">Orders for the Colombo area are delivered within a day. Everywhere else in Sri Lanka takes 2 to 3 days.</p>
         </div>
 
         <!-- WhatsApp CTA -->
@@ -171,7 +171,7 @@ const BUSINESS = await getBusiness();
     ].filter(l => l !== null);
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
     window.open(url, '_blank', 'noopener');
-    window.showToast?.({ title: 'Opening WhatsApp…', tone: 'success' });
+    window.showToast?.({ title: 'Opening WhatsApp...', tone: 'success' });
 
     // Also persist the lead to Supabase (same as the modal / enquiry-list forms)
     // so it isn't lost if the buyer closes WhatsApp before actually sending.

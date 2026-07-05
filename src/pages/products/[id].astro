@@ -2,13 +2,19 @@
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
 import { getCategories, getProducts } from '../../data/rcb.js';
+import { SITE_NAME, absoluteUrl, breadcrumbJsonLd, productAvailabilityUrl } from '../../lib/seo';
+
+type Product = Record<string, any> & { id: number | string; code: string; name: string; category: string; brand?: string; image?: string; availability?: string };
+type Category = Record<string, any> & { slug: string; name: string; short?: string; iconType?: string };
+interface Props { product: Product; cat?: Category; related: Product[] }
+
 
 export async function getStaticPaths() {
-  const [allProducts, CATEGORIES] = await Promise.all([getProducts(), getCategories()]);
-  return allProducts.map((product) => {
-    const cat = CATEGORIES.find((c) => c.slug === product.category);
+  const [allProducts, CATEGORIES] = await Promise.all([getProducts(), getCategories()]) as [Product[], Category[]];
+  return allProducts.map((product: Product) => {
+    const cat = CATEGORIES.find((c: Category) => c.slug === product.category);
     const related = allProducts
-      .filter((p) => p.category === product.category && p.id !== product.id)
+      .filter((p: Product) => p.category === product.category && p.id !== product.id)
       .slice(0, 4);
     return {
       params: { id: String(product.id) },
@@ -17,7 +23,40 @@ export async function getStaticPaths() {
   });
 }
 
-const { product, cat, related } = Astro.props;
+const { product, cat, related } = Astro.props as Props;
+const productDescription = [product.name, product.diameter, cat?.short].filter(Boolean).join('. ');
+const productUrl = `/products/${product.id}`;
+const productImage = product.image && !product.image.startsWith('data:') ? absoluteUrl(product.image) : undefined;
+const productJsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Categories', path: '/categories' },
+    { name: cat?.name ?? product.category, path: `/categories/${product.category}` },
+    { name: product.code, path: productUrl },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `${absoluteUrl(productUrl)}#product`,
+    name: product.name,
+    sku: product.code,
+    description: productDescription,
+    image: productImage ? [productImage] : undefined,
+    brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+    category: cat?.name ?? product.category,
+    offers: {
+      '@type': 'Offer',
+      url: absoluteUrl(productUrl),
+      availability: productAvailabilityUrl(product.availability),
+      priceCurrency: 'LKR',
+      seller: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+        url: absoluteUrl('/'),
+      },
+    },
+  },
+];
 
 const specs = [
   product.bore  !== undefined && { label: 'Bore (d)',     value: `${product.bore} mm` },
@@ -42,9 +81,13 @@ const availabilityBadge = product.availability === 'Pre-order'
 
 <Layout
   title={`${product.code} | Royal Crown Bearings`}
-  description={`${product.name}. ${product.diameter || ''} — ${cat?.short || ''}`}
+  description={productDescription}
   activeNav="categories"
   waMessage={waRawMsg}
+  canonicalPath={productUrl}
+  image={productImage}
+  type="product"
+  jsonLd={productJsonLd}
 >
 
   <!-- Breadcrumb + header -->
@@ -130,7 +173,7 @@ const availabilityBadge = product.availability === 'Pre-order'
           <!-- Delivery note -->
           <div class="mt-5 flex items-start gap-2.5 rounded-lg border hairline bg-ink-800/50 px-4 py-3">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-0.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <p class="text-sm text-chrome-200/75 leading-relaxed"><span class="text-chrome-50 font-medium">Fast delivery</span> — within a day in the Colombo area, 2–3 days everywhere else in Sri Lanka.</p>
+            <p class="text-sm text-chrome-200/75 leading-relaxed"><span class="text-chrome-50 font-medium">Fast delivery</span>: within a day in the Colombo area, 2 to 3 days everywhere else in Sri Lanka.</p>
           </div>
 
           <p class="mt-4 text-xs text-chrome-200/60 font-mono">Product ID: {product.id}</p>

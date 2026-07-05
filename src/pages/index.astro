@@ -4,17 +4,52 @@ export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import BearingVisual from "../components/BearingVisual.astro";
 import { getBusiness, getBrands, getCategories } from "../data/rcb.js";
+import { SITE_NAME, SITE_URL, absoluteUrl } from "../lib/seo";
 
 const [BUSINESS, BRANDS, CATEGORIES] = await Promise.all([
   getBusiness(),
   getBrands(),
   getCategories(),
-]);
+]) as [any, any[], any[]];
 const featuredCats = CATEGORIES.slice(0, 6);
+const homeDescription = 'Royal Crown Bearings supplies premium bearings, V-belts, oil seals and industrial components across Sri Lanka.';
+const homeJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': ['LocalBusiness', 'Store'],
+    '@id': `${SITE_URL}/#business`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: absoluteUrl('/logo.svg'),
+    description: homeDescription,
+    telephone: BUSINESS.phone || undefined,
+    email: BUSINESS.email || undefined,
+    areaServed: { '@type': 'Country', name: 'Sri Lanka' },
+    openingHours: 'Mo-Su 00:00-23:59',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: BUSINESS.phone || undefined,
+      contactType: 'sales',
+      areaServed: 'LK',
+      availableLanguage: ['en'],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: SITE_NAME,
+    publisher: { '@id': `${SITE_URL}/#business` },
+  },
+];
 ---
 
 <Layout
-  title="Royal Crown Bearings — Powering Performance, Ensuring Reliability"
+  title="Royal Crown Bearings | Powering Performance, Ensuring Reliability"
+  description={homeDescription}
+  canonicalPath="/"
+  jsonLd={homeJsonLd}
 >
   <!-- ── HERO ──────────────────────────────────────────────────────── -->
   <section class="relative overflow-hidden border-b hairline">
@@ -51,7 +86,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           data-hero-step
           class="mt-4 sm:mt-5 text-[15px] sm:text-base md:text-lg text-chrome-100/80 max-w-[58ch] leading-relaxed"
         >
-          Premium bearings, V-belts, oil seals and industrial components —
+          Premium bearings, V-belts, oil seals and industrial components
           sourced from the world's most trusted manufacturers and stocked at
           scale across Sri Lanka.
         </p>
@@ -239,8 +274,8 @@ const featuredCats = CATEGORIES.slice(0, 6);
             Find the right bearing for the job.
           </h2>
           <p data-reveal class="text-chrome-100/80 max-w-[60ch] leading-relaxed">
-            From miniature precision bearings to heavy-duty spherical rollers —
-            every category linked to inventory you can enquire on today.
+            From miniature precision bearings to heavy-duty spherical rollers,
+            every category is linked to inventory you can enquire on today.
           </p>
         </div>
         <a
@@ -371,7 +406,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
             },
             {
               t: "Reliability",
-              d: "Factory-direct sourcing from NTN, NSK, NACHI, FAG, SKF, KOYO and TIMKEN — no grey market.",
+              d: "Factory-direct sourcing from NTN, NSK, NACHI, FAG, SKF, KOYO and TIMKEN with no grey market.",
             },
             {
               t: "Fast Availability",
@@ -379,7 +414,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
             },
             {
               t: "Technical Knowledge",
-              d: "Engineers on the line, not call-centre operators. Tell us the application — we'll spec the part.",
+              d: "Engineers on the line, not call-centre operators. Tell us the application and we'll spec the part.",
             },
             {
               t: "Customer-focused",
@@ -424,7 +459,7 @@ const featuredCats = CATEGORIES.slice(0, 6);
           class="font-display text-[clamp(1.8rem,3.5vw,2.6rem)] font-semibold tracking-tight text-chrome-50 max-w-[26ch]"
           style="text-wrap:balance"
         >
-          From our shelves to your machines — fast.
+          From our shelves to your machines, fast.
         </h2>
         <p data-reveal class="text-chrome-100/80 max-w-[60ch] leading-relaxed">
           Confirmed orders are dispatched from Colombo without delay, so your
@@ -489,11 +524,11 @@ const featuredCats = CATEGORIES.slice(0, 6);
           <h3
             class="mt-3 font-display text-xl sm:text-2xl font-semibold tracking-tight text-chrome-50"
           >
-            Delivered within 2–3 days
+            Delivered within 2 to 3 days
           </h3>
           <p class="mt-2 text-sm text-chrome-100/70 leading-relaxed">
-            Every other district island-wide — dispatched from Colombo and with
-            you within 2–3 days.
+            For every other district, we dispatch from Colombo and deliver
+            within 2 to 3 days.
           </p>
         </div>
       </div>
@@ -614,8 +649,8 @@ const featuredCats = CATEGORIES.slice(0, 6);
         Got a part code? <span class="text-gold">We probably stock it.</span>
       </h2>
       <p data-reveal class="mt-4 text-chrome-100/80 max-w-2xl mx-auto">
-        Send your specifications, application or just a photo of an old bearing
-        — our team will identify and quote within the hour.
+        Send your specifications, application or just a photo of an old bearing.
+        Our team will identify and quote within the hour.
       </p>
       <div data-reveal class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a

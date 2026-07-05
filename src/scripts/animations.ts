@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Default easing — soft, mechanical, not bouncy
+// Default easing - soft, mechanical, not bouncy
 const EASE_OUT = 'power3.out';
 const EASE_INOUT = 'power2.inOut';
 
@@ -178,13 +178,13 @@ function initEyebrows() {
 }
 
 // ── Headline word-by-word reveal ──────────────────────────────────────
-// [data-split-words] — wraps each word in span, staggers in.
+// [data-split-words] - wraps each word in span, staggers in.
 function initSplitWords() {
   if (prefersReducedMotion) return;
   document.querySelectorAll<HTMLElement>('[data-split-words]').forEach((el) => {
     if (el.dataset.splitDone === '1') return;
 
-    // Preserve children like <br> and <span class="text-gold">…</span>
+    // Preserve children like <br> and <span class="text-gold">...</span>
     const wrap = (node: Node, frag: DocumentFragment) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const text = node.textContent ?? '';
@@ -240,7 +240,7 @@ function initDialogs() {
         { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'power3.out', clearProps: 'transform' }
       );
     };
-    // showModal is called from various places — patch the prototype-less way via event
+    // showModal is called from various places - patch the prototype-less way via event
     const origShow = dlg.showModal.bind(dlg);
     dlg.showModal = () => {
       origShow();

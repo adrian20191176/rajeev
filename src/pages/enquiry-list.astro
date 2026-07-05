@@ -12,6 +12,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
   title="Enquiry List | Royal Crown Bearings"
   description="Review your product enquiry list and send your request via WhatsApp or email."
   activeNav=""
+  noindex
 >
   <section class="relative border-b hairline overflow-hidden">
     <div class="absolute inset-0 tech-grid pointer-events-none"></div>
@@ -39,7 +40,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
             Enquiry List
           </h1>
           <p data-hero-step class="mt-2 text-chrome-200/75 text-sm" id="list-summary">
-            Loading…
+            Loading...
           </p>
         </div>
         <button
@@ -309,7 +310,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
           <td class="px-4 py-3">
             <a href="/products/${p.id}" class="font-display text-sm font-semibold text-chrome-50 hover:text-gold transition-colors">${p.code}</a>
           </td>
-          <td class="px-4 py-3 font-mono text-xs text-chrome-200/60 hidden md:table-cell">${p.diameter || "—"}</td>
+          <td class="px-4 py-3 font-mono text-xs text-chrome-200/60 hidden md:table-cell">${p.diameter || "N/A"}</td>
           <td class="px-4 py-3 text-right">
             <button data-remove="${p.id}" class="remove-btn p-1.5 rounded border hairline text-chrome-200/50 hover:border-red-500/40 hover:text-red-400 transition-colors">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -384,8 +385,8 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
     const items = load();
     const fd = new FormData(form);
     const btn = form.querySelector('[type=submit]');
-    const originalHtml = btn?.innerHTML; // innerHTML, not textContent — the label includes an svg icon
-    if (btn) { btn.textContent = "Sending…"; btn.disabled = true; }
+    const originalHtml = btn?.innerHTML; // innerHTML, not textContent - the label includes an svg icon
+    if (btn) { btn.textContent = "Sending..."; btn.disabled = true; }
 
     try {
       await window.submitEnquiry({

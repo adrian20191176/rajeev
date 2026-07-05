@@ -3,29 +3,46 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { getCategories, getProducts, getBusiness } from '../data/rcb.js';
+import { SITE_NAME, absoluteUrl } from '../lib/seo';
+
+type JsonLd = Record<string, unknown>;
 
 interface Props {
   title?: string;
   description?: string;
   activeNav?: string;
   waMessage?: string;
+  canonicalPath?: string;
+  image?: string;
+  type?: 'website' | 'product' | 'article';
+  noindex?: boolean;
+  jsonLd?: JsonLd | JsonLd[];
 }
 
 const {
-  title = 'Royal Crown Bearings — Powering Performance, Ensuring Reliability',
+  title = 'Royal Crown Bearings | Powering Performance, Ensuring Reliability',
   description = 'Royal Crown Bearings supplies premium bearings, V-belts, oil seals and industrial components across Sri Lanka.',
   activeNav,
   waMessage = 'Hi Royal Crown Bearings, I have an enquiry.',
+  canonicalPath,
+  image,
+  type = 'website',
+  noindex = false,
+  jsonLd,
 } = Astro.props;
 
 const [PRODUCTS, CATEGORIES, BUSINESS] = await Promise.all([getProducts(), getCategories(), getBusiness()]);
 const waFabHref = `https://wa.me/${BUSINESS.whatsapp ?? ''}?text=${encodeURIComponent(waMessage)}`;
+const canonicalUrl = absoluteUrl(canonicalPath ?? Astro.url.pathname);
+const metaImage = image && !image.startsWith('data:') ? absoluteUrl(image) : undefined;
+const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+const serializeJsonLd = (item: JsonLd) => JSON.stringify(item).replace(/</g, '\\u003c');
 
 const searchIndex = PRODUCTS.map(p => ({
   id: p.id, code: p.code, name: p.name, brand: p.brand,
   diameter: p.diameter, category: p.category, family: p.family,
 }));
-const catIndex = CATEGORIES.map(c => ({
+const catIndex = CATEGORIES.map((c: any) => ({
   slug: c.slug, name: c.name, family: c.family, short: c.short,
 }));
 ---
@@ -37,10 +54,27 @@ const catIndex = CATEGORIES.map(c => ({
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow'} />
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:locale" content="en_LK" />
+  <meta name="twitter:card" content={metaImage ? 'summary_large_image' : 'summary'} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  {metaImage && <meta property="og:image" content={metaImage} />}
+  {metaImage && <meta name="twitter:image" content={metaImage} />}
   <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  {jsonLdItems.map((item) => (
+    <script is:inline type="application/ld+json" set:html={serializeJsonLd(item)}></script>
+  ))}
   <script is:inline>
     /* Flag <html> so CSS can pre-hide animated elements (prevents flash before GSAP runs). */
     document.documentElement.classList.add('rcb-anim');
@@ -63,7 +97,7 @@ const catIndex = CATEGORIES.map(c => ({
   <dialog id="search-dialog" class="fixed inset-0 w-full max-w-2xl mx-auto mt-16 sm:mt-24 p-0 rounded-xl bg-ink-700 border hairline shadow-card fade-up max-h-[70vh] overflow-hidden">
     <div class="flex items-center gap-3 px-4 py-3 border-b hairline">
       <svg class="text-chrome-200 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
-      <input id="search-input" type="text" placeholder="Search bearings, V-belts, brands, part codes…"
+      <input id="search-input" type="text" placeholder="Search bearings, V-belts, brands, part codes..."
         class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/60 text-base" autocomplete="off" />
       <button id="search-close" class="font-mono text-[12px] tracking-widest uppercase border hairline rounded px-2 py-1 text-chrome-200 hover:text-chrome-50">ESC</button>
     </div>
@@ -110,7 +144,7 @@ const catIndex = CATEGORIES.map(c => ({
         <div class="sm:col-span-2">
           <label class="block">
             <span class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/70 mb-1.5 block">Message</span>
-            <textarea name="message" rows="4" placeholder="Quantities, delivery location, urgency, application notes…" required
+            <textarea name="message" rows="4" placeholder="Quantities, delivery location, urgency, application notes..." required
               class="w-full px-3 py-2.5 rounded-md border hairline bg-ink-900/70 text-chrome-50 text-base placeholder-chrome-200/50 focus:border-gold/60 outline-none resize-none"></textarea>
           </label>
         </div>
@@ -205,7 +239,7 @@ const catIndex = CATEGORIES.map(c => ({
       }
 
       // Fire-and-forget Pushover notification. Must never block or fail
-      // the enquiry itself — the buyer's submission has already succeeded.
+      // the enquiry itself - the buyer's submission has already succeeded.
       fetch('/api/notify-enquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -364,7 +398,7 @@ const catIndex = CATEGORIES.map(c => ({
             class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-md hover:bg-ink-600/70">
             <div class="min-w-0">
               <div class="text-chrome-50 text-sm font-mono">${p.code}</div>
-              <div class="text-[12px] text-chrome-200/75 truncate">${p.name} — ${p.brand}${p.diameter ? ' · ' + p.diameter : ''}</div>
+              <div class="text-[12px] text-chrome-200/75 truncate">${p.name} | ${p.brand}${p.diameter ? ' · ' + p.diameter : ''}</div>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/70 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
           </a></li>`;
@@ -437,8 +471,8 @@ const catIndex = CATEGORIES.map(c => ({
       const btn = form.querySelector<HTMLButtonElement>('[type=submit]');
       if (!btn) return;
       const fd = new FormData(form);
-      const originalHtml = btn.innerHTML; // innerHTML, not textContent — the label includes an svg icon
-      btn.textContent = 'Sending…';
+      const originalHtml = btn.innerHTML; // innerHTML, not textContent - the label includes an svg icon
+      btn.textContent = 'Sending...';
       btn.disabled = true;
 
       try {

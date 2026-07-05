@@ -5,7 +5,7 @@ const anonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
 if (!url || !anonKey) {
   throw new Error(
-    'Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_ANON_KEY — check your .env file.'
+    'Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_ANON_KEY - check your .env file.'
   );
 }
 

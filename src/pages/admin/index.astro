@@ -15,6 +15,7 @@ const brandsJson     = JSON.stringify(BRANDS);
   title="Admin Console | Royal Crown Bearings"
   description="Manage Royal Crown Bearings products."
   activeNav=""
+  noindex
 >
   <!-- Reference data for the admin runtime -->
   <script id="rcb-admin-categories" type="application/json" set:html={categoriesJson}></script>
@@ -51,7 +52,7 @@ const brandsJson     = JSON.stringify(BRANDS);
     <div class="mt-6 sm:mt-8 flex items-center gap-2 sm:gap-3 flex-wrap">
       <div class="flex items-center gap-2 px-3 py-2 rounded-md border hairline-strong bg-ink-800 flex-1 min-w-[200px] sm:max-w-md">
         <svg class="text-chrome-200/75 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
-        <input id="admin-q" type="text" placeholder="Search by code, name or brand…"
+        <input id="admin-q" type="text" placeholder="Search by code, name or brand..."
           class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/60 text-sm min-w-0" />
         <button id="admin-q-clear" class="hidden text-chrome-200/75 hover:text-chrome-50" aria-label="Clear search">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
@@ -88,7 +89,7 @@ const brandsJson     = JSON.stringify(BRANDS);
 
   <!-- ── Auth gate placeholder (until JS decides what to show) ─ -->
   <div id="admin-gate" class="min-h-[40vh] grid place-items-center text-chrome-200/70 font-mono text-[12px] tracking-[0.22em] uppercase">
-    Checking session…
+    Checking session...
   </div>
 
   <!-- ── Product Form modal ──────────────────────────────────── -->
@@ -588,7 +589,7 @@ const brandsJson     = JSON.stringify(BRANDS);
         clearImgError();
         uploadIcon.classList.add('hidden');
         uploadSpinner.classList.remove('hidden');
-        uploadText.textContent = 'Processing…';
+        uploadText.textContent = 'Processing...';
         try {
           const dataUrl: string = await new Promise((res, rej) => {
             const r = new FileReader();
@@ -673,7 +674,7 @@ const brandsJson     = JSON.stringify(BRANDS);
           (el as HTMLElement).classList.toggle('hidden', !show);
         });
         if (beltDims) {
-          fBeltLab.textContent = c.slug.startsWith('v-') ? 'Section (A, B, SPA…)' : 'Pitch (3M, 5M, T10…)';
+          fBeltLab.textContent = c.slug.startsWith('v-') ? 'Section (A, B, SPA...)' : 'Pitch (3M, 5M, T10...)';
           fSecEl.setAttribute('placeholder', c.slug.startsWith('v-') ? 'SPA' : '5M');
           fSecEl.setAttribute('name', c.slug.startsWith('v-') ? 'section' : 'pitch');
         }
@@ -754,7 +755,7 @@ const brandsJson     = JSON.stringify(BRANDS);
         const isEdit = !!product;
         eyebrow.textContent = isEdit ? 'Edit Product' : 'Add Product';
         title.textContent   = isEdit ? `Editing ${product!.name}` : 'New product to the catalogue';
-        sub.textContent     = isEdit ? 'Update details below — changes appear instantly on the public site.'
+        sub.textContent     = isEdit ? 'Update details below. Changes appear instantly on the public site.'
                                      : 'Categories are managed by HQ. Pick from the existing list.';
         submitLabel.textContent = isEdit ? 'Save changes' : 'Add product';
 
@@ -824,10 +825,10 @@ const brandsJson     = JSON.stringify(BRANDS);
 
         try {
           if (built.image && built.image.startsWith('data:')) {
-            submitLabel.textContent = 'Uploading image…';
+            submitLabel.textContent = 'Uploading image...';
             built.image = await Admin.uploadProductImage(built.image);
           }
-          submitLabel.textContent = editingId != null ? 'Saving…' : 'Adding…';
+          submitLabel.textContent = editingId != null ? 'Saving...' : 'Adding...';
 
           if (editingId != null) {
             await Admin.updateProduct(editingId, built);

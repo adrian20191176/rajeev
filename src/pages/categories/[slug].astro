@@ -2,25 +2,59 @@
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
 import { getCategories, getProducts } from '../../data/rcb.js';
+import { SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '../../lib/seo';
+
+type Category = { slug: string; name: string; family: string; description: string; iconType: string };
+type Product = { id: number | string; code: string; name: string; category: string; bore?: number; diameter?: string; image?: string; availability?: string };
+interface Props { cat: Category; products: Product[] }
+
 
 export async function getStaticPaths() {
-  const [CATEGORIES, allProducts] = await Promise.all([getCategories(), getProducts()]);
-  return CATEGORIES.map((cat) => ({
+  const [CATEGORIES, allProducts] = await Promise.all([getCategories(), getProducts()]) as [Category[], Product[]];
+  return CATEGORIES.map((cat: Category) => ({
     params: { slug: cat.slug },
     props: {
       cat,
-      products: allProducts.filter((p) => p.category === cat.slug),
+      products: allProducts.filter((p: Product) => p.category === cat.slug),
     },
   }));
 }
 
-const { cat, products } = Astro.props;
+const { cat, products } = Astro.props as Props;
+const categoryUrl = `/categories/${cat.slug}`;
+const categoryJsonLd = [
+  breadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Categories', path: '/categories' },
+    { name: cat.name, path: categoryUrl },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${absoluteUrl(categoryUrl)}#collection`,
+    name: `${cat.name} | ${SITE_NAME}`,
+    description: cat.description,
+    url: absoluteUrl(categoryUrl),
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: products.length,
+      itemListElement: products.slice(0, 50).map((product: Product, index: number) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: product.name || product.code,
+        url: absoluteUrl(`/products/${product.id}`),
+      })),
+    },
+  },
+];
 ---
 
 <Layout
   title={`${cat.name} | Royal Crown Bearings`}
   description={cat.description}
   activeNav="categories"
+  canonicalPath={categoryUrl}
+  jsonLd={categoryJsonLd}
 >
 
   <!-- Category header -->
@@ -69,7 +103,7 @@ const { cat, products } = Astro.props;
         <input
           id="cat-search"
           type="search"
-          placeholder="Search part code…"
+          placeholder="Search part code..."
           class="w-full pl-8 pr-3 py-2 rounded border hairline-strong bg-ink-800 text-base text-chrome-100 placeholder:text-chrome-200/50 font-mono tracking-wider focus:outline-none focus:border-gold/40"
         />
       </div>
@@ -102,7 +136,7 @@ const { cat, products } = Astro.props;
         </div>
         <div class="font-mono text-[12px] tracking-widest uppercase text-chrome-200/60 mb-2">No products listed yet</div>
         <p class="text-chrome-200/75 text-sm max-w-md mx-auto px-4">
-          We stock {cat.name.toLowerCase()} — contact us for availability and pricing.
+          We stock {cat.name.toLowerCase()}. Contact us for availability and pricing.
         </p>
         <div class="mt-5 flex items-center justify-center gap-3 flex-wrap">
           <a href="/contact" class="btn-shine inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gold text-ink-900 font-medium text-sm hover:shadow-glow-cyan transition-all">

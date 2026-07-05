@@ -1,10 +1,10 @@
-// Cloudflare Pages Function — not part of the Astro build, deploys
+// Cloudflare Pages Function - not part of the Astro build, deploys
 // alongside the static site. Runs per-request, so PUSHOVER_* secrets
 // (set in the Cloudflare Pages dashboard, not .env) never reach the browser.
 //
 // The browser only ever sends { enquiryId }. We re-read the row from
 // Supabase ourselves before pushing, so a forged POST to this endpoint
-// can't inject arbitrary text into the notification — it can only ever
+// can't inject arbitrary text into the notification - it can only ever
 // reflect an enquiry that really exists.
 
 import { createClient } from '@supabase/supabase-js';
@@ -50,7 +50,7 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     return new Response('Enquiry not found', { status: 404 });
   }
 
-  // Best-effort product summary — a failure here must not block the push.
+  // Best-effort product summary - a failure here must not block the push.
   let productLine = '';
   try {
     const { data: items } = await supabase
@@ -71,10 +71,10 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
       productLine = `${items.length} product${items.length === 1 ? '' : 's'}${shown ? ` (${shown}${more})` : ''}`;
     }
   } catch {
-    // ignore — notification still goes out without product detail
+    // ignore - notification still goes out without product detail
   }
 
-  const title = `New enquiry — ${enquiry.name}${enquiry.company ? ` · ${enquiry.company}` : ''}`;
+  const title = `New enquiry - ${enquiry.name}${enquiry.company ? ` · ${enquiry.company}` : ''}`;
   const contact = [enquiry.phone, enquiry.email].filter(Boolean).join(' · ');
   const messageBody = (enquiry.message ?? '').slice(0, 200);
   const message = [contact, productLine, messageBody, `via ${enquiry.source ?? 'website'}`]

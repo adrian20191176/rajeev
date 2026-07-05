@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://royalcrownbearings.lk/sitemap-index.xml

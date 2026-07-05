@@ -1,0 +1,30 @@
+export const SITE_URL = 'https://royalcrownbearings.lk';
+export const SITE_NAME = 'Royal Crown Bearings';
+
+export function absoluteUrl(path = '/') {
+  if (!path) return SITE_URL;
+  try {
+    return new URL(path).href;
+  } catch {
+    return new URL(path, SITE_URL).href;
+  }
+}
+
+export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
+  };
+}
+
+export function productAvailabilityUrl(availability = 'In Stock') {
+  if (availability === 'Out of Stock') return 'https://schema.org/OutOfStock';
+  if (availability === 'Pre-order') return 'https://schema.org/PreOrder';
+  return 'https://schema.org/InStock';
+}

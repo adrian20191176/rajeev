@@ -1,4 +1,4 @@
-// Admin runtime — Supabase-backed product CRUD.
+// Admin runtime - Supabase-backed product CRUD.
 //
 // Auth is still the legacy localStorage admin/royal123 gate, kept as-is for now.
 // When you switch to Supabase Auth, replace isAuthed/login/logout with
@@ -52,7 +52,7 @@ const ADMIN_PASS = import.meta.env.PUBLIC_ADMIN_PASSWORD;
 
 if (!ADMIN_USER || !ADMIN_PASS) {
   console.warn(
-    '[admin] PUBLIC_ADMIN_USERNAME / PUBLIC_ADMIN_PASSWORD are not set — admin login will always fail. Add them to your .env (and to Cloudflare Pages env vars for deployment).'
+    '[admin] PUBLIC_ADMIN_USERNAME / PUBLIC_ADMIN_PASSWORD are not set - admin login will always fail. Add them to your .env (and to Cloudflare Pages env vars for deployment).'
   );
 }
 
@@ -114,7 +114,7 @@ function productToRow(p: Partial<Product>) {
 }
 
 const Admin = {
-  // ── Auth — tab-scoped sessionStorage; cleared on tab close ──
+  // ── Auth - tab-scoped sessionStorage; cleared on tab close ──
   // (Replace with Supabase Auth for real cross-tab session management later.)
   isAuthed(): boolean {
     try {

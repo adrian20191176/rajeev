@@ -8,6 +8,7 @@ import Layout from '../../layouts/Layout.astro';
   title="Admin Sign in | Royal Crown Bearings"
   description="Sign in to manage Royal Crown Bearings products."
   activeNav=""
+  noindex
 >
   <section class="min-h-[calc(100vh-200px)] grid place-items-center px-5 sm:px-6 py-12 sm:py-16 relative overflow-hidden">
     <div class="absolute inset-0 tech-grid opacity-40 pointer-events-none"></div>
@@ -125,7 +126,7 @@ import Layout from '../../layouts/Layout.astro';
       if (!user || !pass) { showError('Enter username and password'); return; }
 
       submit.disabled = true;
-      label.textContent = 'Signing in…';
+      label.textContent = 'Signing in...';
       await new Promise(r => setTimeout(r, 400));
 
       if (window.RCBAdmin.login(user, pass)) {
