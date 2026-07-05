@@ -3,7 +3,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import { getCategories, getProducts, getBusiness } from '../data/rcb.js';
-import { SITE_NAME, absoluteUrl } from '../lib/seo';
+import { SITE_NAME, absoluteUrl, productPath } from '../lib/seo';
 
 type JsonLd = Record<string, unknown>;
 
@@ -39,7 +39,7 @@ const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
 const serializeJsonLd = (item: JsonLd) => JSON.stringify(item).replace(/</g, '\\u003c');
 
 const searchIndex = PRODUCTS.map(p => ({
-  id: p.id, code: p.code, name: p.name, brand: p.brand,
+  id: p.id, code: p.code, name: p.name, url: productPath(p),
   diameter: p.diameter, category: p.category, family: p.family,
 }));
 const catIndex = CATEGORIES.map((c: any) => ({
@@ -97,7 +97,7 @@ const catIndex = CATEGORIES.map((c: any) => ({
   <dialog id="search-dialog" class="fixed inset-0 w-full max-w-2xl mx-auto mt-16 sm:mt-24 p-0 rounded-xl bg-ink-700 border hairline shadow-card fade-up max-h-[70vh] overflow-hidden">
     <div class="flex items-center gap-3 px-4 py-3 border-b hairline">
       <svg class="text-chrome-200 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/></svg>
-      <input id="search-input" type="text" placeholder="Search bearings, V-belts, brands, part codes..."
+      <input id="search-input" type="text" placeholder="Search bearings, V-belts, categories, part codes..."
         class="flex-1 bg-transparent outline-none text-chrome-50 placeholder-chrome-200/60 text-base" autocomplete="off" />
       <button id="search-close" class="font-mono text-[12px] tracking-widest uppercase border hairline rounded px-2 py-1 text-chrome-200 hover:text-chrome-50">ESC</button>
     </div>
@@ -164,12 +164,13 @@ const catIndex = CATEGORIES.map((c: any) => ({
 
   <!-- ── Floating WhatsApp button ───────────────────────────────────── -->
   <a
+    id="whatsapp-fab"
     href={waFabHref}
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Chat on WhatsApp"
     class="btn-shine fixed bottom-6 right-4 sm:right-6 z-[70] w-14 h-14 rounded-full bg-emerald-600/95 hover:bg-emerald-500 text-white grid place-items-center"
-    style="box-shadow: 0 10px 30px -8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08) inset;"
+    style="left: auto; right: max(1rem, env(safe-area-inset-right)); bottom: max(1.5rem, env(safe-area-inset-bottom)); box-shadow: 0 10px 30px -8px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08) inset;"
   >
     <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.557 4.126 1.533 5.862L.057 23.5l5.784-1.517A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.816 9.816 0 0 1-5.001-1.372l-.358-.213-3.726.977.995-3.633-.233-.373A9.818 9.818 0 0 1 2.182 12C2.182 6.573 6.573 2.182 12 2.182S21.818 6.573 21.818 12 17.427 21.818 12 21.818z"/></svg>
   </a>
@@ -373,7 +374,7 @@ const catIndex = CATEGORIES.map((c: any) => ({
         ? searchData.categories.filter((c: any) => c.name.toLowerCase().includes(lq) || c.family.toLowerCase().includes(lq)).slice(0, 4)
         : searchData.categories.slice(0, 4);
       const prods = q
-        ? searchData.products.filter((p: any) => p.name.toLowerCase().includes(lq) || p.code.toLowerCase().includes(lq) || p.brand.toLowerCase().includes(lq)).slice(0, 8)
+        ? searchData.products.filter((p: any) => p.name.toLowerCase().includes(lq) || p.code.toLowerCase().includes(lq)).slice(0, 8)
         : searchData.products.slice(0, 6);
 
       let html = '';
@@ -394,11 +395,12 @@ const catIndex = CATEGORIES.map((c: any) => ({
       if (prods.length) {
         html += `<div class="px-3 pt-2 pb-2 font-mono text-[12px] tracking-widest uppercase text-chrome-200/75">Products</div><ul>`;
         prods.forEach((p: any) => {
-          html += `<li><a href="/products/${p.id}" onclick="document.getElementById('search-dialog').close()"
+          const details = [p.name, p.diameter].filter(Boolean).join(' · ');
+          html += `<li><a href="${p.url}" onclick="document.getElementById('search-dialog').close()"
             class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-md hover:bg-ink-600/70">
             <div class="min-w-0">
               <div class="text-chrome-50 text-sm font-mono">${p.code}</div>
-              <div class="text-[12px] text-chrome-200/75 truncate">${p.name} | ${p.brand}${p.diameter ? ' · ' + p.diameter : ''}</div>
+              ${details ? `<div class="text-[12px] text-chrome-200/75 truncate">${details}</div>` : ''}
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="text-chrome-200/70 shrink-0"><polyline points="9,6 15,12 9,18"/></svg>
           </a></li>`;
@@ -406,7 +408,7 @@ const catIndex = CATEGORIES.map((c: any) => ({
         html += '</ul>';
       }
       if (!cats.length && !prods.length && q) {
-        html = `<div class="px-4 py-12 text-center text-chrome-200/75 text-sm">No results for "${q}". Try a part code, brand, or category.</div>`;
+        html = `<div class="px-4 py-12 text-center text-chrome-200/75 text-sm">No results for "${q}". Try a part code or category.</div>`;
       }
       searchResults.innerHTML = html;
     }

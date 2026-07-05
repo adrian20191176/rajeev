@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import BearingVisual from '../../components/BearingVisual.astro';
 import { getCategories, getProducts } from '../../data/rcb.js';
-import { SITE_NAME, absoluteUrl, breadcrumbJsonLd } from '../../lib/seo';
+import { SITE_NAME, absoluteUrl, breadcrumbJsonLd, productPath } from '../../lib/seo';
 
 type Category = { slug: string; name: string; family: string; description: string; iconType: string };
 type Product = { id: number | string; code: string; name: string; category: string; bore?: number; diameter?: string; image?: string; availability?: string };
@@ -42,7 +42,7 @@ const categoryJsonLd = [
         '@type': 'ListItem',
         position: index + 1,
         name: product.name || product.code,
-        url: absoluteUrl(`/products/${product.id}`),
+        url: absoluteUrl(productPath(product)),
       })),
     },
   },
@@ -158,7 +158,7 @@ const categoryJsonLd = [
           : { label: 'In Stock', cls: 'bg-emerald-500/10 text-emerald-400/80' };
         return (
         <a
-          href={`/products/${p.id}`}
+          href={productPath(p)}
           data-id={p.id}
           data-code={p.code.toLowerCase()}
           data-bore={p.bore ?? 9999}

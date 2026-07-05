@@ -23,6 +23,13 @@ export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
   };
 }
 
+export function productPath(product: { id: string | number; category?: string | null }) {
+  const id = encodeURIComponent(String(product.id).trim());
+  const category = String(product.category ?? '').trim();
+
+  return `/product/${category ? `${encodeURIComponent(category)}-` : ''}${id}`;
+}
+
 export function productAvailabilityUrl(availability = 'In Stock') {
   if (availability === 'Out of Stock') return 'https://schema.org/OutOfStock';
   if (availability === 'Pre-order') return 'https://schema.org/PreOrder';

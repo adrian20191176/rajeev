@@ -5,9 +5,9 @@
 // so we expose memoized async loaders instead of top-level awaits. Consumers
 // import these loaders and `await` them from Astro frontmatter or handlers.
 //
-// Field name differences vs. the DB (icon_type → iconType, brand_name → brand,
-// category_slug → category) are mapped here so the rest of the app doesn't need
-// to change.
+// Field name differences vs. the DB (icon_type -> iconType,
+// category_slug -> category) are mapped here so the rest of the app doesn't need
+// to change. Product brand names are intentionally not exposed in public product data.
 
 import { supabase } from '../lib/supabase';
 
@@ -84,7 +84,22 @@ export async function getProducts() {
 
   const { data, error } = await supabase
     .from('products')
-    .select('*')
+    .select(`
+      id,
+      code,
+      name,
+      category_slug,
+      bore,
+      od,
+      width,
+      section,
+      pitch,
+      length,
+      series,
+      diameter,
+      image,
+      availability
+    `)
     .order('id', { ascending: true });
   if (error) panic('products', error);
   return (data ?? []).map((p) => {
@@ -94,7 +109,6 @@ export async function getProducts() {
       code:         p.code,
       name:         p.name,
       category:     p.category_slug,
-      brand:        p.brand_name,
       bore:         p.bore     ?? undefined,
       od:           p.od       ?? undefined,
       width:        p.width    ?? undefined,

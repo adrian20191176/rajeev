@@ -361,6 +361,10 @@ const brandsJson     = JSON.stringify(BRANDS);
       const escapeHtml = (s: any) => String(s ?? '').replace(/[&<>"']/g, ch =>
         ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch] as string));
 
+      function productHref(p: AnyProduct) {
+        return `/product/${encodeURIComponent(p.category)}-${encodeURIComponent(String(p.id))}`;
+      }
+
       function renderStats() {
         const products = Admin.products();
         const items = [
@@ -420,7 +424,7 @@ const brandsJson     = JSON.stringify(BRANDS);
                 <td class="px-3 py-2 font-mono text-gold/90 text-[12.5px]">${escapeHtml(p.diameter)}</td>
                 <td class="px-3 py-2 text-right">
                   <div class="inline-flex items-center gap-1">
-                    <a href="/products/${p.id}"
+                    <a href="${productHref(p)}"
                       class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[12px] font-mono uppercase tracking-[0.18em]" title="View public page">View</a>
                     <button data-action="edit"   data-id="${p.id}"
                       class="px-2 py-1.5 rounded border hairline text-chrome-100 hover:text-gold hover:border-gold/40 text-[12px] font-mono uppercase tracking-[0.18em]">Edit</button>
@@ -452,7 +456,7 @@ const brandsJson     = JSON.stringify(BRANDS);
                   </div>
                 </div>
                 <div class="mt-3 grid grid-cols-3 gap-2">
-                  <a href="/products/${p.id}" class="text-center py-2 rounded border hairline text-chrome-100 text-[12px] font-mono uppercase tracking-[0.18em]">View</a>
+                  <a href="${productHref(p)}" class="text-center py-2 rounded border hairline text-chrome-100 text-[12px] font-mono uppercase tracking-[0.18em]">View</a>
                   <button data-action="edit"   data-id="${p.id}" class="py-2 rounded border border-gold/40 text-gold text-[12px] font-mono uppercase tracking-[0.18em]">Edit</button>
                   <button data-action="delete" data-id="${p.id}" class="py-2 rounded border hairline text-chrome-100 hover:text-red-300 text-[12px] font-mono uppercase tracking-[0.18em]">Delete</button>
                 </div>

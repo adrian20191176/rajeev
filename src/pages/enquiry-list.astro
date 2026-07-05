@@ -278,6 +278,12 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
     }
   }
 
+  function productHref(p) {
+    if (p.url) return p.url;
+    if (p.category) return `/product/${encodeURIComponent(p.category)}-${encodeURIComponent(String(p.id))}`;
+    return "/categories";
+  }
+
   function render() {
     const items = load();
     const empty = document.getElementById("empty-state");
@@ -308,7 +314,7 @@ const waBase = `https://wa.me/${BUSINESS.whatsapp}`;
         <tr class="border-b hairline last:border-b-0 hover:bg-ink-700/20 transition-colors">
           <td class="px-4 py-3 font-mono text-[12px] text-chrome-200/50">${i + 1}</td>
           <td class="px-4 py-3">
-            <a href="/products/${p.id}" class="font-display text-sm font-semibold text-chrome-50 hover:text-gold transition-colors">${p.code}</a>
+            <a href="${productHref(p)}" class="font-display text-sm font-semibold text-chrome-50 hover:text-gold transition-colors">${p.code}</a>
           </td>
           <td class="px-4 py-3 font-mono text-xs text-chrome-200/60 hidden md:table-cell">${p.diameter || "N/A"}</td>
           <td class="px-4 py-3 text-right">
