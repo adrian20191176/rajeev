@@ -13,6 +13,7 @@ const hiddenFromSearch = new Set([
 // https://astro.build/config
 export default defineConfig({
     site,
+    trailingSlash: 'always',
     integrations: [
         sitemap({
             filter: (page) => !hiddenFromSearch.has(new URL(page).pathname),

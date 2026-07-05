@@ -1,13 +1,22 @@
 export const SITE_URL = 'https://royalcrownbearings.lk';
 export const SITE_NAME = 'Royal Crown Bearings';
 
-export function absoluteUrl(path = '/') {
-  if (!path) return SITE_URL;
-  try {
-    return new URL(path).href;
-  } catch {
-    return new URL(path, SITE_URL).href;
+function hasFileExtension(pathname: string) {
+  const lastSegment = pathname.split('/').pop() ?? '';
+  return /\.[a-z0-9]+$/i.test(lastSegment);
+}
+
+function normalizeInternalUrl(url: URL) {
+  const siteOrigin = new URL(SITE_URL).origin;
+  if (url.origin === siteOrigin && url.pathname !== '/' && !url.pathname.endsWith('/') && !hasFileExtension(url.pathname)) {
+    url.pathname = `${url.pathname}/`;
   }
+
+  return url.href;
+}
+
+export function absoluteUrl(path = '/') {
+  return normalizeInternalUrl(new URL(path || '/', SITE_URL));
 }
 
 export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>) {
