@@ -21,10 +21,10 @@ Captured 2026-05-24 after the Supabase migration commit. Pick up here next sessi
 
 ## Functional gaps
 
-- [ ] **Catalog won't update without a rebuild.** `getProducts()` runs at build time for the prerendered catalog pages (`index.astro`, `categories/index.astro`, `categories/[slug].astro`, `products/[id].astro`). Admin edits only appear after `npm run build`.
-  - Options: (a) trigger a Cloudflare Pages rebuild on admin save, or (b) remove `export const prerender = true` from the catalog pages so they SSR per request.
+- [x] **Catalog updates require a rebuild by design.** `getProducts()` runs at build time for the prerendered catalog pages (`index.astro`, `categories/index.astro`, `categories/[slug].astro`, `product/[id].astro`) and sitemap generation. Admin edits appear publicly after a Cloudflare Pages redeploy.
+  - Accepted workflow: products are added rarely, so trigger a deployment after catalogue changes instead of adding SSR.
 
-- [ ] **Availability is hardcoded to "In Stock".** Admin form always inserts `'In Stock'`; public pages render the string literally. If you want pre-order / out-of-stock badges back, add a selector to the admin dialog (`src/pages/admin/index.astro`) and restore the conditional render in `src/pages/categories/[slug].astro` and `src/pages/products/[id].astro`.
+- [ ] **Availability is hardcoded to "In Stock".** Admin form always inserts `'In Stock'`; public pages render the string literally. If you want pre-order / out-of-stock badges back, add a selector to the admin dialog (`src/pages/admin/index.astro`) and restore the conditional render in `src/pages/categories/[slug].astro` and `src/pages/product/[id].astro`.
 
 ## Nice-to-have
 

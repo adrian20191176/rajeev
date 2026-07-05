@@ -11,6 +11,9 @@
 
 import { supabase } from '../lib/supabase';
 
+const BUSINESS_EMAIL = 'royalcrownbearings@gmail.com';
+const BUSINESS_WEBSITE = 'https://royalcrownbearings.lk';
+
 function panic(label, error) {
   throw new Error(`[rcb.js] failed to load ${label}: ${error.message}`);
 }
@@ -26,9 +29,15 @@ export function getBusiness() {
       .maybeSingle()
       .then(({ data, error }) => {
         if (error) panic('business', error);
-        return data ?? {
+        const business = data ?? {
           name: '', tagline: '', founded: null, phone: '', email: '', website: '',
           hours: '', whatsapp: '', mission: '', vision: '', values: [],
+        };
+
+        return {
+          ...business,
+          email: BUSINESS_EMAIL,
+          website: BUSINESS_WEBSITE,
         };
       });
   }

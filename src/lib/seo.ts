@@ -8,8 +8,8 @@ function hasFileExtension(pathname: string) {
 
 function normalizeInternalUrl(url: URL) {
   const siteOrigin = new URL(SITE_URL).origin;
-  if (url.origin === siteOrigin && url.pathname !== '/' && !url.pathname.endsWith('/') && !hasFileExtension(url.pathname)) {
-    url.pathname = `${url.pathname}/`;
+  if (url.origin === siteOrigin && url.pathname !== '/' && url.pathname.endsWith('/') && !hasFileExtension(url.pathname)) {
+    url.pathname = url.pathname.replace(/\/+$/, '');
   }
 
   return url.href;
